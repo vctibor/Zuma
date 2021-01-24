@@ -1,0 +1,8 @@
+[package]
+name = "zuma"
+version = "0.1.0"
+authors = ["Vladimír Ctibor <vladimir.ctibor@avast.com>"]
+edition = "2018"
+
+[dependencies]
+nom = "6.0"
