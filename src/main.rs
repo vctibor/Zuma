@@ -1,17 +1,20 @@
 #[macro_use] extern crate lalrpop_util;
 
 mod ast;
-
+mod tests;
 
 use crate::grammar::ExprParser;
 
-lalrpop_mod!(pub grammar); // synthesized by LALRPOP
+lalrpop_mod!(pub grammar);
 
 fn main() {
 
     let expr = ExprParser::new()
-        .parse("22 * 44 + 66")
+        .parse("false")
         .unwrap();
 
-        println!("{:?}", expr);
+    println!("{:?}", expr);
+
+    let res = ast::parse_color("#ff00a1".to_owned());
+    println!("{:?}", res);
 }
