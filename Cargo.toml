@@ -1,8 +1,12 @@
 [package]
 name = "zuma"
 version = "0.1.0"
-authors = ["Vladimír Ctibor <vladimir.ctibor@avast.com>"]
+authors = ["Vladimír Ctibor <vladimir.ctibor@gmail.com>"]
 edition = "2018"
 
+[build-dependencies]
+lalrpop = "0.19.4"
+
 [dependencies]
-nom = "6.0"
+lalrpop-util = "0.19.4"
+regex = "1"
