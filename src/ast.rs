@@ -1,4 +1,9 @@
 #[derive(Debug, PartialEq)]
+pub struct Document {
+    pub primitives: Vec<GeometricPrimitive>
+}
+
+#[derive(Debug, PartialEq)]
 pub enum GeometricPrimitive {
     Line(Line)
 }
@@ -14,7 +19,8 @@ pub enum Expr {
 #[derive(Debug, PartialEq)]
 pub struct Line {
     pub start: Point,
-    pub end: Point
+    pub end: Point,
+    pub color: Option<Color>
 }
 
 #[derive(Debug, PartialEq)]

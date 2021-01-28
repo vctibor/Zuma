@@ -1,3 +1,5 @@
+#![allow(unused_imports)]
+
 use crate::ExprParser;
 use crate::grammar::PrimParser;
 
