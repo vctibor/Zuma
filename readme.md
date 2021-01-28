@@ -21,7 +21,7 @@ Following datatypes can be created using literals:
 
 Expressions are delimited using semicolon.
 
-    line [0,10] [25,50] #ff00a1;
+    line start = [0,10] end = [25,50] color = #ff00a1;
 
 ### Comments
 

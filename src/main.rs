@@ -10,10 +10,13 @@ use crate::grammar::PrimParser;
 
 use crate::translator::translate;
 
+use std::time::Instant;
+
 lalrpop_mod!(pub grammar);
 
 fn main() {
-    
+
+    let start_time = Instant::now();
 
     let input = "line [0,10] [25,50] #ff001a;";
 
@@ -30,4 +33,8 @@ fn main() {
     let svg = svg_generator::generate_svg(svg_model);
 
     println!("{}", svg);
+
+    let end_time = start_time.elapsed();
+
+    println!("{:?}", end_time);
 }
