@@ -4,7 +4,7 @@ use crate::parsing::zuma_model::*;
 grammar;
 
 pub Prim: GeometricPrimitive = {
-    "line" <start:Point> <end:Point> <color:Color?> ";" => GeometricPrimitive::Line(Line { start, end, color })
+    "line" "start" "=" <start:Point> "end" "=" <end:Point> "color" "=" <color:Color> ";" => GeometricPrimitive::Line(Line { start, end, color: Some(color) })
 };
 
 pub Expr: Expr = {

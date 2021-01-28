@@ -7,7 +7,7 @@ use crate::svg_generator::svg_model::*;
 pub fn generate_svg(doc: Document) -> String {
     use crate::svg_generator::Element::*;
 
-    let mut svg = "<svg>\n".to_owned();
+    let mut svg = "<svg xmlns=\"http://www.w3.org/2000/svg\">\n".to_owned();
 
     for el in doc.elements {
         match el {

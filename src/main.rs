@@ -10,31 +10,40 @@ use crate::grammar::PrimParser;
 
 use crate::translator::translate;
 
+use std::fs::{read_to_string, File};
 use std::time::Instant;
+use std::io::Write;
+use std::{thread, time};
 
 lalrpop_mod!(pub grammar);
 
-fn main() {
+fn compile(parser: &PrimParser, zuma_source: String) -> String {
+    let parse_res = parser.parse(&zuma_source);
+    let doc = parsing::zuma_model::Document { primitives: vec!(parse_res.unwrap()) };
+    // evaluate
+    let svg_model = translate(doc);
+    svg_generator::generate_svg(svg_model)
+}
 
+fn compile_file(parser: &PrimParser) -> Result<(), Box<dyn std::error::Error>>
+{
     let start_time = Instant::now();
+    let input = read_to_string("examples/example01.zm")?;
+    let svg = compile(&parser, input);
+    let mut output_file = File::create("examples/example01.svg")?;
+    output_file.write_all(svg.as_bytes())?;
+    let end_time = start_time.elapsed();
+    println!("{:?}", end_time);
 
-    let input = "line [0,10] [25,50] #ff001a;";
+    Ok(())
+}
+
+fn main() {
 
     let parser = PrimParser::new();
 
-    let parse_res = parser.parse(input);
-
-    let doc = parsing::zuma_model::Document { primitives: vec!(parse_res.unwrap()) };
-
-    // evaluate
-
-    let svg_model = translate(doc);
-
-    let svg = svg_generator::generate_svg(svg_model);
-
-    println!("{}", svg);
-
-    let end_time = start_time.elapsed();
-
-    println!("{:?}", end_time);
+    loop {
+        thread::sleep(time::Duration::from_millis(10));
+        compile_file(&parser);
+    }
 }
