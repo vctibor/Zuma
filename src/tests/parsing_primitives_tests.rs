@@ -3,11 +3,7 @@
 use crate::ExprParser;
 use crate::grammar::PrimParser;
 
-use crate::ast::GeometricPrimitive;
-use crate::ast::Point;
-use crate::ast::Line;
-use crate::ast::Expr;
-use crate::ast::Color;
+use crate::parsing::zuma_model::*;
 
 #[test]
 fn boolean_test1() {
@@ -46,6 +42,6 @@ fn point_test1() {
 fn line_test1() {
     let parser = PrimParser::new();
     let input = "line [0,10] [25,50];";
-    let output = Line { start: Point { x: 0., y: 10. }, end: Point { x: 25., y: 50. } };
+    let output = Line { start: Point { x: 0., y: 10. }, end: Point { x: 25., y: 50. }, color: None };
     assert!(parser.parse(input).unwrap() == GeometricPrimitive::Line(output));
 }

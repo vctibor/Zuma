@@ -1,0 +1,1 @@
+Code for generating SVG from Rust. I would like to split this into separate crate eventually.

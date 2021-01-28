@@ -1,8 +1,8 @@
 #[macro_use] extern crate lalrpop_util;
 
-mod ast;
+mod parsing;
 mod tests;
-mod generator;
+mod svg_generator;
 mod translator;
 
 use crate::grammar::ExprParser;
@@ -13,6 +13,7 @@ use crate::translator::translate;
 lalrpop_mod!(pub grammar);
 
 fn main() {
+    
 
     let input = "line [0,10] [25,50] #ff001a;";
 
@@ -20,13 +21,13 @@ fn main() {
 
     let parse_res = parser.parse(input);
 
-    let doc = ast::Document { primitives: vec!(parse_res.unwrap()) };
+    let doc = parsing::zuma_model::Document { primitives: vec!(parse_res.unwrap()) };
 
     // evaluate
 
     let svg_model = translate(doc);
 
-    let svg = generator::generate_svg(svg_model);
+    let svg = svg_generator::generate_svg(svg_model);
 
     println!("{}", svg);
 }

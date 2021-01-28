@@ -1,11 +1,11 @@
 // This sits on top of both Zuma parser and SVG generator, and translates from Zuma IR to svg_model.
 
-use crate::ast as zuma;
-use crate::generator::svg_model;
+use crate::parsing::zuma_model;
+use crate::svg_generator::svg_model;
 
-pub fn translate(zuma_ir: zuma::Document) -> svg_model::Document {
+pub fn translate(zuma_ir: zuma_model::Document) -> svg_model::Document {
     
-    use zuma::GeometricPrimitive as gp;
+    use zuma_model::GeometricPrimitive as gp;
     use svg_model::Element as e;
 
     let mut elements = Vec::new();
@@ -23,6 +23,6 @@ pub fn translate(zuma_ir: zuma::Document) -> svg_model::Document {
     svg_model::Document { elements }
 }
 
-fn translate_color(c: zuma::Color) -> svg_model::Color {
+fn translate_color(c: zuma_model::Color) -> svg_model::Color {
     svg_model::Color { r: c.red, g: c.green, b: c.blue }
 }

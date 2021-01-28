@@ -1,32 +1,11 @@
-pub mod svg_model {
+pub mod svg_model;
 
-    pub struct Document {
-        pub elements: Vec<Element>
-    }
-    
-    pub enum Element {
-        Line(Line)
-    }
+mod tests;
 
-    pub struct Line {
-        pub x1: f32,
-        pub y1: f32,
-        pub x2: f32,
-        pub y2: f32,
-        pub color: Option<Color>
-    }
-
-    pub struct Color {
-        pub r: u8,
-        pub g: u8,
-        pub b: u8
-    }
-}
-
-use crate::generator::svg_model::*;
+use crate::svg_generator::svg_model::*;
 
 pub fn generate_svg(doc: Document) -> String {
-    use crate::generator::Element::*;
+    use crate::svg_generator::Element::*;
 
     let mut svg = "<svg>\n".to_owned();
 
