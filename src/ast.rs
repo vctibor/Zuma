@@ -1,6 +1,6 @@
 #[derive(Debug, PartialEq)]
 pub enum GeometricPrimitive {
-    Line
+    Line(Line)
 }
 
 #[derive(Debug, PartialEq)]
@@ -8,7 +8,13 @@ pub enum Expr {
     Boolean(bool),
     Number(f32),
     Color(Color),
-    Point((f32, f32))
+    Point(Point)
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Line {
+    pub start: Point,
+    pub end: Point
 }
 
 #[derive(Debug, PartialEq)]
@@ -16,6 +22,12 @@ pub struct Color {
     pub red: u8,
     pub green: u8,
     pub blue: u8
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Point {
+    pub x: f32,
+    pub y: f32
 }
 
 pub fn parse_color(s: String) -> Color {

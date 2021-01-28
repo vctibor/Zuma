@@ -4,7 +4,7 @@ use crate::ast::*;
 grammar;
 
 pub Prim: GeometricPrimitive = {
-    "line" => GeometricPrimitive::Line
+    "line" <start:Point> <end:Point> ";" => GeometricPrimitive::Line(Line { start, end })
 };
 
 pub Expr: Expr = {
@@ -14,8 +14,8 @@ pub Expr: Expr = {
     Point => Expr::Point(<>),
 };
 
-Point: (f32, f32) = {
-    "[" <x:Number> "," <y:Number> "]" => (x, y)
+Point: Point = {
+    "[" <x:Number> "," <y:Number> "]" => Point { x, y }
 };
 
 Color: Color = r"black|white|red|green|blue|yellow|#[a-f0-9]{6}" => parse_color(<>.to_string());
