@@ -1,12 +1,10 @@
 #[macro_use] extern crate lalrpop_util;
 
 mod parsing;
-mod tests;
 mod svg_generator;
 mod translator;
 
-use crate::grammar::ExprParser;
-use crate::grammar::PrimParser;
+use crate::parsing::ZumaParser;
 
 use crate::translator::translate;
 
@@ -15,9 +13,9 @@ use std::time::Instant;
 use std::io::Write;
 use std::{thread, time};
 
-lalrpop_mod!(pub grammar);
 
-fn compile(parser: &PrimParser, zuma_source: String) -> String {
+
+fn compile(parser: &ZumaParser, zuma_source: String) -> String {
     let parse_res = parser.parse(&zuma_source);
     let doc = parsing::zuma_model::Document { primitives: vec!(parse_res.unwrap()) };
     // evaluate
@@ -25,7 +23,7 @@ fn compile(parser: &PrimParser, zuma_source: String) -> String {
     svg_generator::generate_svg(svg_model)
 }
 
-fn compile_file(parser: &PrimParser) -> Result<(), Box<dyn std::error::Error>>
+fn compile_file(parser: &ZumaParser) -> Result<(), Box<dyn std::error::Error>>
 {
     let start_time = Instant::now();
     let input = read_to_string("examples/example01.zm")?;
@@ -40,7 +38,7 @@ fn compile_file(parser: &PrimParser) -> Result<(), Box<dyn std::error::Error>>
 
 fn main() {
 
-    let parser = PrimParser::new();
+    let parser = ZumaParser::new();
 
     loop {
         thread::sleep(time::Duration::from_millis(10));
