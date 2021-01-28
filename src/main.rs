@@ -2,6 +2,8 @@
 
 mod ast;
 mod tests;
+mod generator;
+mod translator;
 
 use crate::grammar::ExprParser;
 
@@ -9,12 +11,9 @@ lalrpop_mod!(pub grammar);
 
 fn main() {
 
-    let expr = ExprParser::new()
-        .parse("false")
-        .unwrap();
+    let input = "line [0,10] [25,50];";
 
-    println!("{:?}", expr);
+    let parser = PrimParser::new();
 
-    let res = ast::parse_color("#ff00a1".to_owned());
-    println!("{:?}", res);
+    //generator::generate_svg()
 }

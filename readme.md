@@ -1,7 +1,9 @@
 ZUMA - Vector Graphics Language
 ===============================
 
-## Datatypes
+## Language description
+
+### Datatypes
 
 ZUMA is strongly typed.
 
@@ -15,13 +17,13 @@ Following datatypes can be created using literals:
 
 **Color** can be declared using sharp followed by hexadecimal value: `#ff00a1`. Additionally few basic colors can be declared by their name: `black`, `white`, `red`, `green`, `blue` or `yellow`.
 
-## Expressions
+### Expressions
 
 Expressions are delimited using semicolon.
 
     line [0,10] [25,50] #ff00a1;
 
-## Comments
+### Comments
 
 Single line:
 
@@ -42,3 +44,12 @@ Comments can be nested:
     /* /* */
 
 Anything inside comments shouldn't break compilation.
+
+## Architecture
+
+ - Parser
+ - Abstract Syntax Tree
+ - Evaluation (remove comments, eval variables, ifs and for loops)
+ - ZUMA IR
+ - Translation: ZUMA IR -> svg_model
+ - Generate SVG

@@ -40,14 +40,6 @@ fn point_test1() {
     assert!(parser.parse("[0.1,5]").unwrap() == Expr::Point( Point { x: 0.1, y: 5.0 }));
 }
 
-/*
-#[test]
-fn primitive_test1() {
-    let parser = PrimParser::new();
-    assert!(parser.parse("line [0,10] [25,50];").unwrap() == GeometricPrimitive::Line);
-}
-*/
-
 #[test]
 fn line_test1() {
     let parser = PrimParser::new();
