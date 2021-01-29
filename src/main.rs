@@ -5,7 +5,7 @@ mod svg_generator;
 mod translator;
 
 use crate::parsing::ZumaParser;
-
+use crate::parsing::zuma_model::GeometricPrimitive;
 use crate::translator::translate;
 
 use std::fs::{read_to_string, File};
@@ -13,21 +13,28 @@ use std::time::Instant;
 use std::io::Write;
 use std::{thread, time};
 
+use anyhow::{Result, bail};
 
+fn compile(parser: &ZumaParser, zuma_source: String) -> Result<String> {
+    let parse_res: Option<GeometricPrimitive> = parser.parse(zuma_source);
 
-fn compile(parser: &ZumaParser, zuma_source: String) -> String {
-    let parse_res = parser.parse(&zuma_source);
-    let doc = parsing::zuma_model::Document { primitives: vec!(parse_res.unwrap()) };
+    if parse_res.is_none() {
+        bail!("Parsing error.");
+    }
+
+    let parse_res = parse_res.unwrap();
+
+    let doc = parsing::zuma_model::Document { primitives: vec!(parse_res) };
     // evaluate
     let svg_model = translate(doc);
-    svg_generator::generate_svg(svg_model)
+    Ok(svg_generator::generate_svg(svg_model))
 }
 
-fn compile_file(parser: &ZumaParser) -> Result<(), Box<dyn std::error::Error>>
+fn compile_file(parser: &ZumaParser) -> Result<()>
 {
     let start_time = Instant::now();
     let input = read_to_string("examples/example01.zm")?;
-    let svg = compile(&parser, input);
+    let svg = compile(&parser, input)?;
     let mut output_file = File::create("examples/example01.svg")?;
     output_file.write_all(svg.as_bytes())?;
     let end_time = start_time.elapsed();

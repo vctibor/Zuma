@@ -1,11 +1,14 @@
 #![allow(unused_imports)]
 
-pub mod zuma_model;
-
 lalrpop_mod!(grammar);
+
+pub mod zuma_model;
+pub mod parsing_functions;
 
 use crate::parsing::grammar::*;
 use crate::parsing::zuma_model::*;
+
+use anyhow::Result;
 
 pub struct ZumaParser {
     parser: PrimParser
@@ -18,8 +21,8 @@ impl ZumaParser {
     }
 
     /// TODO: Return result
-    pub fn parse(&self, source: &str) -> Option<GeometricPrimitive> {
-        self.parser.parse(source).ok()
+    pub fn parse(&self, source: String) -> Option<GeometricPrimitive> {
+        self.parser.parse(&source).ok()
     }
 }
 
@@ -65,3 +68,4 @@ fn line_test1() {
     let input = "line start = [0,10] end = [25,50] color = black;";
     assert!(parser.parse(input).unwrap() == GeometricPrimitive::Line(output));
 }
+
