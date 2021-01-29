@@ -27,21 +27,21 @@ impl ZumaParser {
 }
 
 #[test]
-fn boolean_test1() {
+fn boolean_test() {
     let parser = BoolParser::new();
     assert!(parser.parse("true").unwrap() == true);
     assert!(parser.parse("false").unwrap() == false);
 }
 
 #[test]
-fn number_test1() {
+fn number_test() {
     let parser = NumberParser::new();
     assert!(parser.parse("1234").unwrap() == 1234.0);
     assert!(parser.parse("1234.56").unwrap() == 1234.56);
 }
 
 #[test]
-fn color_test1() {
+fn color_test() {
     let parser = ColorParser::new();
     assert!(parser.parse("black").unwrap() == Color { red: 0, green: 0, blue: 0 });
     assert!(parser.parse("white").unwrap() == Color { red: 255, green: 255, blue: 255 });
@@ -54,13 +54,13 @@ fn color_test1() {
 }
 
 #[test]
-fn point_test1() {
+fn point_test() {
     let parser = PointParser::new();
     assert!(parser.parse("[0.1,5]").unwrap() == Point { x: 0.1, y: 5.0 });
 }
 
 #[test]
-fn line_test1() {
+fn line_test() {
     let parser = PrimParser::new();
     let output = Line { start: Point { x: 0., y: 10. }, end: Point { x: 25., y: 50. }, color: Some(Color { red: 0, green: 0, blue: 0 }) };
     let input = "line start=[0,10] end=[25,50] color=black;";
@@ -69,3 +69,14 @@ fn line_test1() {
     assert!(parser.parse(input).unwrap() == GeometricPrimitive::Line(output));
 }
 
+#[test]
+fn full_parse_test_1() {
+    let parser = ZumaParser::new();
+    let input = r#"
+
+        line start=[0,10] end=[25,50] color=black;
+
+
+    "#;
+    assert!(parser.parse(input.to_string()).is_some());
+}
