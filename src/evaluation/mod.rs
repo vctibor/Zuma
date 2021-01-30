@@ -9,6 +9,7 @@ use std::collections::HashMap;
 use std::boxed::Box;
 
 use maplit::hashmap;
+use anyhow::{Result, Error, anyhow};
 
 enum Type {
     Number,
@@ -19,8 +20,8 @@ enum Type {
 use crate::evaluation::Type::*;
 
 struct Function {
-    args: HashMap<String, Arg>,
-    eval: Box<dyn FnOnce(ast::FunctionCall) -> Vec<svg::Element>>
+    //args: HashMap<String, Arg>,
+    eval: Box<dyn FnOnce(ast::FunctionCall) -> Result<Vec<svg::Element>>>
 }
 
 struct Arg {
@@ -28,15 +29,13 @@ struct Arg {
     required: bool
 }
 
-
-
-
-
 /// TODO: Don't panic! Return errors.
 pub fn evaluate(zuma_doc: ast::Document) -> svg::Document {
 
-    let FUNCTIONS = hashmap!{
-        "line" =>  Function {
+    /*
+    // declaration of known functions, basically "stdlib"
+    let functions: HashMap<String, Function> = hashmap!{
+        "line".to_owned() =>  Function {
             args: hashmap!{
                 "start".to_owned() => Arg { r#type: Point,  required: true },
                 "end".to_owned()   => Arg { r#type: Point,  required: true },
@@ -44,9 +43,16 @@ pub fn evaluate(zuma_doc: ast::Document) -> svg::Document {
                 "width".to_owned() => Arg { r#type: Number, required: false },
             },
 
-            eval: Box::new(move |fv: ast::FunctionCall| {
+            eval: Box::new(move |fc: ast::FunctionCall| {
                 panic!()
             })
+        }
+    };
+    */
+
+    let functions: HashMap<String, Function> = hashmap!{
+        "line".to_owned() =>  Function {
+            eval: Box::new(eval_line)
         }
     };
 
@@ -56,23 +62,22 @@ pub fn evaluate(zuma_doc: ast::Document) -> svg::Document {
     for row in zuma_doc.rows {
 
         let function_call: ast::FunctionCall = row;    // later `row` will be enum
-
-        /*
-        for element in handle_function_call(function_call) {
-            document.add(element);
-        }
-        */
+        let mut res = handle_function_call(function_call, &functions);
+        document = document.add_many(&mut res);
+        
     };
 
     document
 }
 
-
-
-/*
-fn handle_function_call(function_call: ast::FunctionCall) -> Vec<svg::Element> {
+fn handle_function_call(function_call: ast::FunctionCall, functions: &HashMap<String, Function>) -> Vec<svg::Element> {
     
-    let function = FUNCTIONS.get(function_call.name);
+    let name = function_call.name.clone();
+    
+    println!("Function {:?}", name);
+
+
+    let function = functions.get(&name);
 
     if function.is_none() {
         panic!("Unknown function {}", &function_call.name);
@@ -80,25 +85,47 @@ fn handle_function_call(function_call: ast::FunctionCall) -> Vec<svg::Element> {
 
     let function = function.unwrap();
 
-    let all_accepted_args: Vec<String> = vec!();
-    let required_args: Vec<String> = vec!();
-    let provided_args: Vec<String> = vec!();
+    //let all_accepted_args: Vec<String> = function.args.keys().map(|key| key.clone()).collect();
+    //println!("Accepted args {:?}", all_accepted_args);
+    //let required_args: Vec<String> = function.args.iter().filter(|(_, val)| val.required).map(|(key, _)| key.clone()).collect();
+    //println!("Required args {:?}", required_args);
+    //let provided_args: Vec<String> = function_call.args.iter().map(|arg| arg.name.clone()).collect();   
+    //println!("Provided args {:?}", provided_args);
 
-    // error if required argument isn't provided
-    for arg_name in function.args.keys() {
-        let arg = function.args.get(arg_name).unwrap();
-        if arg.required && !function_call.args.contains(&arg_name) {
-            panic!("Required argument {} wasn't provided.", arg_name);
-        }
-    }
-
-    // error if some provided argument is unknown
-    for arg in function_call.args {
-        if !function.args.contains_key(&arg.name) {
-            panic!("Unknown argument {} provided.", arg.name);
-        }
-    }
+    // TODO: error if required argument isn't provided
+    
+    // TODO: error if some provided argument is unknown
+    
+    // TODO: we also need to match types ! ! !
 
     panic!();
 }
-*/
+
+fn eval_line(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
+
+    let mut args = fc.args;
+    
+    let start = get_arg(&mut args, "start", Type::Point)?;
+    let end = get_arg(&mut args, "end", Type::Point)?;
+
+    let start = get_arg(&mut args, "color", Type::Color);
+    let start = get_arg(&mut args, "width", Type::Number);
+
+
+    Ok(vec!())
+}
+
+fn get_arg(args: &mut Vec<ast::Arg>, name: &str, r#type: Type) -> Result<ast::Arg> {
+
+    let index = args.iter().position(|arg| arg.name == name);
+
+    if index.is_none() {
+        return Err(anyhow!("Missing required argument `start`."));
+    }
+    
+    let index = index.unwrap();
+
+    let arg = args.remove(index);
+
+    Ok(arg)
+}

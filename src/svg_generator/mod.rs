@@ -18,6 +18,11 @@ impl Document {
         self
     }
 
+    pub fn add_many(mut self, els: &mut Vec<Element>) -> Document {
+        self.elements.append(els);
+        self
+    }
+
     pub fn generate(self) -> String {
         generate(self)
     }
