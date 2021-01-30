@@ -4,15 +4,21 @@ use crate::parsing::parsing_functions::*;
 
 grammar;
 
+pub Doc: Document = {
+    Prim* => Document { primitives: <> }
+};
+
 pub Prim: GeometricPrimitive = {
-    "line" "start" "=" <start:Point> "end" "=" <end:Point> "color" "=" <color:Color> ";" => GeometricPrimitive::Line(Line { start, end, color: Some(color) })
+    <line: Line> => GeometricPrimitive::Line(line)
+};
+
+pub Line: Line = {
+    "line" "start" "=" <start:Point> "end" "=" <end:Point>  <color:("color" "=" <Color>)?> ";" => Line { start, end, color }
 };
 
 pub Point: Point = {
     "[" <x:Number> "," <y:Number> "]" => Point { x, y }
 };
-
-//pub Color: Color = r"black|white|red|green|blue|yellow|#[a-f0-9]{6}" => parse_color(<>.to_string()).unwrap();
 
 pub Color: Color = {
     "black"  => Color { red: 0, green: 0, blue: 0 },

@@ -16,7 +16,7 @@ use std::{thread, time};
 use anyhow::{Result, bail};
 
 fn compile(parser: &ZumaParser, zuma_source: String) -> Result<String> {
-    let parse_res: Option<GeometricPrimitive> = parser.parse(zuma_source);
+    let parse_res = parser.parse(zuma_source);
 
     if parse_res.is_none() {
         bail!("Parsing error.");
@@ -24,9 +24,9 @@ fn compile(parser: &ZumaParser, zuma_source: String) -> Result<String> {
 
     let parse_res = parse_res.unwrap();
 
-    let doc = parsing::zuma_model::Document { primitives: vec!(parse_res) };
     // evaluate
-    let svg_model = translate(doc);
+    let svg_model = translate(parse_res);
+
     Ok(svg_generator::generate_svg(svg_model))
 }
 
