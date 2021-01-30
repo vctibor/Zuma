@@ -5,24 +5,24 @@ use crate::parsing::parsing_functions::*;
 grammar;
 
 pub Doc: Document = {
-    FunctionCall* => Document { lines: <> }
+    FunctionCall* => Document { rows: <> }
 };
 
-pub FunctionCall: FunctionCall = {
+FunctionCall: FunctionCall = {
     <name: r"[a-z]+"> <args: Arg*> ";" => FunctionCall { name: name.to_string(), args }
 };
 
-pub Arg: Arg = {
+Arg: Arg = {
     <name: r"[a-z]+"> "=" <value:Number> => number_arg(name.to_string(), value),
     <name: r"[a-z]+"> "=" <value:Color> => color_arg(name.to_string(), value),
     <name: r"[a-z]+"> "=" <value:Point> => point_arg(name.to_string(), value)
 };
 
-pub Point: Point = {
+Point: Point = {
     "[" <x:Number> "," <y:Number> "]" => Point { x, y }
 };
 
-pub Color: Color = {
+Color: Color = {
     "black"  => Color { red: 0, green: 0, blue: 0 },
     "white"  => Color { red: 255, green: 255, blue: 255 },
     "red"    => Color { red: 255, green: 0, blue: 0 },
@@ -32,4 +32,4 @@ pub Color: Color = {
     r"#[a-f0-9]{6}" => parse_color(<>.to_string()).unwrap()
 }
 
-pub Number: f32 = r"[0-9]+\.?[0-9]*" => f32::from_str(<>).unwrap();
+Number: f32 = r"[0-9]+\.?[0-9]*" => f32::from_str(<>).unwrap();

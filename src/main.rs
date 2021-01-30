@@ -24,9 +24,10 @@ fn compile(parser: &ZumaParser, zuma_source: String) -> Result<String> {
     let parse_res = parse_res.unwrap();
 
     // evaluate
-    let svg_model = translate(parse_res);
 
-    Ok(svg_generator::generate_svg(svg_model))
+    let svg = translate(parse_res);
+
+    Ok(svg)
 }
 
 fn compile_file(parser: &ZumaParser) -> Result<()>

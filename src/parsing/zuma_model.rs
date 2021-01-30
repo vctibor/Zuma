@@ -1,6 +1,6 @@
 #[derive(Debug, PartialEq, Clone)]
 pub struct Document {
-    pub lines: Vec<FunctionCall>
+    pub rows: Vec<FunctionCall>
 }
 
 #[derive(Debug, PartialEq, Clone)]

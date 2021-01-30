@@ -1,27 +1,130 @@
-pub mod svg_model;
+//
+// PUBLIC INTERFACE
+//
 
-mod tests;
+pub struct Document {
+    elements: Vec<Element>
+}
 
-use crate::svg_generator::svg_model::*;
-
-pub fn generate_svg(doc: Document) -> String {
-    use crate::svg_generator::Element::*;
-
-    let mut svg = "<svg xmlns=\"http://www.w3.org/2000/svg\">\n".to_owned();
-
-    for el in doc.elements {
-        match el {
-            Line(l) => svg.push_str(&line(l))
+impl Document {
+    pub fn new() -> Document {
+        Document {
+            elements: Vec::new() 
         }
     }
 
-    svg.push_str("</svg>");
+    pub fn add(mut self, el: Element) -> Document {
+        self.elements.push(el);
+        self
+    }
 
-    svg
+    pub fn generate(self) -> String {
+        generate(self)
+    }
+}
+
+pub enum Element {
+    Line(Line)
+}
+
+impl From<Line> for Element {
+    fn from(line: Line) -> Self {
+        Element::Line(line)
+    }
+}
+
+pub struct Line {
+    x1: f32,
+    x2: f32,
+    y1: f32,
+    y2: f32,
+    color: Option<Color>,
+    width: Option<f32>
+}
+
+impl Line {
+    pub fn new(x1: f32, y1: f32, x2: f32, y2: f32) -> Line {
+        Line {
+            x1, y1, x2, y2,
+            color: None,
+            width: None,
+        }
+    }
+
+    pub fn color(mut self, color: Color) -> Line {
+        self.color = Some(color);
+        self
+    }
+
+    pub fn width(mut self, width: f32) -> Line {
+        self.width = Some(width);
+        self
+    }
+}
+
+pub struct Color {
+    r: u8,
+    g: u8,
+    b: u8
+}
+
+impl Color {
+    pub fn new(r: u8, g: u8, b: u8) -> Color {
+        Color { r, g, b }
+    }
+}
+
+//
+// GENERATOR
+//
+
+static INDENT_SIZE: usize = 4;
+
+static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\">";
+static SVG_CLOSE: &str = "</svg>";
+
+struct Generator {
+    content: String
+}
+
+impl Generator {
+
+    pub fn open() -> Generator {
+        let mut content = "".to_owned();
+        content.push_str(SVG_OPEN);
+        content.push_str("\n");
+        Generator { content }
+    }
+
+    pub fn add(&mut self, line: String, indent_level: usize) {
+        let indent_chars = " ".repeat(INDENT_SIZE * indent_level);
+        self.content.push_str(&indent_chars);
+        self.content.push_str(&line);
+        self.content.push_str("\n");
+    }
+
+    pub fn close(mut self) -> String {
+        self.content.push_str(SVG_CLOSE);
+        self.content
+    }
+}
+
+pub fn generate(doc: Document) -> String {
+
+    let mut generator = Generator::open();
+
+    use crate::svg_generator::Element::*;
+    for el in doc.elements {
+        match el {
+            Line(l) => generator.add(line(l), 1)
+        }
+    }
+
+    generator.close()
 }
 
 fn line(l: Line) -> String {
-    let mut line = format!("    <line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\" ", l.x1, l.y1, l.x2, l.y2);
+    let mut line = format!("<line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\" ", l.x1, l.y1, l.x2, l.y2);
 
     let col = l.color.unwrap_or(Color { r: 0, g: 0, b: 0 });
 
@@ -41,4 +144,19 @@ fn style(attrs: Vec<String>) -> String {
 
 fn stroke_color(col: Color) -> String {
     format!("stroke:rgb({},{},{})", col.r, col.g, col.b)
+}
+
+//
+// TESTS
+//
+
+#[test]
+fn svg_gen_test_1() {
+    Document::new()
+        .add(Line::new(0.0, 0.0, 1.0, 10.0)
+            .color(Color::new(128, 25, 45))
+            .width(3.0)
+            .into()
+        )
+    .generate();
 }
