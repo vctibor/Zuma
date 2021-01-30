@@ -49,5 +49,7 @@ fn main() {
     loop {
         thread::sleep(time::Duration::from_millis(10));
         compile_file(&parser);
+
+        break;
     }
 }

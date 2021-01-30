@@ -1,15 +1,15 @@
 /// This module takes Zuma AST,
-///   evaluates all language constructs like variables, functions, loops, etc.,
-///   and returns svg_generator's SVG representation.
+/// evaluates all language constructs like variables, functions, loops, etc.,
+/// and returns svg_generator's SVG representation.
 
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;
 
 use std::collections::HashMap;
+use std::boxed::Box;
 
 use maplit::hashmap;
 
-#[derive(Debug, PartialEq, Clone)]
 enum Type {
     Number,
     Point,
@@ -18,28 +18,36 @@ enum Type {
 
 use crate::evaluation::Type::*;
 
-#[derive(Debug, PartialEq, Clone)]
 struct Function {
-    args: HashMap<String, Arg>
+    args: HashMap<String, Arg>,
+    eval: Box<dyn FnOnce(ast::FunctionCall) -> Vec<svg::Element>>
 }
 
-#[derive(Debug, PartialEq, Clone)]
 struct Arg {
     r#type: Type,
     required: bool
 }
 
 
+
+
+
 /// TODO: Don't panic! Return errors.
 pub fn evaluate(zuma_doc: ast::Document) -> svg::Document {
 
-    let FUNCTIONS: HashMap<&str, Function> = hashmap!{
-        "line" =>  Function { args: hashmap!{
-            "start".to_owned() => Arg { r#type: Point,  required: true },
-            "end".to_owned()   => Arg { r#type: Point,  required: true },
-            "color".to_owned() => Arg { r#type: Color,  required: false },
-            "width".to_owned() => Arg { r#type: Number, required: false },
-        }}
+    let FUNCTIONS = hashmap!{
+        "line" =>  Function {
+            args: hashmap!{
+                "start".to_owned() => Arg { r#type: Point,  required: true },
+                "end".to_owned()   => Arg { r#type: Point,  required: true },
+                "color".to_owned() => Arg { r#type: Color,  required: false },
+                "width".to_owned() => Arg { r#type: Number, required: false },
+            },
+
+            eval: Box::new(move |fv: ast::FunctionCall| {
+                panic!()
+            })
+        }
     };
 
 
@@ -60,6 +68,7 @@ pub fn evaluate(zuma_doc: ast::Document) -> svg::Document {
 }
 
 
+
 /*
 fn handle_function_call(function_call: ast::FunctionCall) -> Vec<svg::Element> {
     
@@ -70,6 +79,10 @@ fn handle_function_call(function_call: ast::FunctionCall) -> Vec<svg::Element> {
     }
 
     let function = function.unwrap();
+
+    let all_accepted_args: Vec<String> = vec!();
+    let required_args: Vec<String> = vec!();
+    let provided_args: Vec<String> = vec!();
 
     // error if required argument isn't provided
     for arg_name in function.args.keys() {
