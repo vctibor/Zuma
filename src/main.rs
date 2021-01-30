@@ -2,10 +2,9 @@
 
 mod parsing;
 mod svg_generator;
-mod translator;
+mod evaluation;
 
 use crate::parsing::ZumaParser;
-use crate::translator::translate;
 
 use std::fs::{read_to_string, File};
 use std::time::Instant;
@@ -21,13 +20,13 @@ fn compile(parser: &ZumaParser, zuma_source: String) -> Result<String> {
         bail!("Parsing error.");
     }
 
-    let parse_res = parse_res.unwrap();
+    let zuma_doc: crate::parsing::ast::Document = parse_res.unwrap();
 
     // evaluate
 
-    let svg = translate(parse_res);
+    let svg: svg_generator::Document = evaluation::evaluate(zuma_doc);
 
-    Ok(svg)
+    Ok(svg.generate())
 }
 
 fn compile_file(parser: &ZumaParser) -> Result<()>

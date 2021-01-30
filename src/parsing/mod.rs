@@ -2,11 +2,11 @@
 
 lalrpop_mod!(grammar);
 
-pub mod zuma_model;
+pub mod ast;
 pub mod parsing_functions;
 
 use crate::parsing::grammar::*;
-use crate::parsing::zuma_model::*;
+use crate::parsing::ast::*;
 
 use anyhow::Result;
 

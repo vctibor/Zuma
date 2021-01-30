@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use crate::parsing::zuma_model::*;
+use crate::parsing::ast::*;
 use crate::parsing::parsing_functions::*;
 
 grammar;

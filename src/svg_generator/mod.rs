@@ -38,7 +38,7 @@ pub struct Line {
     x2: f32,
     y1: f32,
     y2: f32,
-    color: Option<Color>,
+    color: Option<(u8, u8, u8)>,
     width: Option<f32>
 }
 
@@ -51,8 +51,8 @@ impl Line {
         }
     }
 
-    pub fn color(mut self, color: Color) -> Line {
-        self.color = Some(color);
+    pub fn color(mut self, r: u8, g: u8, b: u8) -> Line {
+        self.color = Some((r, g, b));
         self
     }
 
@@ -62,17 +62,6 @@ impl Line {
     }
 }
 
-pub struct Color {
-    r: u8,
-    g: u8,
-    b: u8
-}
-
-impl Color {
-    pub fn new(r: u8, g: u8, b: u8) -> Color {
-        Color { r, g, b }
-    }
-}
 
 //
 // GENERATOR
@@ -126,7 +115,7 @@ pub fn generate(doc: Document) -> String {
 fn line(l: Line) -> String {
     let mut line = format!("<line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\" ", l.x1, l.y1, l.x2, l.y2);
 
-    let col = l.color.unwrap_or(Color { r: 0, g: 0, b: 0 });
+    let col = l.color.unwrap_or((0, 0, 0 ));
 
     let mut style_attrs = vec!();
     style_attrs.push(stroke_color(col));
@@ -142,8 +131,8 @@ fn style(attrs: Vec<String>) -> String {
     format!("style=\"{}\"", attrs.join(";"))
 }
 
-fn stroke_color(col: Color) -> String {
-    format!("stroke:rgb({},{},{})", col.r, col.g, col.b)
+fn stroke_color(rgb: (u8, u8, u8)) -> String {
+    format!("stroke:rgb({},{},{})", rgb.0, rgb.1, rgb.2)
 }
 
 //
@@ -154,7 +143,7 @@ fn stroke_color(col: Color) -> String {
 fn svg_gen_test_1() {
     Document::new()
         .add(Line::new(0.0, 0.0, 1.0, 10.0)
-            .color(Color::new(128, 25, 45))
+            .color(128, 25, 45)
             .width(3.0)
             .into()
         )
