@@ -5,12 +5,14 @@ use crate::svg_generator::svg_model;
 
 pub fn translate(zuma_ir: zuma_model::Document) -> svg_model::Document {
     
-    use zuma_model::GeometricPrimitive as gp;
-    use svg_model::Element as e;
+    //use zuma_model::GeometricPrimitive as gp;
+    //use svg_model::Element as e;
 
     let mut elements = Vec::new();
 
-    for primitive in zuma_ir.primitives {
+    for primitive in zuma_ir.lines {
+
+        /*
         match primitive {
             gp::Line(l) => {
                 elements.push(e::Line(svg_model::Line {
@@ -18,6 +20,9 @@ pub fn translate(zuma_ir: zuma_model::Document) -> svg_model::Document {
                 }));
             }
         }
+        */
+
+        panic!();
     }
     
     svg_model::Document { elements }

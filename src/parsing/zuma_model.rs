@@ -1,11 +1,26 @@
 #[derive(Debug, PartialEq, Clone)]
 pub struct Document {
-    pub primitives: Vec<GeometricPrimitive>
+    pub lines: Vec<FunctionCall>
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum GeometricPrimitive {
-    Line(Line)
+pub struct FunctionCall {
+    pub name: String,
+    pub args: Vec<Arg>
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Arg {
+    pub name: String,
+    pub value: Literal
+}
+
+/// Types which can be decalred by literal in Zuma.
+#[derive(Debug, PartialEq, Clone)]
+pub enum Literal {
+    Number(f32),
+    Point(Point),
+    Color(Color)
 }
 
 #[derive(Debug, PartialEq, Clone)]

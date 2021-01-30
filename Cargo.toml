@@ -3,6 +3,8 @@ name = "zuma"
 version = "0.1.0"
 authors = ["Vladimír Ctibor <vladimir.ctibor@gmail.com>"]
 edition = "2018"
+description = "Vector Graphics Language"
+license = "GPL-3.0-only"
 
 [build-dependencies]
 lalrpop = "0.19.4"
