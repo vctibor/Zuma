@@ -5,7 +5,6 @@ mod svg_generator;
 mod translator;
 
 use crate::parsing::ZumaParser;
-use crate::parsing::zuma_model::GeometricPrimitive;
 use crate::translator::translate;
 
 use std::fs::{read_to_string, File};
