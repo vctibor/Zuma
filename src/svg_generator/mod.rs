@@ -33,7 +33,8 @@ impl Document {
 
 pub enum Element {
     Line(Line),
-    Rectangle(Rectangle)
+    Rectangle(Rectangle),
+    Text(Text)
 }
 
 impl From<Line> for Element {
@@ -45,6 +46,12 @@ impl From<Line> for Element {
 impl From<Rectangle> for Element {
     fn from(rect: Rectangle) -> Self {
         Element::Rectangle(rect)
+    }
+}
+
+impl From<Text> for Element {
+    fn from(text: Text) -> Self {
+        Element::Text(text)
     }
 }
 
@@ -120,6 +127,28 @@ impl Rectangle {
     }
 }
 
+pub struct Text {
+    x: f32,
+    y: f32,
+    text: String,
+    fill_color: Option<(u8, u8, u8)>
+}
+
+impl Text {
+
+    pub fn new(x: f32, y: f32, text: String) -> Text {
+        Text {
+            x, y, text,
+            fill_color: None
+        }
+    }
+
+    pub fn fill_color(mut self, r: u8, g: u8, b: u8) -> Text {
+        self.fill_color = Some((r, g, b));
+        self
+    }
+}
+
 //
 // GENERATOR
 //
@@ -171,15 +200,34 @@ pub fn generate(doc: Document) -> String {
     for el in doc.elements {
         match el {
             Line(l) => generator.add(line(l), 1),
-            Rectangle(r) => generator.add(rectangle(r), 1)
+            Rectangle(r) => generator.add(rectangle(r), 1),
+            Text(t) => generator.add(text(t), 1),
         }
     }
 
     generator.close()
 }
 
-fn rectangle(r: Rectangle) -> String {
+fn line(l: Line) -> String {
+    let mut attrs = hashmap!(
+        "x1".to_owned() => l.x1.to_string(),
+        "y1".to_owned() => l.y1.to_string(),
+        "x2".to_owned() => l.x2.to_string(),
+        "y2".to_owned() => l.y2.to_string()
+    );
 
+    let mut style_attrs = vec!();
+    style_attrs.push(stroke_width(l.width));
+    style_attrs.push(stroke_color(l.color));
+    if style_attrs.len() > 0 {
+        let style = style_attrs.join(";");
+        attrs.insert("style".to_owned(), style);
+    }
+    
+    xml_tag("line".to_owned(), attrs)
+}
+
+fn rectangle(r: Rectangle) -> String {
     let mut attrs = hashmap!(
         "x".to_owned() => r.x.to_string(),
         "y".to_owned() => r.y.to_string(),
@@ -200,21 +248,18 @@ fn rectangle(r: Rectangle) -> String {
     xml_tag("rect".to_owned(), attrs)
 }
 
-fn line(l: Line) -> String {
+fn text(t: Text) -> String {
     let mut attrs = hashmap!(
-        "x1".to_owned() => l.x1.to_string(),
-        "y1".to_owned() => l.y1.to_string(),
-        "x2".to_owned() => l.x2.to_string(),
-        "y2".to_owned() => l.y2.to_string()
+        "x".to_owned() => t.x.to_string(),
+        "y".to_owned() => t.y.to_string()
     );
 
     let mut style_attrs = vec!();
-    style_attrs.push(stroke_width(l.width));
-    style_attrs.push(stroke_color(l.color));
+    style_attrs.push(fill_color(t.fill_color));
     if style_attrs.len() > 0 {
         let style = style_attrs.join(";");
         attrs.insert("style".to_owned(), style);
     }
     
-    xml_tag("line".to_owned(), attrs)
+    xml_element("text".to_owned(), attrs, t.text)
 }

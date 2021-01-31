@@ -3,6 +3,7 @@
 /// and returns svg_generator's SVG representation.
 
 mod stdlib;
+mod helpers;
 
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;

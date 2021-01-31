@@ -20,7 +20,8 @@ pub struct Arg {
 pub enum Literal {
     Number(f32),
     Point(Point),
-    Color(Color)
+    Color(Color),
+    String(String)
 }
 
 #[derive(Debug, PartialEq, Clone)]

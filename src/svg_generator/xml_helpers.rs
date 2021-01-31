@@ -4,6 +4,10 @@ pub fn xml_tag(name: String, attrs: HashMap<String, String>) -> String {
     format!("<{} {}/>", name, attributes(attrs))
 }
 
+pub fn xml_element(name: String, attrs: HashMap<String, String>, content: String) -> String {
+    format!("<{} {}>{}</{}>", name, attributes(attrs), content, name)
+}
+
 pub fn attributes(attributes: HashMap<String, String>) -> String {
     let mut attrs = vec!();
 

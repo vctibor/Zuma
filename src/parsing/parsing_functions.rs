@@ -29,3 +29,10 @@ pub fn color_arg(name: String, value: Color) -> Arg {
         value: Literal::Color(value)
     }
 }
+
+pub fn string_arg(name: String, value: String) -> Arg {
+    Arg {
+        name: name,
+        value: Literal::String(value)
+    }
+}

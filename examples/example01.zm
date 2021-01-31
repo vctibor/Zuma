@@ -7,3 +7,5 @@ rectangle start=[300, 300] size=[100, 100] color=black stroke-color=white stroke
 line start = [500, 100] end = [700, 100] color=#660088 width=20;
 line start = [500, 100] end = [600, 200] color=#660088 width=20;
 line start = [700, 100] end = [600, 200] color=#660088 width=20;
+
+text text="Ahoj světe!" start=[50,50] color=red;

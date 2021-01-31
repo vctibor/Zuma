@@ -1,3 +1,5 @@
+use super::helpers::*;
+
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;
 
@@ -24,7 +26,11 @@ pub fn stdlib() -> FunMap {
 
         "rectangle".to_owned() => Function {
             eval: Box::new(rectangle)
-        }
+        },
+
+        "text".to_owned() => Function {
+            eval: Box::new(text)
+        },
     }
 }
 
@@ -123,35 +129,32 @@ fn rectangle(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
     Ok(vec!(rectangle))
 }
 
-fn get_arg(args: &mut Vec<ast::Arg>, name: &str) -> Result<ast::Arg> {
+fn text(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
+    let mut args = fc.args;
 
-    let index = args.iter().position(|arg| arg.name == name);
+    let start = get_arg(&mut args, "start")?;
+    let start = get_point(start)?;
 
-    if let Some(index) = index {
-        return Ok(args.remove(index));
+    let content = get_arg(&mut args, "text")?;
+    let content = get_string(content)?;
+    let mut content = remove_first(&content).to_owned();
+    content.pop();
+
+    let color: Option<ast::Arg> = get_arg(&mut args, "color").ok();
+    let color = if let Some(color) = color {
+        get_color(color)?
+    } else {
+        ast::Color { red: 0, green: 0, blue: 0 } 
+    };
+
+    if args.len() > 0 {
+        println!("{:?}", args);
+        return Err(anyhow!("Unexpected argument provided."));
     }
 
-    Err(anyhow!("Missing required argument `{}`.", name))
-}
+    let text = svg::Text::new(start.x, start.y, content)
+        .fill_color(color.red, color.green, color.blue)
+        .into();
 
-
-fn get_point(arg: ast::Arg) -> Result<ast::Point> {
-    match arg.value {
-        ast::Literal::Point(p) => Ok(p),
-        _ => Err(anyhow!("Wrong type."))
-    }
-}
-
-fn get_color(arg: ast::Arg) -> Result<ast::Color> {
-    match arg.value {
-        ast::Literal::Color(c) => Ok(c),
-        _ => Err(anyhow!("Wrong type."))
-    }
-}
-
-fn get_number(arg: ast::Arg) -> Result<f32> {
-    match arg.value {
-        ast::Literal::Number(n) => Ok(n),
-        _ => Err(anyhow!("Wrong type."))
-    }
+    Ok(vec!(text))
 }
