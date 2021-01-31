@@ -6,6 +6,14 @@ edition = "2018"
 description = "Vector Graphics Language"
 license = "GPL-3.0-only"
 
+[lib]
+name = "zumalib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "zuma"
+path = "src/main.rs"
+
 [build-dependencies]
 lalrpop = "0.19.4"
 
