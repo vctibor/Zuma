@@ -5,8 +5,8 @@ lalrpop_mod!(grammar);
 pub mod ast;
 pub mod parsing_functions;
 
-use crate::parsing::grammar::*;
-use crate::parsing::ast::*;
+use grammar::*;
+use ast::*;
 
 use anyhow::Result;
 
