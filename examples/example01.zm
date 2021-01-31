@@ -1,5 +1,5 @@
-line start=[10,10] end=[110,10] color=red;
+line start=[10,10] end=[110,10] color=red width=15;
 
-line start=[10,10] end=[60,50] color=red;
+line start=[10,10] end=[60,50] color=#ffffff width=11;
 
-line start=[110,10] end=[60,70] color=red;
+line start=[110,10] end=[60,50] color=blue;

@@ -22,9 +22,7 @@ fn compile(parser: &ZumaParser, zuma_source: String) -> Result<String> {
 
     let zuma_doc: crate::parsing::ast::Document = parse_res.unwrap();
 
-    // evaluate
-
-    let svg: svg_generator::Document = evaluation::evaluate(zuma_doc);
+    let svg: svg_generator::Document = evaluation::evaluate(zuma_doc)?;
 
     Ok(svg.generate())
 }
@@ -48,8 +46,10 @@ fn main() {
 
     loop {
         thread::sleep(time::Duration::from_millis(10));
-        compile_file(&parser);
+        let res = compile_file(&parser);
 
-        break;
+        println!("{:?}", res);
+
+        //break;
     }
 }
