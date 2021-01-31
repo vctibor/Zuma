@@ -53,3 +53,14 @@ fn test_two_lines_1() {
     "#;
     assert!(parser.parse(input.to_string()).is_some());
 }
+
+#[test]
+fn test_arbitrary_arg_poistion() {
+    let parser = ZumaParser::new();
+    let input = r#"
+        line color=white end=[100,70] width=11.5 start=[0,40];
+        line end=[100,70] width=11.5 color=white start=[0,40];
+        line width=11.5 start=[0,40] color=white end=[100,70];
+    "#;
+    assert!(parser.parse(input.to_string()).is_some());
+}

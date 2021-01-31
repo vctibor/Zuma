@@ -74,7 +74,7 @@ impl Line {
 
 static INDENT_SIZE: usize = 4;
 
-static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\">";
+static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\">";
 static SVG_CLOSE: &str = "</svg>";
 
 struct Generator {
@@ -121,19 +121,25 @@ fn line(l: Line) -> String {
     let mut line = format!("<line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\" ", l.x1, l.y1, l.x2, l.y2);
 
     let col = l.color.unwrap_or((0, 0, 0 ));
+    let width = l.width.unwrap_or(1.0);
 
     let mut style_attrs = vec!();
     style_attrs.push(stroke_color(col));
+    style_attrs.push(stroke_width(width));
     let style = style(style_attrs);
     line.push_str(&style);
 
-    line.push_str("/>\n");
+    line.push_str("/>");
 
     line
 }
 
 fn style(attrs: Vec<String>) -> String {
     format!("style=\"{}\"", attrs.join(";"))
+}
+
+fn stroke_width(width: f32) -> String {
+    format!("stroke-width:{}", width)
 }
 
 fn stroke_color(rgb: (u8, u8, u8)) -> String {
