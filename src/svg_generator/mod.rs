@@ -29,12 +29,19 @@ impl Document {
 }
 
 pub enum Element {
-    Line(Line)
+    Line(Line),
+    Rectangle(Rectangle)
 }
 
 impl From<Line> for Element {
     fn from(line: Line) -> Self {
         Element::Line(line)
+    }
+}
+
+impl From<Rectangle> for Element {
+    fn from(rect: Rectangle) -> Self {
+        Element::Rectangle(rect)
     }
 }
 
@@ -67,6 +74,48 @@ impl Line {
     }
 }
 
+pub struct Rectangle {
+    x: f32,
+    y: f32,
+    width: f32,
+    height: f32,
+    stroke_width: Option<f32>,
+    stroke_color: Option<(u8, u8, u8)>,
+    fill_color: Option<(u8, u8, u8)>,
+    opacity: Option<f32>
+}
+
+impl Rectangle {
+    pub fn new(x: f32, y: f32, width: f32, height: f32) -> Rectangle {
+        Rectangle {
+            x, y, width, height,
+            stroke_width: None,
+            stroke_color: None,
+            fill_color: None,
+            opacity: None
+        }
+    }
+
+    pub fn stroke_width(mut self, width: f32) -> Rectangle {
+        self.stroke_width = Some(width);
+        self
+    }
+
+    pub fn stroke_color(mut self, r: u8, g: u8, b: u8) -> Rectangle {
+        self.stroke_color = Some((r, g, b));
+        self
+    }
+
+    pub fn fill_color(mut self, r: u8, g: u8, b: u8) -> Rectangle {
+        self.fill_color = Some((r, g, b));
+        self
+    }
+
+    pub fn opacity(mut self, opacity: f32) -> Rectangle {
+        self.opacity = Some(opacity);
+        self
+    }
+}
 
 //
 // GENERATOR
@@ -74,8 +123,11 @@ impl Line {
 
 static INDENT_SIZE: usize = 4;
 
-static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\">";
+static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\">";
 static SVG_CLOSE: &str = "</svg>";
+
+use maplit::hashmap;
+use std::collections::HashMap;
 
 struct Generator {
     content: String
@@ -110,12 +162,35 @@ pub fn generate(doc: Document) -> String {
     use crate::svg_generator::Element::*;
     for el in doc.elements {
         match el {
-            Line(l) => generator.add(line(l), 1)
+            Line(l) => generator.add(line(l), 1),
+            Rectangle(r) => generator.add(rectangle(r), 1)
         }
     }
 
     generator.close()
 }
+
+fn rectangle(r: Rectangle) -> String {
+
+    let mut attrs = hashmap!(
+        "x".to_owned() => r.x.to_string(),
+        "y".to_owned() => r.y.to_string(),
+        "width".to_owned() => r.width.to_string(),
+        "height".to_owned() => r.height.to_string()
+    );
+
+    let mut style_attrs = vec!();
+    style_attrs.push(stroke_width(r.stroke_width));
+    style_attrs.push(stroke_color(r.stroke_color));
+    style_attrs.push(fill_color(r.fill_color));
+    style_attrs.push(opacity(r.opacity));
+    if style_attrs.len() > 0 {
+        let style = style_attrs.join(";");
+        attrs.insert("style".to_owned(), style);
+    }
+    
+    xml_tag("rect".to_owned(), attrs)
+} 
 
 fn line(l: Line) -> String {
     let mut line = format!("<line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\" ", l.x1, l.y1, l.x2, l.y2);
@@ -123,9 +198,10 @@ fn line(l: Line) -> String {
     let col = l.color.unwrap_or((0, 0, 0 ));
     let width = l.width.unwrap_or(1.0);
 
+    // we shouldn't create these attributes if they are None:
     let mut style_attrs = vec!();
-    style_attrs.push(stroke_color(col));
-    style_attrs.push(stroke_width(width));
+    style_attrs.push(stroke_color(Some(col)));
+    style_attrs.push(stroke_width(Some(width)));
     let style = style(style_attrs);
     line.push_str(&style);
 
@@ -134,29 +210,85 @@ fn line(l: Line) -> String {
     line
 }
 
+
+// XML helper functions
+
+fn xml_tag(name: String, attrs: HashMap<String, String>) -> String {
+    format!("<{} {}/>", name, attributes(attrs))
+}
+
+fn attributes(attributes: HashMap<String, String>) -> String {
+    let mut attrs = vec!();
+
+    for attr in attributes {
+        attrs.push(format!("{}=\"{}\"", attr.0, attr.1));
+    }
+
+    attrs.sort();
+
+    attrs.join(" ")
+}
+
+
+// Style attributes
+
 fn style(attrs: Vec<String>) -> String {
     format!("style=\"{}\"", attrs.join(";"))
 }
 
-fn stroke_width(width: f32) -> String {
-    format!("stroke-width:{}", width)
+fn opacity(opacity: Option<f32>) -> String {
+    if let Some(opacity) = opacity {
+        format!("opacity:{}", opacity)
+    } else {
+        "".to_owned()
+    }
 }
 
-fn stroke_color(rgb: (u8, u8, u8)) -> String {
-    format!("stroke:rgb({},{},{})", rgb.0, rgb.1, rgb.2)
+fn fill_color(fill: Option<(u8, u8, u8)>) -> String {
+    if let Some(fill) = fill {
+        format!("fill:rgb({},{},{})", fill.0, fill.1, fill.2)
+    } else {
+        "".to_owned()
+    }
 }
+
+fn stroke_width(width: Option<f32>) -> String {
+    if let Some(width) = width {
+        format!("stroke-width:{}", width)
+    } else {
+        "".to_owned()
+    }
+}
+
+fn stroke_color(rgb: Option<(u8, u8, u8)>) -> String {
+    if let Some(rgb) = rgb {
+        format!("stroke:rgb({},{},{})", rgb.0, rgb.1, rgb.2)
+    } else {
+        "".to_owned()
+    }
+}
+
+////
 
 //
 // TESTS
 //
 
 #[test]
-fn svg_gen_test_1() {
-    Document::new()
+fn svg_gen_test_line() {
+    let actual = Document::new()
         .add(Line::new(0.0, 0.0, 1.0, 10.0)
             .color(128, 25, 45)
             .width(3.0)
             .into()
         )
-    .generate();
+        .generate();
+
+    let expected = r#"
+<svg xmlns="http://www.w3.org/2000/svg">
+    <line x1="0" y1="0" x2="1" y2="10" style="stroke:rgb(128,25,45);stroke-width:3"/>
+</svg>
+    "#.trim();
+
+    assert_eq!(actual, expected);
 }

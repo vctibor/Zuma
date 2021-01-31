@@ -18,8 +18,12 @@ pub type FunMap = HashMap<String, Function>;
 // I'd like to move this into something like OnceCell.
 pub fn stdlib() -> FunMap {
     hashmap!{
-        "line".to_owned() =>  Function {
+        "line".to_owned() => Function {
             eval: Box::new(line)
+        },
+
+        "rectangle".to_owned() => Function {
+            eval: Box::new(rectangle)
         }
     }
 }
@@ -65,6 +69,58 @@ fn line(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
         .into();
 
     Ok(vec!(line))
+}
+
+fn rectangle(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
+
+    let mut args = fc.args;
+
+    let start = get_arg(&mut args, "start")?;
+    let start = get_point(start)?;
+
+    let size = get_arg(&mut args, "size")?;
+    let size = get_point(size)?;
+
+    let color: Option<ast::Arg> = get_arg(&mut args, "color").ok();
+    let color = if let Some(color) = color {
+        get_color(color)?
+    } else {
+        ast::Color { red: 0, green: 0, blue: 0 } 
+    };
+
+    let stroke_color: Option<ast::Arg> = get_arg(&mut args, "stroke-color").ok();
+    let stroke_color = if let Some(stroke_color) = stroke_color {
+        get_color(stroke_color)?
+    } else {
+        ast::Color { red: 0, green: 0, blue: 0 } 
+    };
+
+    let stroke_width: Option<ast::Arg> = get_arg(&mut args, "stroke-width").ok();
+    let stroke_width = if let Some(stroke_width) = stroke_width {
+        get_number(stroke_width)?
+    } else {
+        1.0
+    };
+    
+    let opacity: Option<ast::Arg> = get_arg(&mut args, "opacity").ok();
+    let opacity = if let Some(opacity) = opacity {
+        get_number(opacity)?
+    } else {
+        1.0
+    };
+
+    if args.len() > 0 {
+        return Err(anyhow!("Unexpected argument provided."));
+    }
+
+    let rectangle = svg::Rectangle::new(start.x, start.y, size.x, size.y)
+        .stroke_width(stroke_width)
+        .stroke_color(stroke_color.red, stroke_color.green, stroke_color.blue)
+        .fill_color(color.red, color.green, color.blue)
+        .opacity(opacity)
+        .into();
+
+    Ok(vec!(rectangle))
 }
 
 fn get_arg(args: &mut Vec<ast::Arg>, name: &str) -> Result<ast::Arg> {

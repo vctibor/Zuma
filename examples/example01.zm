@@ -1,1 +1,5 @@
-line color=white end=[100,70] width=11.5 start=[0,40];
+rectangle start=[50,50] size=[100,100] color=blue opacity=0.3;
+rectangle start=[10,10] size=[100,100] color=red opacity=0.3;
+rectangle start=[70,40] size=[100,100] color=green opacity=0.3;
+
+rectangle start=[300, 300] size=[100, 100] color=black stroke-color=white stroke-width=5;

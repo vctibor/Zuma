@@ -26,7 +26,7 @@ fn main() {
         thread::sleep(time::Duration::from_millis(10));
         let res = compile_file(&parser);
 
-        println!("{:?}", res);
+        //println!("{:?}", res);
 
         //break;
     }

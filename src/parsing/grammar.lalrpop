@@ -9,13 +9,13 @@ pub Doc: Document = {
 };
 
 FunctionCall: FunctionCall = {
-    <name: r"[a-z]+"> <args: Arg*> ";" => FunctionCall { name: name.to_string(), args }
+    <name: r"[a-z-]+"> <args: Arg*> ";" => FunctionCall { name: name.to_string(), args }
 };
 
 Arg: Arg = {
-    <name: r"[a-z]+"> "=" <value:Number> => number_arg(name.to_string(), value),
-    <name: r"[a-z]+"> "=" <value:Color> => color_arg(name.to_string(), value),
-    <name: r"[a-z]+"> "=" <value:Point> => point_arg(name.to_string(), value)
+    <name: r"[a-z-]+"> "=" <value:Number> => number_arg(name.to_string(), value),
+    <name: r"[a-z-]+"> "=" <value:Color> => color_arg(name.to_string(), value),
+    <name: r"[a-z-]+"> "=" <value:Point> => point_arg(name.to_string(), value)
 };
 
 Point: Point = {
