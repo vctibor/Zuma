@@ -1,3 +1,5 @@
+mod tests;
+
 //
 // PUBLIC INTERFACE
 //
@@ -122,13 +124,18 @@ impl Rectangle {
 // GENERATOR
 //
 
+mod style_attributes;
+use style_attributes::*;
+
+mod xml_helpers;
+use xml_helpers::*;
+
 static INDENT_SIZE: usize = 4;
 
 static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\">";
 static SVG_CLOSE: &str = "</svg>";
 
 use maplit::hashmap;
-use std::collections::HashMap;
 
 struct Generator {
     content: String
@@ -210,83 +217,4 @@ fn line(l: Line) -> String {
     }
     
     xml_tag("line".to_owned(), attrs)
-}
-
-
-// XML helper functions
-
-fn xml_tag(name: String, attrs: HashMap<String, String>) -> String {
-    format!("<{} {}/>", name, attributes(attrs))
-}
-
-fn attributes(attributes: HashMap<String, String>) -> String {
-    let mut attrs = vec!();
-
-    for attr in attributes {
-        attrs.push(format!("{}=\"{}\"", attr.0, attr.1));
-    }
-
-    attrs.sort();
-
-    attrs.join(" ")
-}
-
-
-// Style attributes
-
-fn opacity(opacity: Option<f32>) -> String {
-    if let Some(opacity) = opacity {
-        format!("opacity:{}", opacity)
-    } else {
-        "".to_owned()
-    }
-}
-
-fn fill_color(fill: Option<(u8, u8, u8)>) -> String {
-    if let Some(fill) = fill {
-        format!("fill:rgb({},{},{})", fill.0, fill.1, fill.2)
-    } else {
-        "".to_owned()
-    }
-}
-
-fn stroke_width(width: Option<f32>) -> String {
-    if let Some(width) = width {
-        format!("stroke-width:{}", width)
-    } else {
-        "".to_owned()
-    }
-}
-
-fn stroke_color(rgb: Option<(u8, u8, u8)>) -> String {
-    if let Some(rgb) = rgb {
-        format!("stroke:rgb({},{},{})", rgb.0, rgb.1, rgb.2)
-    } else {
-        "".to_owned()
-    }
-}
-
-////
-
-//
-// TESTS
-//
-
-#[test]
-fn svg_gen_test_line() {
-    let actual = Document::new()
-        .add(Line::new(0.0, 0.0, 1.0, 10.0)
-            .color(128, 25, 45)
-            .width(3.0)
-            .into()
-        )
-        .generate();
-
-    let expected = r#"
-<svg xmlns="http://www.w3.org/2000/svg">
-    <line style="stroke-width:3;stroke:rgb(128,25,45)" x1="0" x2="1" y1="0" y2="10"/>
-</svg>
-    "#.trim();
-
-    assert_eq!(actual, expected);
 }
