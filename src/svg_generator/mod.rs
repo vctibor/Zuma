@@ -13,6 +13,7 @@ impl Document {
         }
     }
 
+    #[allow(dead_code)]
     pub fn add(mut self, el: Element) -> Document {
         self.elements.push(el);
         self
@@ -190,24 +191,25 @@ fn rectangle(r: Rectangle) -> String {
     }
     
     xml_tag("rect".to_owned(), attrs)
-} 
+}
 
 fn line(l: Line) -> String {
-    let mut line = format!("<line x1=\"{}\" y1=\"{}\" x2=\"{}\" y2=\"{}\" ", l.x1, l.y1, l.x2, l.y2);
+    let mut attrs = hashmap!(
+        "x1".to_owned() => l.x1.to_string(),
+        "y1".to_owned() => l.y1.to_string(),
+        "x2".to_owned() => l.x2.to_string(),
+        "y2".to_owned() => l.y2.to_string()
+    );
 
-    let col = l.color.unwrap_or((0, 0, 0 ));
-    let width = l.width.unwrap_or(1.0);
-
-    // we shouldn't create these attributes if they are None:
     let mut style_attrs = vec!();
-    style_attrs.push(stroke_color(Some(col)));
-    style_attrs.push(stroke_width(Some(width)));
-    let style = style(style_attrs);
-    line.push_str(&style);
-
-    line.push_str("/>");
-
-    line
+    style_attrs.push(stroke_width(l.width));
+    style_attrs.push(stroke_color(l.color));
+    if style_attrs.len() > 0 {
+        let style = style_attrs.join(";");
+        attrs.insert("style".to_owned(), style);
+    }
+    
+    xml_tag("line".to_owned(), attrs)
 }
 
 
@@ -231,10 +233,6 @@ fn attributes(attributes: HashMap<String, String>) -> String {
 
 
 // Style attributes
-
-fn style(attrs: Vec<String>) -> String {
-    format!("style=\"{}\"", attrs.join(";"))
-}
 
 fn opacity(opacity: Option<f32>) -> String {
     if let Some(opacity) = opacity {
@@ -286,7 +284,7 @@ fn svg_gen_test_line() {
 
     let expected = r#"
 <svg xmlns="http://www.w3.org/2000/svg">
-    <line x1="0" y1="0" x2="1" y2="10" style="stroke:rgb(128,25,45);stroke-width:3"/>
+    <line style="stroke-width:3;stroke:rgb(128,25,45)" x1="0" x2="1" y1="0" y2="10"/>
 </svg>
     "#.trim();
 

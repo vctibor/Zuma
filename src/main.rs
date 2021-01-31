@@ -24,7 +24,7 @@ fn main() {
 
     loop {
         thread::sleep(time::Duration::from_millis(10));
-        let res = compile_file(&parser);
+        let _ = compile_file(&parser);
 
         //println!("{:?}", res);
 

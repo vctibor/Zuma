@@ -2,4 +2,8 @@ rectangle start=[50,50] size=[100,100] color=blue opacity=0.3;
 rectangle start=[10,10] size=[100,100] color=red opacity=0.3;
 rectangle start=[70,40] size=[100,100] color=green opacity=0.3;
 
-rectangle start=[300, 300] size=[100, 100] color=black stroke-color=white stroke-width=5;
+rectangle start=[300, 300] size=[100, 100] color=black stroke-color=white stroke-width=3;
+
+line start = [500, 100] end = [700, 100] color=#660088 width=20;
+line start = [500, 100] end = [600, 200] color=#660088 width=20;
+line start = [700, 100] end = [600, 200] color=#660088 width=20;
