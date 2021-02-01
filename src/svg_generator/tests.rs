@@ -14,7 +14,7 @@ fn svg_gen_test_line() {
         .generate();
 
     let expected = r#"
-<svg xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
     <line style="stroke-width:3;stroke:rgb(128,25,45)" x1="0" x2="1" y1="0" y2="10"/>
 </svg>
     "#.trim();
