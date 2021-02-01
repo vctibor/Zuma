@@ -4,25 +4,37 @@ mod parsing;
 mod svg_generator;
 mod evaluation;
 
-pub use crate::parsing::ZumaParser;
+use crate::parsing::ZumaParser;
 
 use anyhow::{Result, bail};
 
-pub fn compile(parser: &ZumaParser, zuma_source: String) -> Result<String> {
-    let parse_res = parser.parse(zuma_source);
-
-    if parse_res.is_none() {
-        bail!("Parsing error.");
-    }
-
-    let zuma_doc: crate::parsing::ast::Document = parse_res.unwrap();
-
-    let svg: svg_generator::Document = evaluation::evaluate(zuma_doc)?;
-
-    Ok(svg.generate())
+pub struct ZumaCompiler {
+    parser: ZumaParser
 }
 
+impl ZumaCompiler {
 
+    pub fn new() -> ZumaCompiler {
+        ZumaCompiler {
+            parser: ZumaParser::new()
+        }
+    }
+
+    pub fn compile(&self, zuma_source: String) -> Result<String> {
+        let parse_res = self.parser.parse(zuma_source);
+    
+        if parse_res.is_none() {
+            bail!("Parsing error.");
+        }
+    
+        let zuma_doc: crate::parsing::ast::Document = parse_res.unwrap();
+    
+        let svg: svg_generator::Document = evaluation::evaluate(zuma_doc)?;
+    
+        Ok(svg.generate())
+    }
+    
+}
 
 #[test]
 fn compile_test_rectangle() {
@@ -40,8 +52,8 @@ rectangle start=[70,40] size=[100,100] color=green opacity=0.3;
 </svg>
     "#.trim();
 
-    let parser = ZumaParser::new();
-    let res = compile(&parser, input.to_owned()).unwrap();
+    let compiler = ZumaCompiler::new();
+    let res = compiler.compile(input.to_owned()).unwrap();
 
     assert_eq!(expected, res);
 }

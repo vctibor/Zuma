@@ -1,6 +1,18 @@
 #[derive(Debug, PartialEq, Clone)]
 pub struct Document {
-    pub rows: Vec<FunctionCall>
+    pub rows: Vec<Expression>
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum Expression {
+    ConstantDeclaration(ConstantDeclaration),
+    FunctionCall(FunctionCall)
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct ConstantDeclaration {
+    pub name: String,
+    pub value: Value
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -12,12 +24,12 @@ pub struct FunctionCall {
 #[derive(Debug, PartialEq, Clone)]
 pub struct Arg {
     pub name: String,
-    pub value: Literal
+    pub value: Value
 }
 
 /// Types which can be decalred by literal in Zuma.
 #[derive(Debug, PartialEq, Clone)]
-pub enum Literal {
+pub enum Value {
     Number(f32),
     Point(Point),
     Color(Color),

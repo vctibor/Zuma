@@ -1,10 +1,1 @@
-rectangle start=[50,50] size=[100,100] color=blue opacity=0.3;
-rectangle start=[10,10] size=[100,100] color=red opacity=0.3;
-rectangle start=[70,40] size=[100,100] color=green opacity=0.3;
-
-rectangle start=[300, 300] size=[100, 100] color=black stroke-color=white stroke-width=3;
-
-line start=[0,0] end=[500,500] color=#660088 width=20;
-line start=[0,500] end=[500,0] color=#660088 width=20;
-
-text text="sddsnjnfdjn" start=[50,50] color=red;
+line start=[100,90] end=[300,100] color=white;

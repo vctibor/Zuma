@@ -12,14 +12,20 @@ use anyhow::{Result, anyhow};
 
 pub fn evaluate(zuma_doc: ast::Document) -> Result<svg::Document> {
 
+    use crate::parsing::ast::Expression::*;
+
     let mut document = svg::Document::new();
 
     for row in zuma_doc.rows {
+        match row {
+            FunctionCall(fc) => {
+                let mut res = handle_function_call(fc)?;
+                document = document.add_many(&mut res);
+            },
+            ConstantDeclaration(c) => {
 
-        let function_call: ast::FunctionCall = row;    // later `row` will be enum
-        let mut res = handle_function_call(function_call)?;
-        document = document.add_many(&mut res);
-        
+            },
+        }       
     };
 
     Ok(document)

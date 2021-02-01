@@ -16,28 +16,28 @@ pub fn get_arg(args: &mut Vec<ast::Arg>, name: &str) -> Result<ast::Arg> {
 
 pub fn get_string(arg: ast::Arg) -> Result<String> {
     match arg.value {
-        ast::Literal::String(s) => Ok(s),
+        ast::Value::String(s) => Ok(s),
         _ => Err(anyhow!("Wrong type."))
     }
 }
 
 pub fn get_point(arg: ast::Arg) -> Result<ast::Point> {
     match arg.value {
-        ast::Literal::Point(p) => Ok(p),
+        ast::Value::Point(p) => Ok(p),
         _ => Err(anyhow!("Wrong type."))
     }
 }
 
 pub fn get_color(arg: ast::Arg) -> Result<ast::Color> {
     match arg.value {
-        ast::Literal::Color(c) => Ok(c),
+        ast::Value::Color(c) => Ok(c),
         _ => Err(anyhow!("Wrong type."))
     }
 }
 
 pub fn get_number(arg: ast::Arg) -> Result<f32> {
     match arg.value {
-        ast::Literal::Number(n) => Ok(n),
+        ast::Value::Number(n) => Ok(n),
         _ => Err(anyhow!("Wrong type."))
     }
 }

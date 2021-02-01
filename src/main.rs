@@ -14,24 +14,24 @@ fn render_svg(svg: String, path: &str) {
     
 
     let mut options = Options::default();
-    options.font_family = "Liberation Serif".to_owned();
+    options.font_family = "Fira Code".to_owned();
     
     let tree = Tree::from_str(&svg, &options).unwrap();
 
     let mut pixmap = Pixmap::new(500, 500).unwrap();
 
-    let mut pixmap_mut = pixmap.as_mut();
+    let pixmap_mut = pixmap.as_mut();
 
     render(&tree, FitTo::Original, pixmap_mut);
 
     pixmap.save_png(path).unwrap();
 }
 
-fn compile_file(parser: &zumalib::ZumaParser) -> Result<()>
+fn compile_file(compiler: &zumalib::ZumaCompiler) -> Result<()>
 {
     let start_time = Instant::now();
     let input = read_to_string("examples/example01.zm")?;
-    let svg = zumalib::compile(&parser, input)?;
+    let svg = compiler.compile(input)?;
     let mut output_file = File::create("examples/example01.svg")?;
     output_file.write_all(svg.as_bytes())?;
 
@@ -45,11 +45,11 @@ fn compile_file(parser: &zumalib::ZumaParser) -> Result<()>
 
 fn main() {
 
-    let parser = zumalib::ZumaParser::new();
+    let compiler = zumalib::ZumaCompiler::new();
 
     loop {
         thread::sleep(time::Duration::from_millis(10));
-        let res = compile_file(&parser);
+        let res = compile_file(&compiler);
 
         println!("{:?}", res);
 

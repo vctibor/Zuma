@@ -9,41 +9,10 @@ pub fn parse_color(s: String) -> Result<Color> {
     Ok(Color { red, green, blue })
 }
 
-pub fn number_arg(name: String, value: f32) -> Arg {
-    Arg {
-        name: name,
-        value: Literal::Number(value)
-    }
-}
-
-pub fn point_arg(name: String, value: Point) -> Arg {
-    Arg {
-        name: name,
-        value: Literal::Point(value)
-    }
-}
-
-pub fn color_arg(name: String, value: Color) -> Arg {
-    Arg {
-        name: name,
-        value: Literal::Color(value)
-    }
-}
-
-pub fn string_arg(name: String, value: String) -> Arg {
-
-    let mut value = remove_first(&value).to_owned();
-    value.pop();
-
-    Arg {
-        name: name,
-        value: Literal::String(value)
-    }
-}
-
-
-fn remove_first(s: &str) -> &str {
-    let mut chars = s.chars();
+pub fn strip_quotes(value: String) -> String {
+    let mut chars = value.chars();
     chars.next();
-    chars.as_str()
+    let mut value = chars.as_str().to_owned();
+    value.pop();
+    value
 }
