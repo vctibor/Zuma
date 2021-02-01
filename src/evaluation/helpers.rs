@@ -43,8 +43,4 @@ pub fn get_number(arg: ast::Arg) -> Result<f32> {
 }
 
 
-pub fn remove_first(s: &str) -> &str {
-    let mut chars = s.chars();
-    chars.next();
-    chars.as_str()
-}
+

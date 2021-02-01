@@ -137,8 +137,6 @@ fn text(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
 
     let content = get_arg(&mut args, "text")?;
     let content = get_string(content)?;
-    let mut content = remove_first(&content).to_owned();
-    content.pop();
 
     let color: Option<ast::Arg> = get_arg(&mut args, "color").ok();
     let color = if let Some(color) = color {
