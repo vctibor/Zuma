@@ -31,10 +31,10 @@ pub Literal: Value = {
     Number => Value::Number(<>),
     Point => Value::Point(<>),
     Color => Value::Color(<>),
-    Text => Value::String(strip_quotes(<>)),
+    Text => Value::String(<>),
 }
 
-pub Text: String = r#"".*""# => <>.to_string();
+pub Text: String = r#"".*""# => strip_quotes(<>);
 
 pub Point: Point = {
     "[" <a:Number> "," <b:Number> "]" => Point { x: b, y: a }

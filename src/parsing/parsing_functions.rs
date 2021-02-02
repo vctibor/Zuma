@@ -9,7 +9,7 @@ pub fn parse_color(s: String) -> Result<Color> {
     Ok(Color { red, green, blue })
 }
 
-pub fn strip_quotes(value: String) -> String {
+pub fn strip_quotes(value: &str) -> String {
     let mut chars = value.chars();
     chars.next();
     let mut value = chars.as_str().to_owned();

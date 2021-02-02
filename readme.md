@@ -1,6 +1,8 @@
 ZUMA - Vector Graphics Language
 ===============================
 
+## WARNING: Language spec is currently unstable and WILL break.
+
 [This code](examples/front_page01.zm):
 
 ```

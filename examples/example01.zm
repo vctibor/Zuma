@@ -1,1 +1,3 @@
-line start=[100,90] end=[300,100] color=white;
+rectangle start=[100,100] size=[300,200] color=white;
+
+text text="fdsdaa" color=red start=[0,0];

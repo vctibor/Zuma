@@ -48,7 +48,7 @@ rectangle start=[70,40] size=[100,100] color=green opacity=0.3;
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
     <rect height="100" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(0,0,255);opacity:0.3" width="100" x="50" y="50"/>
     <rect height="100" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(255,0,0);opacity:0.3" width="100" x="10" y="10"/>
-    <rect height="100" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(0,255,0);opacity:0.3" width="100" x="70" y="40"/>
+    <rect height="100" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(0,255,0);opacity:0.3" width="100" x="40" y="70"/>
 </svg>
     "#.trim();
 

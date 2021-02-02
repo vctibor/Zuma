@@ -57,7 +57,15 @@ fn test_color() {
 #[test]
 fn test_point() {
     let parser = PointParser::new();
-    assert!(parser.parse("[0.1,5]").unwrap() == Point { x: 0.1, y: 5.0 });
+    assert!(parser.parse("[0.1,5]").unwrap() == Point {y: 0.1, x: 5.0 });
+}
+
+#[test]
+fn test_string() {
+    let parser = TextParser::new();
+    let res = parser.parse(r#""Ahoj světe!""#);
+    println!("{:?}", res);
+    assert!(res.unwrap() == "Ahoj světe!".to_owned());
 }
 
 #[test]

@@ -30,7 +30,8 @@ fn render_svg(svg: String, path: &str) {
 fn compile_file(compiler: &zumalib::ZumaCompiler) -> Result<()>
 {
     let folder = "examples";
-    let input_file = "front_page01";
+    //let input_file = "front_page01";
+    let input_file = "example01";
 
     let zuma_input = format!("{}/{}.zm", folder, input_file);
     let svg_output = format!("{}/{}.svg", folder, input_file);
