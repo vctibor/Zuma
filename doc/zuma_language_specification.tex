@@ -41,6 +41,12 @@ Color can be declared using sharp followed by hexadecimal value: \texttt{\#ff00a
 
 \section{Text}
 
+\chapter{Coordinate system}
+
+Origin point is left upper corner. \texttt{x} is vertical axis, \texttt{y} is horizontal axis.
+
+Therefore \texttt{[0,500]} describes upper right corner, while \texttt{[500,0]} describes lower left corner.
+
 \chapter{Language constructs}
 
 \section{Expressions}
@@ -51,29 +57,29 @@ Expressions are delimited using semicolon.
 
 Expressions are following constructs:
 
-- constant declaration
-- function call
-- scope
+\begin{itemize}
+    \item constant declaration
+    \item function call
+    \item scope
+\end{itemize}
 
 \section{Comments}
 
 Single line:
 
-    // this is comment
+\texttt{// this is comment}
 
 Part-line / multiline:
 
-    /*
-        multiline comment
-    */
-
-    let x = /* can be also in the middle of any expression */ 5;
+\texttt{/* multiline comment */}
 
 Comments can be nested:
 
-    /* /* */ */
-    /* */ */
-    /* /* */
+\texttt{/* /* */ */}
+
+\texttt{/* */ */}
+
+\texttt{/* /* */}
 
 Anything inside comments shouldn't break compilation.
 

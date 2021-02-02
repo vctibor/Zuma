@@ -4,9 +4,9 @@ ZUMA - Vector Graphics Language
 [This code](examples/front_page01.zm):
 
 ```
-line start=[10,10] end=[100,10] color=white width=3;
-line start=[10,20] end=[100,20] color=white width=6;
-line start=[10,35] end=[100,35] color=white width=9;
+line start=[10,10] end=[400,10] color=red width=3;
+line start=[10,20] end=[400,20] color=green width=6;
+line start=[10,35] end=[400,35] color=blue width=9;
 ```
 
 produces this:

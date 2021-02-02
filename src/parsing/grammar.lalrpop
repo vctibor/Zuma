@@ -37,7 +37,7 @@ pub Literal: Value = {
 pub Text: String = r#"".*""# => <>.to_string();
 
 pub Point: Point = {
-    "[" <x:Number> "," <y:Number> "]" => Point { x, y }
+    "[" <a:Number> "," <b:Number> "]" => Point { x: b, y: a }
 };
 
 pub Color: Color = {
