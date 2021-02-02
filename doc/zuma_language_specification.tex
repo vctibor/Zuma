@@ -1,0 +1,103 @@
+\documentclass{scrreprt}
+
+\title{ZUMA}
+\subtitle{Language Specification}
+\date{}
+\author{}
+
+\begin{document}
+
+\pagenumbering{gobble}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\pagenumbering{arabic}
+
+\chapter{Datatypes}
+
+ZUMA is strongly typed.
+
+Following datatypes can be created using literals:
+
+\section{Boolean}
+
+Boolean has one of values \texttt{true} or \texttt{false}.
+
+\section{Number}
+
+Number is a single precision floating point, i.e. f32: \texttt{1.5464}.
+
+\section{Point}
+
+Point is declared using two numbers inside square brackets like \texttt{[4.45,6.06]}.
+
+\section{Color}
+
+Color can be declared using sharp followed by hexadecimal value: \texttt{\#ff00a1}. Additionally few basic colors can be declared by their name: \texttt{black}, \texttt{white}, \texttt{red}, \texttt{green}, \texttt{blue} or \texttt{yellow}.
+
+\section{Text}
+
+\chapter{Language constructs}
+
+\section{Expressions}
+
+Expressions are delimited using semicolon.
+
+\texttt{line start = [0,10] end = [25,50] color = \#ff00a1;}
+
+Expressions are following constructs:
+
+- constant declaration
+- function call
+- scope
+
+\section{Comments}
+
+Single line:
+
+    // this is comment
+
+Part-line / multiline:
+
+    /*
+        multiline comment
+    */
+
+    let x = /* can be also in the middle of any expression */ 5;
+
+Comments can be nested:
+
+    /* /* */ */
+    /* */ */
+    /* /* */
+
+Anything inside comments shouldn't break compilation.
+
+\section{Scopes}
+
+Scope is delimited by \texttt{\{} and \texttt{\}}. There is list of expressions between braces. Scope is an expression.
+
+\chapter{Architecture}
+
+\section{Parser}
+
+\section{Abstract Syntax Tree}
+
+\section{Evaluation}
+
+remove comments, eval variables, ifs and for loops
+
+\section{ZUMA IR}
+
+\section{Translation}
+
+ZUMA IR to SVG model
+
+\section{Generate SVG}
+
+
+\end{document}

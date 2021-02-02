@@ -1,55 +1,14 @@
 ZUMA - Vector Graphics Language
 ===============================
 
-## Language description
+[This code](examples/front_page01.zm):
 
-### Datatypes
+```
+line start=[10,10] end=[100,10] color=white width=3;
+line start=[10,20] end=[100,20] color=white width=6;
+line start=[10,35] end=[100,35] color=white width=9;
+```
 
-ZUMA is strongly typed.
+produces this:
 
-Following datatypes can be created using literals:
-
-**Boolean** has one of values `true` or `false`.
-
-**Number** is a single precision floating point, i.e. f32: `1.5464`.
-
-**Point** is declared using two numbers inside square brackets like `[4.45,6.06]`.
-
-**Color** can be declared using sharp followed by hexadecimal value: `#ff00a1`. Additionally few basic colors can be declared by their name: `black`, `white`, `red`, `green`, `blue` or `yellow`.
-
-### Expressions
-
-Expressions are delimited using semicolon.
-
-    line start = [0,10] end = [25,50] color = #ff00a1;
-
-### Comments
-
-Single line:
-
-    // this is comment
-
-Part-line / multiline:
-
-    /*
-        multiline comment
-    */
-
-    let x = /* can be also in the middle of any expression */ 5;
-
-Comments can be nested:
-
-    /* /* */ */
-    /* */ */
-    /* /* */
-
-Anything inside comments shouldn't break compilation.
-
-## Architecture
-
- - Parser
- - Abstract Syntax Tree
- - Evaluation (remove comments, eval variables, ifs and for loops)
- - ZUMA IR
- - Translation: ZUMA IR -> svg_model
- - Generate SVG
+![alt text](examples/front_page01.svg "Logo Title Text 1")

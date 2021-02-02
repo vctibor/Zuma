@@ -29,13 +29,20 @@ fn render_svg(svg: String, path: &str) {
 
 fn compile_file(compiler: &zumalib::ZumaCompiler) -> Result<()>
 {
+    let folder = "examples";
+    let input_file = "front_page01";
+
+    let zuma_input = format!("{}/{}.zm", folder, input_file);
+    let svg_output = format!("{}/{}.svg", folder, input_file);
+    let png_output = format!("{}/{}.png", folder, input_file);
+
     let start_time = Instant::now();
-    let input = read_to_string("examples/example01.zm")?;
+    let input = read_to_string(zuma_input)?;
     let svg = compiler.compile(input)?;
-    let mut output_file = File::create("examples/example01.svg")?;
+    let mut output_file = File::create(svg_output)?;
     output_file.write_all(svg.as_bytes())?;
 
-    render_svg(svg, "examples/example01.png");
+    render_svg(svg, &png_output);
 
     let end_time = start_time.elapsed();
     println!("{:?}", end_time);
