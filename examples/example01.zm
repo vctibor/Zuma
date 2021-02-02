@@ -1,3 +1,5 @@
-rectangle start=[100,100] size=[300,200] color=white;
-
-text text="fdsdaa" color=red start=[0,0];
+{
+    rectangle start=[100,100] size=[300,200] color=red stroke-color=red;
+    line start=[100,100] end=[100,300] color=white width=15;
+    line start=[400,100] end=[400,300] color=white width=15;
+}

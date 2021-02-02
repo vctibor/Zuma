@@ -5,12 +5,17 @@ use crate::parsing::parsing_functions::*;
 grammar;
 
 pub Doc: Document = {
-    Expression* => Document { rows: <> }
+    Expression* => Document { expressions: <> }
 };
 
 pub Expression: Expression = {
     FunctionCall => Expression::FunctionCall(<>),
     ConstantDeclaration => Expression::ConstantDeclaration(<>),
+    Scope => Expression::Scope(<>),
+};
+
+pub Scope: Scope = {
+    "{" <expressions:Expression*> "}" => Scope { expressions },
 };
 
 pub ConstantDeclaration: ConstantDeclaration = {

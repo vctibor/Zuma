@@ -1,12 +1,18 @@
 #[derive(Debug, PartialEq, Clone)]
 pub struct Document {
-    pub rows: Vec<Expression>
+    pub expressions: Vec<Expression>
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
     ConstantDeclaration(ConstantDeclaration),
-    FunctionCall(FunctionCall)
+    FunctionCall(FunctionCall),
+    Scope(Scope),
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Scope {
+    pub expressions: Vec<Expression>
 }
 
 #[derive(Debug, PartialEq, Clone)]

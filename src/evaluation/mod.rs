@@ -10,25 +10,33 @@ use crate::svg_generator as svg;
 
 use anyhow::{Result, anyhow};
 
-pub fn evaluate(zuma_doc: ast::Document) -> Result<svg::Document> {
+pub fn evaluate(zuma: ast::Document) -> Result<svg::Document> {
+    let mut doc = svg::Document::new();
+    doc = handle_expressions(zuma.expressions, doc)?;
+    Ok(doc)
+}
 
+fn handle_expressions(expressions: Vec<ast::Expression>, doc: svg::Document) -> Result<svg::Document> {
     use crate::parsing::ast::Expression::*;
+    let mut doc = doc;
+    for expr in expressions {
+        match expr {
 
-    let mut document = svg::Document::new();
-
-    for row in zuma_doc.rows {
-        match row {
             FunctionCall(fc) => {
                 let mut res = handle_function_call(fc)?;
-                document = document.add_many(&mut res);
+                doc = doc.add_many(&mut res);
             },
+            
             ConstantDeclaration(c) => {
 
             },
+            
+            Scope(s) => {
+                doc = handle_expressions(s.expressions, doc)?;
+            },
         }       
-    };
-
-    Ok(document)
+    }
+    Ok(doc)
 }
 
 fn handle_function_call(function_call: ast::FunctionCall) -> Result<Vec<svg::Element>> {
