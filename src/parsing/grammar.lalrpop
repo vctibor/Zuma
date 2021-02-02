@@ -27,10 +27,11 @@ pub FunctionCall: FunctionCall = {
 };
 
 pub Arg: Arg = {
-    <name:Name> "=" <value:Literal> => Arg { name, value },
+    <name:Name> "=" <value:Literal> => Arg { name, value: ConstantOrLiteral::Literal(value) },
+    <name:Name> "=" <value:Name> => Arg { name, value: ConstantOrLiteral::Const(value) },
 };
 
-pub Name: String = r"[a-z-]+" => <>.to_string();
+pub Name: String = r"[a-z_-]+" => <>.to_string();
 
 pub Literal: Value = {
     Number => Value::Number(<>),

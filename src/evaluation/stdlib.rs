@@ -3,72 +3,45 @@ use super::helpers::*;
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;
 
-use std::collections::HashMap;
 use std::boxed::Box;
 
 use maplit::hashmap;
 use anyhow::{Result, anyhow};
 
-
-pub struct Function {
-    pub eval: Box<dyn Fn(ast::FunctionCall) -> Result<Vec<svg::Element>>>
-}
-
-pub type FunMap = HashMap<String, Function>;
-
 // Declaration of known functions, basically "stdlib".
 // I'd like to move this into something like OnceCell.
 pub fn stdlib() -> FunMap {
     hashmap!{
-        "line".to_owned() => Function {
-            eval: Box::new(line)
-        },
-
-        "rectangle".to_owned() => Function {
-            eval: Box::new(rectangle)
-        },
-
-        "text".to_owned() => Function {
-            eval: Box::new(text)
-        },
+        "line".to_owned() => Function { eval: Box::new(line) },
+        "rectangle".to_owned() => Function { eval: Box::new(rectangle) },
+        "text".to_owned() => Function { eval: Box::new(text) },
     }
 }
 
-fn line(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
+fn line(mut args: Args) -> Result<Vec<svg::Element>> {
 
-    let mut args = fc.args;
+    let start = args.remove("start")
+                    .ok_or(anyhow!("Missing argument `start`"))?
+                    .get_point()?;
+
+    let end = args.remove("end")
+                  .ok_or(anyhow!("Missing argument `end`"))?
+                  .get_point()?;
+
+    let color = args.remove("color")
+                    .map(|x| x.get_color().ok())
+                    .flatten()
+                    .unwrap_or(ast::Color { red: 0, green: 0, blue: 0 });
+
+    let width = args.remove("width")
+                    .map(|x| x.get_number().ok())
+                    .flatten()
+                    .unwrap_or(1.0);
     
-    // Required args
-    let start: ast::Arg = get_arg(&mut args, "start")?;
-    let end: ast::Arg = get_arg(&mut args, "end")?;
-
-    // Optional args
-    let color: Option<ast::Arg> = get_arg(&mut args, "color").ok();
-    let width: Option<ast::Arg> = get_arg(&mut args, "width").ok();
-
-    // Fail if unknown argument is passed
     if args.len() > 0 {
         return Err(anyhow!("Unexpected argument provided."));
     }
 
-    // Perform type checks and extract values
-    let start = get_point(start)?;
-    let end = get_point(end)?;
-
-    // Type checks on optional args
-    let color = if let Some(color) = color {
-        get_color(color)?
-    } else {
-        ast::Color { red: 0, green: 0, blue: 0 } 
-    };
-
-    let width = if let Some(width) = width {
-        get_number(width)?
-    } else {
-        1.0
-    };
-
-    // Result of function - construct line from provided args
     let line: svg::Element = svg::Line::new(start.x, start.y, end.x, end.y)
         .color(color.red, color.green, color.blue)
         .width(width)
@@ -77,44 +50,36 @@ fn line(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
     Ok(vec!(line))
 }
 
-fn rectangle(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
+fn rectangle(mut args: Args) -> Result<Vec<svg::Element>> {
 
-    let mut args = fc.args;
+    let start = args.remove("start")
+                    .ok_or(anyhow!("Missing argument `start`"))?
+                    .get_point()?;
 
-    let start = get_arg(&mut args, "start")?;
-    let start = get_point(start)?;
+    let size = args.remove("size")
+                   .ok_or(anyhow!("Missing argument `size`"))?
+                   .get_point()?;
 
-    let size = get_arg(&mut args, "size")?;
-    let size = get_point(size)?;
+    let color = args.remove("color")
+                    .map(|x| x.get_color().ok())
+                    .flatten()
+                    .unwrap_or(ast::Color { red: 0, green: 0, blue: 0 });
 
-    let color: Option<ast::Arg> = get_arg(&mut args, "color").ok();
-    let color = if let Some(color) = color {
-        get_color(color)?
-    } else {
-        ast::Color { red: 0, green: 0, blue: 0 } 
-    };
+    let stroke_color = args.remove("stroke-color")
+                           .map(|x| x.get_color().ok())
+                           .flatten()
+                           .unwrap_or(ast::Color { red: 0, green: 0, blue: 0 });
 
-    let stroke_color: Option<ast::Arg> = get_arg(&mut args, "stroke-color").ok();
-    let stroke_color = if let Some(stroke_color) = stroke_color {
-        get_color(stroke_color)?
-    } else {
-        ast::Color { red: 0, green: 0, blue: 0 } 
-    };
+    let stroke_width = args.remove("stroke-width")
+                           .map(|x| x.get_number().ok())
+                           .flatten()
+                           .unwrap_or(1.0);
 
-    let stroke_width: Option<ast::Arg> = get_arg(&mut args, "stroke-width").ok();
-    let stroke_width = if let Some(stroke_width) = stroke_width {
-        get_number(stroke_width)?
-    } else {
-        1.0
-    };
+    let opacity = args.remove("opacity")
+                           .map(|x| x.get_number().ok())
+                           .flatten()
+                           .unwrap_or(1.0);
     
-    let opacity: Option<ast::Arg> = get_arg(&mut args, "opacity").ok();
-    let opacity = if let Some(opacity) = opacity {
-        get_number(opacity)?
-    } else {
-        1.0
-    };
-
     if args.len() > 0 {
         return Err(anyhow!("Unexpected argument provided."));
     }
@@ -129,24 +94,22 @@ fn rectangle(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
     Ok(vec!(rectangle))
 }
 
-fn text(fc: ast::FunctionCall) -> Result<Vec<svg::Element>> {
-    let mut args = fc.args;
+fn text(mut args: Args) -> Result<Vec<svg::Element>> {
 
-    let start = get_arg(&mut args, "start")?;
-    let start = get_point(start)?;
+    let start = args.remove("start")
+                    .ok_or(anyhow!("Missing argument `start`"))?
+                    .get_point()?;
 
-    let content = get_arg(&mut args, "text")?;
-    let content = get_string(content)?;
+    let content = args.remove("start")
+                    .ok_or(anyhow!("Missing argument `content`"))?
+                    .get_string()?;
 
-    let color: Option<ast::Arg> = get_arg(&mut args, "color").ok();
-    let color = if let Some(color) = color {
-        get_color(color)?
-    } else {
-        ast::Color { red: 0, green: 0, blue: 0 } 
-    };
+    let color = args.remove("color")
+                    .map(|x| x.get_color().ok())
+                    .flatten()
+                    .unwrap_or(ast::Color { red: 0, green: 0, blue: 0 });
 
     if args.len() > 0 {
-        println!("{:?}", args);
         return Err(anyhow!("Unexpected argument provided."));
     }
 

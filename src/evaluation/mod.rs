@@ -36,6 +36,7 @@ fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document)
             
             ConstantDeclaration(c) => {
                 local_consts.insert(c.name, c.value);
+                println!("{:?}", local_consts);
             },
             
             Scope(s) => {
@@ -49,17 +50,16 @@ fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document)
 
 fn handle_function_call(function_call: ast::FunctionCall) -> Result<Vec<svg::Element>> {
     
-    let name = function_call.name.clone();
+    let ast::FunctionCall { name, args } = function_call;
     
     let stdlib = stdlib::stdlib();
 
-    let function = stdlib.get(&name);
+    match stdlib.get(&name) {
+        Some(fun) => {
+            let args = helpers::create_arg_map(args)?;
+            Ok((fun.eval)(args)?)
+        }
 
-    if function.is_none() {
-        return Err(anyhow!("Unknown function {}", &function_call.name));
+        None => Err(anyhow!("Unknown function {}", &name))
     }
-
-    let function = function.unwrap();
-
-    (function.eval)(function_call)
 }
