@@ -22,11 +22,14 @@ lalrpop = "0.19.4"
 anyhow = "1.0"
 maplit = "1.0"
 
-# parsing deps
+# parsing
 lalrpop-util = "0.19.4"
 regex = "1.0"
 
-# rendering deps
+# generating SVG
+svg = "0.9"
+
+# rendering PNG
 resvg = "0.13"
 usvg = "0.13"
 tiny-skia = "0.4"

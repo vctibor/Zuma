@@ -605,6 +605,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "svg"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcbef9cf3cf75dd7772fb1f40dd6d90278a5263454db94ee399500ee9918aaa7"
+
+[[package]]
 name = "svgfilters"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -804,6 +810,7 @@ dependencies = [
  "maplit",
  "regex",
  "resvg",
+ "svg",
  "tiny-skia",
  "usvg",
 ]
