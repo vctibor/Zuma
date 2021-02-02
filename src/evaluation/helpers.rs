@@ -9,13 +9,15 @@ pub type ArgsMap = HashMap<String, ast::Value>;
 
 pub type ConstantsMap = HashMap::<String, ast::Value>;
 
+pub type Constants<'a> = Vec<&'a ConstantsMap>;
+
 pub struct Function {
     pub eval: Box<dyn Fn(ArgsMap) -> Result<Vec<svg::Element>>>
 }
 
 pub type FunMap = HashMap<String, Function>;
 
-pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &ConstantsMap) -> Result<ArgsMap> {
+pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &Constants) -> Result<ArgsMap> {
     
     use ast::ConstantOrLiteral::*;
 
@@ -27,7 +29,7 @@ pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &ConstantsMap) -> Resul
 
         match value {
             Const(const_name) => {
-                match constants.get(&const_name) {
+                match  get_constant(&const_name, &constants) {
                     Some(val) => { arg_map.insert(arg_name, val.clone()); },
                     None => return Err(anyhow!("Unknown constant {}", &const_name))
                 }
@@ -40,4 +42,14 @@ pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &ConstantsMap) -> Resul
     }
 
     Ok(arg_map)
+}
+
+fn get_constant(name: &str, const_vec: &Constants) -> Option<ast::Value> {
+    for const_map in const_vec {
+        if let Some(constant) = const_map.get(name) {
+            return Some(constant.clone())
+        }
+    }
+
+    None
 }

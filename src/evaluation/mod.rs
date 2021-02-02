@@ -4,7 +4,7 @@
 
 mod stdlib;
 mod helpers;
-use helpers::ConstantsMap;
+use helpers::{ConstantsMap, Constants};
 
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;
@@ -15,11 +15,16 @@ use anyhow::{Result, anyhow};
 
 pub fn evaluate(zuma: ast::Document) -> Result<svg::Document> {
     let mut doc = svg::Document::new();
-    doc = handle_expressions(zuma.expressions, doc)?;
+    let constants = vec!();
+    doc = handle_expressions(zuma.expressions, doc, &constants)?;
     Ok(doc)
 }
 
-fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document) -> Result<svg::Document> {
+fn handle_expressions(expressions: Vec<ast::Expression>,
+                      doc: svg::Document,
+                      upper_scope_constants: &Constants)
+    -> Result<svg::Document>
+{
     use crate::parsing::ast::Expression::*;
 
     let mut local_consts: ConstantsMap = HashMap::new();
@@ -29,7 +34,11 @@ fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document)
         match expr {
 
             FunctionCall(fc) => {
-                let mut res = handle_function_call(fc, &local_consts)?;
+
+                let mut all_constants = upper_scope_constants.clone();
+                all_constants.push(&local_consts);
+
+                let mut res = handle_function_call(fc, &all_constants)?;
                 doc = doc.add_many(&mut res);
             },
             
@@ -39,7 +48,11 @@ fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document)
             },
             
             Scope(s) => {
-                doc = handle_expressions(s.expressions, doc)?;
+
+                let mut all_constants = upper_scope_constants.clone();
+                all_constants.push(&local_consts);
+
+                doc = handle_expressions(s.expressions, doc, &all_constants)?;
             },
         }       
     }
@@ -47,7 +60,9 @@ fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document)
     Ok(doc)
 }
 
-fn handle_function_call(function_call: ast::FunctionCall, consts: &ConstantsMap) -> Result<Vec<svg::Element>> {
+fn handle_function_call(function_call: ast::FunctionCall, consts: &Constants)
+    -> Result<Vec<svg::Element>>
+{
     
     let ast::FunctionCall { name, args } = function_call;
     

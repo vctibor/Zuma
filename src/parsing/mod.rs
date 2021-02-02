@@ -23,7 +23,7 @@ impl ZumaParser {
     pub fn parse(&self, source: String) -> Option<Document> {
         let res = self.parser.parse(&source);
 
-        println!("{:?}", res);
+        //println!("{:?}", res);
 
         res.ok()
     }
