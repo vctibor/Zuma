@@ -24,8 +24,6 @@ rectangle start=[70,40] size=[100,100] color=green opacity=0.3;
     assert_eq!(expected, res);
 }
 
-
-
 #[test]
 fn test_scope() {
     let input = r#"

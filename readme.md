@@ -13,4 +13,4 @@ line start=[10,35] end=[400,35] color=blue width=9;
 
 produces this:
 
-![alt text](examples/front_page01.svg "Logo Title Text 1")
+![examples/front_page01.svg](examples/front_page01.svg)

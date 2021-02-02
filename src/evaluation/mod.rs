@@ -8,7 +8,11 @@ mod helpers;
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;
 
+use std::collections::HashMap;
+
 use anyhow::{Result, anyhow};
+
+type ConstantsMap = HashMap::<String, ast::Value>;
 
 pub fn evaluate(zuma: ast::Document) -> Result<svg::Document> {
     let mut doc = svg::Document::new();
@@ -16,8 +20,11 @@ pub fn evaluate(zuma: ast::Document) -> Result<svg::Document> {
     Ok(doc)
 }
 
-fn handle_expressions(expressions: Vec<ast::Expression>, doc: svg::Document) -> Result<svg::Document> {
+fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document) -> Result<svg::Document> {
     use crate::parsing::ast::Expression::*;
+
+    let mut local_consts: ConstantsMap = HashMap::new();
+
     let mut doc = doc;
     for expr in expressions {
         match expr {
@@ -28,7 +35,7 @@ fn handle_expressions(expressions: Vec<ast::Expression>, doc: svg::Document) -> 
             },
             
             ConstantDeclaration(c) => {
-
+                local_consts.insert(c.name, c.value);
             },
             
             Scope(s) => {
@@ -36,6 +43,7 @@ fn handle_expressions(expressions: Vec<ast::Expression>, doc: svg::Document) -> 
             },
         }       
     }
+
     Ok(doc)
 }
 
