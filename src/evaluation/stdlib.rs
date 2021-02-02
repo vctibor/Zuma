@@ -18,7 +18,7 @@ pub fn stdlib() -> FunMap {
     }
 }
 
-fn line(mut args: Args) -> Result<Vec<svg::Element>> {
+fn line(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -50,7 +50,7 @@ fn line(mut args: Args) -> Result<Vec<svg::Element>> {
     Ok(vec!(line))
 }
 
-fn rectangle(mut args: Args) -> Result<Vec<svg::Element>> {
+fn rectangle(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -94,7 +94,7 @@ fn rectangle(mut args: Args) -> Result<Vec<svg::Element>> {
     Ok(vec!(rectangle))
 }
 
-fn text(mut args: Args) -> Result<Vec<svg::Element>> {
+fn text(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?

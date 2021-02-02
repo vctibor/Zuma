@@ -1,5 +1,18 @@
-let blue_color = #1122ff;
+let malky_green = #bbe088;
+let purple = #994fd1;
 
-rectangle start=[100,100] size=[300,200] color=red stroke-color=red;
-line start=[100,100] end=[100,300] color=white width=15;
-line start=[400,100] end=[400,300] color=white width=15;
+let rectangle_size = [120, 120];
+
+let my_width = 15;
+
+rectangle start=[100,100] size=rectangle_size color=malky_green stroke-color=purple
+    stroke-width=my_width;
+
+rectangle start=[100,300] size=rectangle_size color=malky_green stroke-color=purple
+    stroke-width=my_width;
+
+rectangle start=[300,100] size=rectangle_size color=malky_green stroke-color=purple
+    stroke-width=my_width;
+
+rectangle start=[300,300] size=rectangle_size color=malky_green stroke-color=purple
+    stroke-width=my_width;

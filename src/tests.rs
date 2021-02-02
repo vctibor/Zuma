@@ -27,14 +27,14 @@ rectangle start=[70,40] size=[100,100] color=green opacity=0.3;
 #[test]
 fn test_scope() {
     let input = r#"
-    {
-        rectangle start=[100,100] size=[300,200] color=red stroke-color=red;
+{
+    rectangle start=[100,100] size=[300,200] color=red stroke-color=red;
 
-        {
-            line start=[100,100] end=[100,300] color=white width=15;
-            line start=[400,100] end=[400,300] color=white width=15;
-        }
+    {
+        line start=[100,100] end=[100,300] color=white width=15;
+        line start=[400,100] end=[400,300] color=white width=15;
     }
+}
     "#.trim();
 
     let expected = r#"
@@ -50,5 +50,45 @@ fn test_scope() {
 
     assert_eq!(expected, res);
 }
+
+#[test]
+fn test_constants() {
+    let input = r#"
+let malky_green = #bbe088;
+let purple = #994fd1;
+
+let rectangle_size = [120, 120];
+
+let my_width = 15;
+
+rectangle start=[100,100] size=rectangle_size color=malky_green stroke-color=purple
+    stroke-width=my_width;
+
+rectangle start=[100,300] size=rectangle_size color=malky_green stroke-color=purple
+    stroke-width=my_width;
+
+rectangle start=[300,100] size=rectangle_size color=malky_green stroke-color=purple
+    stroke-width=my_width;
+
+rectangle start=[300,300] size=rectangle_size color=malky_green stroke-color=purple
+    stroke-width=my_width;
+    "#.trim();
+
+    let expected = r#"
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+    <rect height="120" style="stroke-width:15;stroke:rgb(153,79,209);fill:rgb(187,224,136);opacity:1" width="120" x="100" y="100"/>
+    <rect height="120" style="stroke-width:15;stroke:rgb(153,79,209);fill:rgb(187,224,136);opacity:1" width="120" x="300" y="100"/>
+    <rect height="120" style="stroke-width:15;stroke:rgb(153,79,209);fill:rgb(187,224,136);opacity:1" width="120" x="100" y="300"/>
+    <rect height="120" style="stroke-width:15;stroke:rgb(153,79,209);fill:rgb(187,224,136);opacity:1" width="120" x="300" y="300"/>
+</svg>
+    "#.trim();
+
+    let compiler = ZumaCompiler::new();
+    let res = compiler.compile(input.to_owned()).unwrap();
+
+    assert_eq!(expected, res);
+}
+
+
 
 // TODO: Test that all files in example folder do compile

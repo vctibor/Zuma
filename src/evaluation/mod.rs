@@ -4,6 +4,7 @@
 
 mod stdlib;
 mod helpers;
+use helpers::ConstantsMap;
 
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;
@@ -11,8 +12,6 @@ use crate::svg_generator as svg;
 use std::collections::HashMap;
 
 use anyhow::{Result, anyhow};
-
-type ConstantsMap = HashMap::<String, ast::Value>;
 
 pub fn evaluate(zuma: ast::Document) -> Result<svg::Document> {
     let mut doc = svg::Document::new();
@@ -30,7 +29,7 @@ fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document)
         match expr {
 
             FunctionCall(fc) => {
-                let mut res = handle_function_call(fc)?;
+                let mut res = handle_function_call(fc, &local_consts)?;
                 doc = doc.add_many(&mut res);
             },
             
@@ -48,7 +47,7 @@ fn handle_expressions<'a>(expressions: Vec<ast::Expression>, doc: svg::Document)
     Ok(doc)
 }
 
-fn handle_function_call(function_call: ast::FunctionCall) -> Result<Vec<svg::Element>> {
+fn handle_function_call(function_call: ast::FunctionCall, consts: &ConstantsMap) -> Result<Vec<svg::Element>> {
     
     let ast::FunctionCall { name, args } = function_call;
     
@@ -56,7 +55,7 @@ fn handle_function_call(function_call: ast::FunctionCall) -> Result<Vec<svg::Ele
 
     match stdlib.get(&name) {
         Some(fun) => {
-            let args = helpers::create_arg_map(args)?;
+            let args = helpers::create_arg_map(args, &consts)?;
             Ok((fun.eval)(args)?)
         }
 
