@@ -17,17 +17,8 @@ pub struct Scope {
     pub expressions: Vec<Expression>
 }
 
-#[derive(Debug, PartialEq, Clone)]
-pub enum ConstantOrLiteral {
-    Const(String),  // name of constant used
-    Literal(Value)
-}
 
-#[derive(Debug, PartialEq, Clone)]
-pub struct ConstantDeclaration {
-    pub name: String,
-    pub value: Value
-}
+// FUNCTIONS
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct FunctionCall {
@@ -41,6 +32,47 @@ pub struct Arg {
     pub value: ConstantOrLiteral
 }
 
+
+// CONSTANTS
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum ConstantOrLiteral {
+    Const(String),  // name of constant used
+    Literal(Value)
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct ConstantDeclaration {
+    pub name: String,
+    pub value: Value
+}
+
+
+// ARITHMETIC AND LOGICAL OPERATIONS
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Operation {
+    pub lh: Value,
+    pub rh: Value,
+    pub op: Operator
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum Operator {
+    Addition,
+    Subtraction,
+    Multiplication,
+    Division,
+    LessThan,
+    GreaterThan,
+    Equality,
+    LogicalAnd,
+    LogicalOr,
+    Negation,
+}
+
+
+// LITERALS
 
 /// Types which can be declared by literal in Zuma.
 #[derive(Debug, PartialEq, Clone)]
@@ -80,14 +112,6 @@ impl Value {
             _ => Err(anyhow!("Wrong type."))
         }
     }    
-}
-
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct Line {
-    pub start: Point,
-    pub end: Point,
-    pub color: Option<Color>
 }
 
 #[derive(Debug, PartialEq, Clone)]

@@ -12,6 +12,10 @@
 
 \newcommand{\zuma}{ZUMA}
 
+\newcommand{\question}[1]{
+    \color{red} \textbf{QUESTION:} \color{black} #1
+}
+
 \begin{document}
 
 \pagenumbering{gobble}
@@ -80,7 +84,7 @@ And following logical ones:
 
 Additionally, left and right parenthesis \texttt{( )} can be used to group operations into higher level units and set precedence of operations.
 
-\color{red} \textbf{QUESTION:} \color{black} Is it possible to have NO operators precedence and rely on parentheses exclusively? 
+\question{Is it possible to have NO operators precedence and rely on parentheses exclusively?}
 
 
 \section{Expressions}
@@ -97,6 +101,20 @@ Expressions are following constructs:
     \item scope
 \end{itemize}
 
+
+\section{Functions}
+
+Function is called using its name followed by list argument assignments, like this:
+
+\texttt{line start=[0,0] end=[15,20] color=white;}
+
+Here \texttt{line} is name of function being invoked, \texttt{start}, \texttt{end} and \texttt{color} are arguments being passed to function. Like every expression it has to end with semicolon.
+
+There is number of predefined functions, mainly concerned with generating graphical primitives.
+
+Support for user defined functions is planned, but not finalized.
+
+\question{We will want to have two kind of functions, one to calculate and \textit{return} some complex value, possibly to be used inside arithmetic or logical operation. Second kind to directly render some graphical object. We will need to distuingish these. Possibly functions to directly render graphics should instead return these (with ability to assign them to constant) and only when invoked without assignment should they be rendered.}
 
 \section{Scopes}
 
@@ -122,6 +140,15 @@ Comments can be nested:
 \texttt{/* /* */}
 
 Anything inside comments shouldn't break compilation.
+
+
+\chapter{Predefined functions}
+
+\section{Line}
+
+\section{Rectangle}
+
+\section{Text}
 
 
 \chapter{Notes}

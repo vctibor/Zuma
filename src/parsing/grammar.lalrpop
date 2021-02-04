@@ -31,6 +31,23 @@ pub Arg: Arg = {
     <name:Name> "=" <value:Name> => Arg { name, value: ConstantOrLiteral::Const(value) },
 };
 
+pub Operation: Operation = {
+    "(" <lh:Literal> <op:Operator> <rh:Literal> ")" => Operation { lh, op, rh },
+};
+
+pub Operator: Operator = {
+    "+" => Operator::Addition,
+    "-" => Operator::Subtraction,
+    "*" => Operator::Multiplication,
+    "/" => Operator::Division,
+    "<" => Operator::LessThan,
+    ">" => Operator::GreaterThan,
+    "==" => Operator::Equality,
+    "&" => Operator::LogicalAnd,
+    "|" => Operator::LogicalOr,
+    "!" => Operator::Negation,
+};
+
 pub Name: String = r"[a-z_-]+" => <>.to_string();
 
 pub Literal: Value = {
