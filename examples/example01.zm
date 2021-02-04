@@ -1,6 +1,15 @@
-let ab = true;
-let ba = false;
+let size = [50, 50];
 
-let w = 4;
+rectangle start=[10, 10] size=size color=white;
 
-rectangle start=[50,50] size=[50,100] color=red stroke-width=w stroke-color=white;
+{
+    rectangle start=[100, 10] size=size color=white;
+
+    let size = [20, 80];
+
+    rectangle start=[200, 10] size=size color=blue;
+
+    {
+        rectangle start=[300, 10] size=size color=red;
+    }
+}

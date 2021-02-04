@@ -31,13 +31,17 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
 
     let mut doc = doc;
     for expr in expressions {
+
+        // TODO: I know this is highly suboptimal, but until it starts to cause measurable
+        //  performance impact, I am leaving it. Anyway, it would be nice to clean it up.
+        let mut mut_upper = upper_scope_constants.clone();
+        let mut all_constants = vec!();
+        all_constants.push(&local_consts);
+        all_constants.append(&mut mut_upper);
+
         match expr {
 
             FunctionCall(fc) => {
-
-                let mut all_constants = upper_scope_constants.clone();
-                all_constants.push(&local_consts);
-
                 let mut res = handle_function_call(fc, &all_constants)?;
                 doc = doc.add_many(&mut res);
             },
@@ -48,10 +52,6 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
             },
             
             Scope(s) => {
-
-                let mut all_constants = upper_scope_constants.clone();
-                all_constants.push(&local_consts);
-
                 doc = handle_expressions(s.expressions, doc, &all_constants)?;
             },
         }       
