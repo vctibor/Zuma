@@ -1,54 +1,6 @@
-let purple = #6600aa;
+let ab = true;
+let ba = false;
 
-let my_color = #00ff00;
+let w = 4;
 
-let my_width = 2.5;
-
-let size = [30, 30];
-
-{
-    let size = [100, 300];
-
-    rectangle start=size size=[100,100] color=purple;
-
-    rectangle start=[100,200] size=[200,100] color=purple;
-
-    {
-
-        let my_width = 17.560;
-
-        let my_end = [405, 450];
-
-        {
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-        }
-
-        let my_color = #ff0000;
-
-        let my_width = 52.060;
-
-        let my_end = [105, 450];
-
-        {
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-            line start=size end=my_end width=my_width color=my_color;
-        }
-    }
-}
-
-rectangle start=[100,200] size=size color=green;
+rectangle start=[50,50] size=[50,100] color=red stroke-width=w stroke-color=white;

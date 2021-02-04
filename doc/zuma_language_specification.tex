@@ -8,6 +8,10 @@
 \setlength{\parindent}{0em}
 \setlength{\parskip}{3mm}
 
+\usepackage{xcolor}
+
+\newcommand{\zuma}{ZUMA}
+
 \begin{document}
 
 \pagenumbering{gobble}
@@ -20,47 +24,64 @@
 
 \pagenumbering{arabic}
 
-\chapter{Datatypes}
-
-ZUMA is strongly typed.
-
-Following datatypes can be created using literals:
-
-\section{Boolean}
-
-Boolean has one of values \texttt{true} or \texttt{false}.
-
-\section{Number}
-
-Number is a single precision floating point, i.e. f32: \texttt{1.5464}.
-
-\section{Point}
-
-Point is declared using two numbers inside square brackets like \texttt{[4.45,6.06]}.
-
-\section{Color}
-
-Color can be declared using sharp followed by hexadecimal value: \texttt{\#ff00a1}. Additionally few basic colors can be declared by their name: \texttt{black}, \texttt{white}, \texttt{red}, \texttt{green}, \texttt{blue} or \texttt{yellow}.
-
-\section{Text}
-
-\chapter{Coordinate system}
-
-Origin point is left upper corner. \texttt{x} is vertical axis, \texttt{y} is horizontal axis.
-
-Therefore \texttt{[0,500]} describes upper right corner, while \texttt{[500,0]} describes lower left corner.
-
-\chapter{Reserved words}
-
-Color literals: \texttt{black white red green blue yellow}
-
-Boolean literals: \texttt{true false}
-
-Pre-defined functions: \texttt{line rectangle text}
-
-Constant declaration keyword: \texttt{let}
 
 \chapter{Language constructs}
+
+\section{Datatypes and constants}
+
+\zuma{} is strongly typed.
+
+Following datatypes can be declared using literals:
+
+\textbf{Bool} has one of values \texttt{true} or \texttt{false}.
+
+\textbf{Number} is a single precision floating point, i.e. f32: \texttt{1.5464}.
+
+\textbf{Point} is declared using two numbers inside square brackets like \texttt{[4.45,6.06]}.
+
+\textbf{Color} can be declared using sharp followed by hexadecimal value: \texttt{\#ff00a1}. Additionally few basic colors can be declared by their name: \texttt{black}, \texttt{white}, \texttt{red}, \texttt{green}, \texttt{blue} or \texttt{yellow}.
+
+\textbf{Text} is delimited by double quotes.
+
+We can declare constant \textit{name} with value \textit{literal} using keyword \texttt{let}:
+
+\texttt{let <name> = <literal>;}
+
+
+\section{Arithmetic and logical operations}
+
+\zuma{} is not intended to be general purpose programming language, therefore design goal is to \textbf{minimize} amount of supported data types, operations and language constructs.
+
+However for generating complex structures, such as ones consisting of repeated elements (\textit{for loops}) or of parts rendered conditionally (\textit{if statements}), we have to support these language constructs. And these constructs require support for aritmetic (loops) and logical (ifs) operations.
+
+\zuma{} understands these aritmetic operations:
+
+\textbf{Arithmetic addition} expressed by symbol \texttt{+}.
+
+\textbf{Subtraction} expressed by symbol \texttt{-}.
+
+\textbf{Arithmetic multiplication} expressed by symbol \texttt{*}.
+
+\textbf{Division} expressed by symbol \texttt{/}.
+
+And following logical ones:
+
+\textbf{Less than} expressed by symbol \texttt{<}.
+
+\textbf{Greater than} expressed by symbol \texttt{>}.
+
+\textbf{Equality} expressed by symbol \texttt{==} (double equal sign).
+
+\textbf{Logical addition (or)} expressed by symbol \texttt{|}.
+
+\textbf{Logical multiplication (and)} expressed by symbol \texttt{\&}.
+
+\textbf{Negation} expressed by symbol \texttt{!}.
+
+Additionally, left and right parenthesis \texttt{( )} can be used to group operations into higher level units and set precedence of operations.
+
+\color{red} \textbf{QUESTION:} \color{black} Is it possible to have NO operators precedence and rely on parentheses exclusively? 
+
 
 \section{Expressions}
 
@@ -75,6 +96,12 @@ Expressions are following constructs:
     \item function call
     \item scope
 \end{itemize}
+
+
+\section{Scopes}
+
+Scope is delimited by \texttt{\{} and \texttt{\}}. There is list of expressions between braces. Scope is an expression.
+
 
 \section{Comments}
 
@@ -96,29 +123,41 @@ Comments can be nested:
 
 Anything inside comments shouldn't break compilation.
 
-\section{Scopes}
 
-Scope is delimited by \texttt{\{} and \texttt{\}}. There is list of expressions between braces. Scope is an expression.
+\chapter{Notes}
 
-\chapter{Architecture}
+\section{Coordinate system}
 
-\section{Parser}
+Origin point is left upper corner. \texttt{x} is vertical axis, \texttt{y} is horizontal axis.
 
-\section{Abstract Syntax Tree}
+Therefore \texttt{[0,500]} describes upper right corner, while \texttt{[500,0]} describes lower left corner.
 
-\section{Evaluation}
 
-remove comments, eval variables, ifs and for loops
+\section{Reserved words}
 
-\section{ZUMA IR}
+Color literals: \texttt{black white red green blue yellow}
 
-\section{Translation}
+Boolean literals: \texttt{true false}
 
-ZUMA IR to SVG model
+Pre-defined functions: \texttt{line rectangle text}
 
-\section{Generate SVG}
+Constant declaration keyword: \texttt{let}
 
-\chapter{Performance goals}
+
+\section{Architecture}
+
+\textbf{Parser}
+
+\textbf{Abstract Syntax Tree}
+
+\textbf{Evaluation}: remove comments, eval variables, ifs and for loops...
+
+\textbf{Translation}: ZUMA IR is basically in-memory OOP model of SVG to be generated. It is result of evaluation step and used to generate SVG.
+
+\textbf{Generate SVG} 
+
+
+\section{Performance goals}
 
 \textbf{1ms} - good
 

@@ -89,6 +89,27 @@ rectangle start=[300,300] size=rectangle_size color=malky_green stroke-color=pur
     assert_eq!(expected, res);
 }
 
+#[test]
+fn test_bools() {
+    let input = r#"
+let ab = true;
+let ba = false;
 
+let w = 4;
+
+rectangle start=[50,50] size=[50,100] color=red stroke-width=w stroke-color=white;
+    "#.trim();
+
+    let expected = r#"
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+    <rect height="50" style="stroke-width:4;stroke:rgb(255,255,255);fill:rgb(255,0,0);opacity:1" width="100" x="50" y="50"/>
+</svg>
+    "#.trim();
+
+    let compiler = ZumaCompiler::new();
+    let res = compiler.compile(input.to_owned()).unwrap();
+
+    assert_eq!(expected, res);
+}
 
 // TODO: Test that all files in example folder do compile

@@ -48,7 +48,8 @@ pub enum Value {
     Number(f32),
     Point(Point),
     Color(Color),
-    String(String)
+    String(String),
+    Bool(bool),
 }
 
 impl Value {
