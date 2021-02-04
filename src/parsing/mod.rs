@@ -7,7 +7,7 @@ pub mod parsing_functions;
 mod tests;
 
 use grammar::*;
-use ast::*;
+pub use ast::*;
 
 pub struct ZumaParser {
     parser: DocParser

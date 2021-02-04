@@ -52,6 +52,41 @@ fn test_scopes_1() {
 }
 
 #[test]
+fn test_scopes_2() {
+    let input = r#"
+let size = [50, 50];
+
+rectangle start=[10, 10] size=size color=white;
+
+{
+    rectangle start=[100, 10] size=size color=white;
+
+    let size = [20, 80];
+
+    rectangle start=[200, 10] size=size color=blue;
+
+    {
+        rectangle start=[300, 10] size=size color=red;
+    }
+}
+    "#.trim();
+
+    let expected = r#"
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+    <rect height="50" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(255,255,255);opacity:1" width="50" x="10" y="10"/>
+    <rect height="50" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(255,255,255);opacity:1" width="50" x="10" y="100"/>
+    <rect height="20" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(0,0,255);opacity:1" width="80" x="10" y="200"/>
+    <rect height="20" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(255,0,0);opacity:1" width="80" x="10" y="300"/>
+</svg>
+    "#.trim();
+
+    let compiler = ZumaCompiler::new();
+    let res = compiler.compile(input.to_owned()).unwrap();
+
+    assert_eq!(expected, res);
+}
+
+#[test]
 fn test_constants() {
     let input = r#"
 let malky_green = #bbe088;
@@ -103,43 +138,6 @@ rectangle start=[50,50] size=[50,100] color=red stroke-width=w stroke-color=whit
     let expected = r#"
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
     <rect height="50" style="stroke-width:4;stroke:rgb(255,255,255);fill:rgb(255,0,0);opacity:1" width="100" x="50" y="50"/>
-</svg>
-    "#.trim();
-
-    let compiler = ZumaCompiler::new();
-    let res = compiler.compile(input.to_owned()).unwrap();
-
-    assert_eq!(expected, res);
-}
-
-
-
-#[test]
-fn test_scopes_2() {
-    let input = r#"
-let size = [50, 50];
-
-rectangle start=[10, 10] size=size color=white;
-
-{
-    rectangle start=[100, 10] size=size color=white;
-
-    let size = [20, 80];
-
-    rectangle start=[200, 10] size=size color=blue;
-
-    {
-        rectangle start=[300, 10] size=size color=red;
-    }
-}
-    "#.trim();
-
-    let expected = r#"
-<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
-    <rect height="50" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(255,255,255);opacity:1" width="50" x="10" y="10"/>
-    <rect height="50" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(255,255,255);opacity:1" width="50" x="10" y="100"/>
-    <rect height="20" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(0,0,255);opacity:1" width="80" x="10" y="200"/>
-    <rect height="20" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(255,0,0);opacity:1" width="80" x="10" y="300"/>
 </svg>
     "#.trim();
 

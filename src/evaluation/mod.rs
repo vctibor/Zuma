@@ -8,6 +8,9 @@ use helpers::{ConstantsMap, Constants};
 
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;
+use crate::parsing::OperationInput::Literal;
+use crate::parsing::OperationInput::Constant;
+use crate::parsing::OperationInput::Operation;
 
 use std::collections::HashMap;
 
@@ -47,8 +50,11 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
             },
             
             ConstantDeclaration(c) => {
-                local_consts.insert(c.name, c.value);
-                println!("{:?}", local_consts);
+                match c.value {
+                    Literal(value) => { local_consts.insert(c.name, value); },
+                    Constant(name) => {},
+                    Operation(op) => {},
+                }
             },
             
             Scope(s) => {

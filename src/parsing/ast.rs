@@ -29,31 +29,40 @@ pub struct FunctionCall {
 #[derive(Debug, PartialEq, Clone)]
 pub struct Arg {
     pub name: String,
-    pub value: ConstantOrLiteral
+    pub value: OperationInput
 }
 
 
 // CONSTANTS
 
+/*
 #[derive(Debug, PartialEq, Clone)]
 pub enum ConstantOrLiteral {
     Const(String),  // name of constant used
-    Literal(Value)
+    Literal(OperationInput)
 }
+*/
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ConstantDeclaration {
     pub name: String,
-    pub value: Value
+    pub value: OperationInput,
 }
 
 
 // ARITHMETIC AND LOGICAL OPERATIONS
 
 #[derive(Debug, PartialEq, Clone)]
+pub enum OperationInput {
+    Literal(Value),
+    Constant(String),
+    Operation(Operation),
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct Operation {
-    pub lh: Value,
-    pub rh: Value,
+    pub lh: Box<OperationInput>,
+    pub rh: Box<OperationInput>,
     pub op: Operator
 }
 

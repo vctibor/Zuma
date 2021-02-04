@@ -19,7 +19,7 @@ pub type FunMap = HashMap<String, Function>;
 
 pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &Constants) -> Result<ArgsMap> {
     
-    use ast::ConstantOrLiteral::*;
+    use ast::OperationInput::*;
 
     let mut arg_map = HashMap::new();
 
@@ -28,7 +28,7 @@ pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &Constants) -> Result<A
         let ast::Arg { name: arg_name, value } = arg;
 
         match value {
-            Const(const_name) => {
+            Constant(const_name) => {
                 match  get_constant(&const_name, &constants) {
                     Some(val) => { arg_map.insert(arg_name, val.clone()); },
                     None => return Err(anyhow!("Unknown constant {}", &const_name))
@@ -37,6 +37,10 @@ pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &Constants) -> Result<A
 
             Literal(val) => {
                 arg_map.insert(arg_name, val);
+            }
+
+            Operation(_) => {
+                
             }
         }
     }

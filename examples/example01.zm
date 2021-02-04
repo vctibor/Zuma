@@ -1,15 +1,3 @@
-let size = [50, 50];
+let width = (10 + 25);
 
-rectangle start=[10, 10] size=size color=white;
-
-{
-    rectangle start=[100, 10] size=size color=white;
-
-    let size = [20, 80];
-
-    rectangle start=[200, 10] size=size color=blue;
-
-    {
-        rectangle start=[300, 10] size=size color=red;
-    }
-}
+line start=[0,0] end=[15,50] width=33 color=red;

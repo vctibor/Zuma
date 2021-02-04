@@ -19,7 +19,7 @@ pub Scope: Scope = {
 };
 
 pub ConstantDeclaration: ConstantDeclaration = {
-    "let" <name:Name> "=" <value:Literal> ";" => ConstantDeclaration { name, value },
+    "let" <name:Name> "=" <value:OperationInput> ";" => ConstantDeclaration { name, value },
 }
 
 pub FunctionCall: FunctionCall = {
@@ -27,13 +27,18 @@ pub FunctionCall: FunctionCall = {
 };
 
 pub Arg: Arg = {
-    <name:Name> "=" <value:Literal> => Arg { name, value: ConstantOrLiteral::Literal(value) },
-    <name:Name> "=" <value:Name> => Arg { name, value: ConstantOrLiteral::Const(value) },
+    <name:Name> "=" <value:OperationInput> => Arg { name, value },
 };
 
 pub Operation: Operation = {
-    "(" <lh:Literal> <op:Operator> <rh:Literal> ")" => Operation { lh, op, rh },
+    <lh:OperationInput> <op:Operator> <rh:OperationInput> => Operation { lh: Box::new(lh), op, rh: Box::new(rh) },
 };
+
+pub OperationInput: OperationInput = {
+    Literal => OperationInput::Literal(<>),
+    Name => OperationInput::Constant(<>),
+    "(" <o:Operation> ")" => OperationInput::Operation(o),
+}
 
 pub Operator: Operator = {
     "+" => Operator::Addition,
