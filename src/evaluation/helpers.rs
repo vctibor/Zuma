@@ -12,7 +12,7 @@ pub type ConstantsMap = HashMap::<String, ast::Value>;
 pub type Constants<'a> = Vec<&'a ConstantsMap>;
 
 pub struct Function {
-    pub eval: Box<dyn Fn(ArgsMap) -> Result<Vec<svg::Element>>>
+    pub eval: Box<dyn Fn(ArgsMap, &Constants) -> Result<Vec<svg::Element>>>
 }
 
 pub type FunMap = HashMap<String, Function>;
@@ -98,7 +98,7 @@ pub fn eval_operation(operation: ast::Operation, constants: &Constants) -> Resul
     }
 }
 
-fn get_value(input: &ast::OperationInput, constants: &Constants) -> Result<ast::Value> {
+pub fn get_value(input: &ast::OperationInput, constants: &Constants) -> Result<ast::Value> {
     use ast::OperationInput::*;
     match input {
         Literal(value) => Ok(value.clone()),

@@ -79,7 +79,7 @@ fn handle_function_call(function_call: ast::FunctionCall, consts: &Constants)
     match stdlib.get(&name) {
         Some(fun) => {
             let args = helpers::create_arg_map(args, &consts)?;
-            Ok((fun.eval)(args)?)
+            Ok((fun.eval)(args, consts)?)
         }
 
         None => Err(anyhow!("Unknown function {}", &name))

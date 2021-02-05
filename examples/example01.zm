@@ -1,3 +1,40 @@
-let width = (3 + 5) * (10 * 2);
+let size = [70, 200];
+let border_color = #222222;
 
-line start=[50, 200] end=[150,350] width=width color=red;
+let width = 3;
+
+let start_point = 0;
+let vspace = 100;
+
+let start = (start_point + (0 * vspace));
+
+rectangle start=[start, 100] size=size color=white stroke-color=border_color stroke-width=width;
+text text="Objednání surovin" start=[(start + 30), 140] color=border_color;
+text text="a komponent" start=[(start + 50), 160] color=border_color;
+
+let start = (start_point + (1 * vspace));
+
+rectangle start=[start, 100] size=size color=white stroke-color=border_color stroke-width=width;
+text text="Fakturizace" start=[(start + 30), 170] color=border_color;
+text text="od dodavatele" start=[(start + 50), 160] color=border_color;
+
+let start = (start_point + (2 * vspace));
+
+rectangle start=[start, 100] size=size color=white stroke-color=border_color stroke-width=width;
+text text="Doprava do podniku" start=[(start + 40), 140] color=border_color;
+
+let start = (start_point + (3 * vspace));
+
+rectangle start=[start, 100] size=size color=white stroke-color=border_color stroke-width=width;
+text text="Přesun do výroby" start=[(start + 40), 150] color=border_color;
+
+let start = (start_point + (4 * vspace));
+
+rectangle start=[start,100] size=size color=white stroke-color=border_color stroke-width=width;
+text text="Proces výroby" start=[(start + 40), 160] color=border_color;
+
+let start = (start_point + (5 * vspace));
+
+rectangle start=[start, 100] size=size color=white stroke-color=border_color stroke-width=width;
+text text="Přesun do" start=[(start + 30), 170] color=border_color;
+text text="meziskladu" start=[(start + 50), 165] color=border_color;

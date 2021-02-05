@@ -137,8 +137,16 @@ pub struct Color {
     pub blue: u8
 }
 
+/*
 #[derive(Debug, PartialEq, Clone)]
 pub struct Point {
     pub x: f32,
     pub y: f32
+}
+*/
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Point {
+    pub x: Box<OperationInput>,
+    pub y: Box<OperationInput>,
 }

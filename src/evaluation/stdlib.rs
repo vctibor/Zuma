@@ -18,7 +18,7 @@ pub fn stdlib() -> FunMap {
     }
 }
 
-fn line(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
+fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -42,7 +42,12 @@ fn line(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
         return Err(anyhow!("Unexpected argument provided."));
     }
 
-    let line: svg::Element = svg::Line::new(start.x, start.y, end.x, end.y)
+    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?;
+    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?;
+    let end_x = get_value(end.x.as_ref(), &constants)?.get_number()?;
+    let end_y = get_value(end.y.as_ref(), &constants)?.get_number()?;
+
+    let line: svg::Element = svg::Line::new(start_x, start_y, end_x, end_y)
         .color(color.red, color.green, color.blue)
         .width(width)
         .into();
@@ -50,7 +55,7 @@ fn line(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
     Ok(vec!(line))
 }
 
-fn rectangle(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
+fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -84,7 +89,12 @@ fn rectangle(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
         return Err(anyhow!("Unexpected argument provided."));
     }
 
-    let rectangle = svg::Rectangle::new(start.x, start.y, size.x, size.y)
+    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?;
+    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?;
+    let size_x = get_value(size.x.as_ref(), &constants)?.get_number()?;
+    let size_y = get_value(size.y.as_ref(), &constants)?.get_number()?;
+
+    let rectangle = svg::Rectangle::new(start_x, start_y, size_x, size_y)
         .stroke_width(stroke_width)
         .stroke_color(stroke_color.red, stroke_color.green, stroke_color.blue)
         .fill_color(color.red, color.green, color.blue)
@@ -94,14 +104,14 @@ fn rectangle(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
     Ok(vec!(rectangle))
 }
 
-fn text(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
+fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
                     .get_point()?;
 
-    let content = args.remove("start")
-                    .ok_or(anyhow!("Missing argument `content`"))?
+    let content = args.remove("text")
+                    .ok_or(anyhow!("Missing argument `text`"))?
                     .get_string()?;
 
     let color = args.remove("color")
@@ -113,7 +123,10 @@ fn text(mut args: ArgsMap) -> Result<Vec<svg::Element>> {
         return Err(anyhow!("Unexpected argument provided."));
     }
 
-    let text = svg::Text::new(start.x, start.y, content)
+    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?;
+    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?;
+
+    let text = svg::Text::new(start_x, start_y, content)
         .fill_color(color.red, color.green, color.blue)
         .into();
 

@@ -16,3 +16,9 @@ pub fn strip_quotes(value: &str) -> String {
     value.pop();
     value
 }
+
+/*
+pub fn get_point(a: OperationInput, b: OperationInput) -> Point {
+
+}
+*/

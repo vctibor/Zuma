@@ -162,6 +162,7 @@ use xml_helpers::*;
 static INDENT_SIZE: usize = 4;
 
 static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"500\" height=\"500\">";
+//static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1000\" height=\"1000\">";
 static SVG_CLOSE: &str = "</svg>";
 
 use maplit::hashmap;

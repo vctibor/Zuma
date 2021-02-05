@@ -67,7 +67,7 @@ pub Literal: Value = {
 pub Text: String = r#"".*""# => strip_quotes(<>);
 
 pub Point: Point = {
-    "[" <a:Number> "," <b:Number> "]" => Point { x: b, y: a }
+    "[" <a:OperationInput> "," <b:OperationInput> "]" => Point { x: Box::new(b), y: Box::new(a) },
 };
 
 pub Color: Color = {

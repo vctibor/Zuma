@@ -26,8 +26,12 @@ fn test_color() {
 
 #[test]
 fn test_point() {
+    let expected = Point {
+        y: Box::new(OperationInput::Literal(Value::Number(0.1))),
+        x: Box::new(OperationInput::Literal(Value::Number(5.0)))
+    };
     let parser = PointParser::new();
-    assert!(parser.parse("[0.1,5]").unwrap() == Point {y: 0.1, x: 5.0 });
+    assert!(parser.parse("[0.1,5]").unwrap() == expected);
 }
 
 #[test]
