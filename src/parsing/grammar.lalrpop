@@ -52,7 +52,6 @@ pub Operator: Operator = {
     "==" => Operator::Equality,
     "&" => Operator::LogicalAnd,
     "|" => Operator::LogicalOr,
-    "!" => Operator::Negation,
 };
 
 pub Name: String = r"[a-z_-]+" => <>.to_string();

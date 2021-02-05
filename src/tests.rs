@@ -147,4 +147,22 @@ rectangle start=[50,50] size=[50,100] color=red stroke-width=w stroke-color=whit
     assert_eq!(expected, res);
 }
 
-// TODO: Test that all files in example folder do compile
+#[test]
+fn test_operations() {
+    let input = r#"
+let width = (3 + 5) * (10 * 2);
+
+line start=[50, 200] end=[150,350] width=width color=red;
+    "#.trim();
+
+    let expected = r#"
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+    <line style="stroke-width:160;stroke:rgb(255,0,0)" x1="200" x2="350" y1="50" y2="150"/>
+</svg>
+    "#.trim();
+
+    let compiler = ZumaCompiler::new();
+    let res = compiler.compile(input.to_owned()).unwrap();
+
+    assert_eq!(expected, res);
+}

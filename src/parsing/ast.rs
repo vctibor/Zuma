@@ -77,7 +77,7 @@ pub enum Operator {
     Equality,
     LogicalAnd,
     LogicalOr,
-    Negation,
+    //Negation,  // unary operator, requires different implementation
 }
 
 
@@ -120,7 +120,14 @@ impl Value {
             Value::Number(n) => Ok(n),
             _ => Err(anyhow!("Wrong type."))
         }
-    }    
+    }
+    
+    pub fn get_bool(self) -> Result<bool> {
+        match self {
+            Value::Bool(b) => Ok(b),
+            _ => Err(anyhow!("Wrong type."))
+        }
+    }  
 }
 
 #[derive(Debug, PartialEq, Clone)]

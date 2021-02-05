@@ -4,7 +4,7 @@
 
 mod stdlib;
 mod helpers;
-use helpers::{ConstantsMap, Constants};
+use helpers::*;
 
 use crate::parsing::ast as ast;
 use crate::svg_generator as svg;
@@ -50,11 +50,13 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
             },
             
             ConstantDeclaration(c) => {
-                match c.value {
-                    Literal(value) => { local_consts.insert(c.name, value); },
-                    Constant(name) => {},
-                    Operation(op) => {},
-                }
+                let resulting_constant = match c.value {
+                    Literal(value) => value,
+                    Constant(name) => get_constant(&name, &all_constants)?,
+                    Operation(op) => eval_operation(op, &all_constants)?,
+                };
+
+                local_consts.insert(c.name, resulting_constant);
             },
             
             Scope(s) => {

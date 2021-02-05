@@ -1,3 +1,3 @@
-let width = (10 + 25);
+let width = (3 + 5) * (10 * 2);
 
-line start=[0,0] end=[15,50] width=33 color=red;
+line start=[50, 200] end=[150,350] width=width color=red;

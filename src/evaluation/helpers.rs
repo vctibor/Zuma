@@ -27,7 +27,7 @@ pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &Constants) -> Result<A
     Ok(arg_map)
 }
 
-fn get_constant(name: &str, constants: &Constants) -> Result<ast::Value> {
+pub fn get_constant(name: &str, constants: &Constants) -> Result<ast::Value> {
     for const_map in constants {
         if let Some(constant) = const_map.get(name) {
             return Ok(constant.clone())
@@ -37,46 +37,64 @@ fn get_constant(name: &str, constants: &Constants) -> Result<ast::Value> {
     Err(anyhow!("Unknown constant {}", &name))
 }
 
-fn eval_operation(operation: ast::Operation, constants: &Constants) -> Result<ast::Value> {
+pub fn eval_operation(operation: ast::Operation, constants: &Constants) -> Result<ast::Value> {
 
     use ast::Operator::*;
 
     let ast::Operation { lh, op, rh } = operation;
 
-    let left_hand_value: ast::Value = get_value(lh.as_ref(), constants).unwrap();
-    let right_hand_value: ast::Value = get_value(rh.as_ref(), constants).unwrap();
+    let lh: ast::Value = get_value(lh.as_ref(), constants).unwrap();
+    let rh: ast::Value = get_value(rh.as_ref(), constants).unwrap();
     
     match op {
         Addition => {
-            panic!("Not yet implemented!");
+            let lh = lh.get_number()?;
+            let rh = rh.get_number()?;
+            return Ok(ast::Value::Number(lh + rh));
         },
         Subtraction => {
-            panic!("Not yet implemented!");
+            let lh = lh.get_number()?;
+            let rh = rh.get_number()?;
+            return Ok(ast::Value::Number(lh - rh));
         },
         Multiplication => {
-            panic!("Not yet implemented!");
+            let lh = lh.get_number()?;
+            let rh = rh.get_number()?;
+            return Ok(ast::Value::Number(lh * rh));
         },
         Division => {
-            panic!("Not yet implemented!");
+            let lh = lh.get_number()?;
+            let rh = rh.get_number()?;
+            
+            if rh == 0.0 {
+                return Err(anyhow!("Division by zero!"));
+            }
+
+            return Ok(ast::Value::Number(lh / rh));
         },
         LessThan => {
-            panic!("Not yet implemented!");
+            let lh = lh.get_number()?;
+            let rh = rh.get_number()?;
+            return Ok(ast::Value::Bool(lh < rh));
         },
         GreaterThan => {
-            panic!("Not yet implemented!");
+            let lh = lh.get_number()?;
+            let rh = rh.get_number()?;
+            return Ok(ast::Value::Bool(lh > rh));
         },
         Equality => {
             panic!("Not yet implemented!");
         },
         LogicalAnd => {
-            panic!("Not yet implemented!");
+            let lh = lh.get_bool()?;
+            let rh = rh.get_bool()?;
+            return Ok(ast::Value::Bool(lh && rh));
         },
         LogicalOr => {
-            panic!("Not yet implemented!");
-        },
-        Negation => {
-            panic!("Not yet implemented!");
-        },
+            let lh = lh.get_bool()?;
+            let rh = rh.get_bool()?;
+            return Ok(ast::Value::Bool(lh | rh));
+        }
     }
 }
 
