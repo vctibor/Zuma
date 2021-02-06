@@ -24,8 +24,11 @@ pub Scope: Scope = {
 };
 
 pub ConstantDeclaration: ConstantDeclaration = {
-    "let" <name:Name> "=" <value:OperationInput> ";" => ConstantDeclaration { name, value },
-    "let" <name:Name> "=" <value:Operation> ";" => ConstantDeclaration { name, value: OperationInput::Operation(value) },
+    "let" <name:Name> "=" <value:OperationInput> ";"
+        => ConstantDeclaration { name, value },
+
+    "let" <name:Name> "=" <value:Operation> ";"
+        => ConstantDeclaration { name, value: OperationInput::Operation(value) },
 }
 
 pub FunctionCall: FunctionCall = {

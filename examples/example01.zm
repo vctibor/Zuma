@@ -1,5 +1,1 @@
-if true {
-    rectangle start=[100,200] size=[600,400] color=red opacity=0.2;
-} else {
-
-};
+line start=[10,15] end=[25,50] color=green width=3;
