@@ -1,0 +1,21 @@
+proc arrow(
+    arrow_start: Point,
+    pointing_to_x: Number,
+    pointing_to_y: Number,
+    head_height: Number = 10,
+    head_length: Number = 20,
+    arrow_color: Color = black,
+    arrow_width: Number = 3)
+{
+    let pointing_to = [
+        pointing_to_x,
+        pointing_to_y
+    ];
+
+    let head_y = (pointing_to_y - head_length);
+
+    line start=arrow_start end=pointing_to color=arrow_color width=arrow_width;
+    line start=[(pointing_to_x - head_height), head_y] end=pointing_to color=arrow_color width=arrow_width;
+    line start=[(pointing_to_x + head_height), head_y] end=pointing_to color=arrow_color width=arrow_width;
+};
+

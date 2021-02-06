@@ -1,3 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <line style="stroke-width:3;stroke:rgb(0,255,0)" x1="15" x2="50" y1="10" y2="25"/>
+    <line style="stroke-width:3;stroke:rgb(0,255,0)" x1="100" x2="200" y1="100" y2="100"/>
+    <line style="stroke-width:3;stroke:rgb(0,255,0)" x1="180" x2="200" y1="90" y2="100"/>
+    <line style="stroke-width:3;stroke:rgb(0,255,0)" x1="180" x2="200" y1="110" y2="100"/>
 </svg>

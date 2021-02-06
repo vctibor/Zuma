@@ -101,6 +101,10 @@ pub enum Value {
     Color(Color),
     String(String),
     Bool(bool),
+
+    /// This is special type that can be only constructed using built-in functions
+    /// for generating resulting graphic primitives, such as line, rectangle, etc.
+    Graphic
 }
 
 impl Value {
