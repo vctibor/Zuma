@@ -1,3 +1,5 @@
+//! PARSING -> type checking -> interpretation -> code generation
+
 #![allow(dead_code)]        // because of pub function in grammar.lalrpop
 
 lalrpop_mod!(grammar);

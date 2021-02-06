@@ -1,3 +1,5 @@
+//! parsing -> type checking -> interpretation -> CODE GENERATION
+
 mod tests;
 
 //

@@ -1,6 +1,8 @@
-/// This module takes Zuma AST,
-/// evaluates all language constructs like variables, functions, loops, etc.,
-/// and returns svg_generator's SVG representation.
+//! parsing -> type checking -> INTERPRETATION -> code generation
+//!
+//! This module takes Zuma AST,
+//! evaluates all language constructs like variables, functions, loops, etc.,
+//! and returns svg_generator's SVG representation.
 
 mod stdlib;
 mod helpers;
