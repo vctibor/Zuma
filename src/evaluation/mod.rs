@@ -62,6 +62,18 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
             Scope(s) => {
                 doc = handle_expressions(s.expressions, doc, &all_constants)?;
             },
+
+            IfStatement(if_statement) => {
+
+                let mut if_statement = if_statement.clone();
+
+                let eval_cond = get_value(&if_statement.condition, &all_constants)?.get_bool()?;
+                if eval_cond {
+                    println!("evaluated true");
+                    let expr = if_statement.expression_block.as_mut().expressions.clone();
+                    doc = handle_expressions(expr, doc, &all_constants)?;
+                }
+            },
         }       
     }
 

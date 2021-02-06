@@ -10,11 +10,20 @@ pub enum Expression {
     ConstantDeclaration(ConstantDeclaration),
     FunctionCall(FunctionCall),
     Scope(Scope),
+    IfStatement(IfStatement),
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Scope {
     pub expressions: Vec<Expression>
+}
+
+// STATEMENTS
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct IfStatement {
+    pub condition: OperationInput,
+    pub expression_block: Box<Scope>,
 }
 
 

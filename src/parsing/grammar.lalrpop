@@ -8,10 +8,15 @@ pub Doc: Document = {
     Expression* => Document { expressions: <> }
 };
 
+pub IfStatement: IfStatement = {
+    "if" <condition:OperationInput> <scope:Scope> => IfStatement { condition, expression_block: Box::new(scope) },
+}
+
 pub Expression: Expression = {
     FunctionCall => Expression::FunctionCall(<>),
     ConstantDeclaration => Expression::ConstantDeclaration(<>),
     Scope => Expression::Scope(<>),
+    IfStatement => Expression::IfStatement(<>),
 };
 
 pub Scope: Scope = {
@@ -24,7 +29,7 @@ pub ConstantDeclaration: ConstantDeclaration = {
 }
 
 pub FunctionCall: FunctionCall = {
-    <name:Name> <args: Arg*> ";" => FunctionCall { name: name, args }
+    <name:Name> <args: Arg*> ";" => FunctionCall { name, args }
 };
 
 pub Arg: Arg = {

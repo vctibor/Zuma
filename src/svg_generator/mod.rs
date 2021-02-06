@@ -4,6 +4,7 @@ mod tests;
 // PUBLIC INTERFACE
 //
 
+#[derive(Debug, PartialEq, Clone)]
 pub struct Document {
     elements: Vec<Element>
 }
@@ -31,6 +32,7 @@ impl Document {
     }
 }
 
+#[derive(Debug, PartialEq, Clone)]
 pub enum Element {
     Line(Line),
     Rectangle(Rectangle),
@@ -55,6 +57,7 @@ impl From<Text> for Element {
     }
 }
 
+#[derive(Debug, PartialEq, Clone)]
 pub struct Line {
     x1: f32,
     x2: f32,
@@ -84,6 +87,7 @@ impl Line {
     }
 }
 
+#[derive(Debug, PartialEq, Clone)]
 pub struct Rectangle {
     x: f32,
     y: f32,
@@ -127,6 +131,7 @@ impl Rectangle {
     }
 }
 
+#[derive(Debug, PartialEq, Clone)]
 pub struct Text {
     x: f32,
     y: f32,
