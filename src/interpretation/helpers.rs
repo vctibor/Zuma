@@ -43,8 +43,8 @@ pub fn eval_operation(operation: ast::Operation, constants: &Constants) -> Resul
 
     let ast::Operation { lh, op, rh } = operation;
 
-    let lh: ast::Value = get_value(lh.as_ref(), constants).unwrap();
-    let rh: ast::Value = get_value(rh.as_ref(), constants).unwrap();
+    let lh: ast::Value = get_value(lh.as_ref(), constants)?;
+    let rh: ast::Value = get_value(rh.as_ref(), constants)?;
     
     match op {
         Addition => {
