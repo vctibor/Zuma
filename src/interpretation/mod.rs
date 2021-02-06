@@ -7,7 +7,7 @@ mod helpers;
 use helpers::*;
 
 use crate::parsing::ast as ast;
-use crate::svg_generator as svg;
+use crate::code_generation as svg;
 use crate::parsing::OperationInput::Literal;
 use crate::parsing::OperationInput::Constant;
 use crate::parsing::OperationInput::Operation;
@@ -16,7 +16,7 @@ use std::collections::HashMap;
 
 use anyhow::{Result, anyhow};
 
-pub fn evaluate(zuma: ast::Document) -> Result<svg::Document> {
+pub fn interpret(zuma: ast::Document) -> Result<svg::Document> {
     let mut doc = svg::Document::new();
     let constants = vec!();
     doc = handle_expressions(zuma.expressions, doc, &constants)?;

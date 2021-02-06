@@ -1,7 +1,7 @@
 #![allow(unused_imports)]
 
-use crate::svg_generator::Document;
-use crate::svg_generator::Line;
+use crate::code_generation::Document;
+use crate::code_generation::Line;
 
 #[test]
 fn svg_gen_test_line() {

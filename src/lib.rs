@@ -5,8 +5,9 @@
 #[macro_use] extern crate lalrpop_util;
 
 mod parsing;
-mod svg_generator;
-mod evaluation;
+mod interpretation;
+mod code_generation;
+
 mod tests;
 
 use crate::parsing::ZumaParser;
@@ -36,7 +37,7 @@ impl ZumaCompiler {
     
         let zuma_doc: crate::parsing::ast::Document = parse_res.unwrap();
     
-        let svg: svg_generator::Document = evaluation::evaluate(zuma_doc)?;
+        let svg: code_generation::Document = interpretation::interpret(zuma_doc)?;
     
         Ok(svg.generate())
     }

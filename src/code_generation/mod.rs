@@ -202,7 +202,7 @@ pub fn generate(doc: Document) -> String {
 
     let mut generator = Generator::open();
 
-    use crate::svg_generator::Element::*;
+    use crate::code_generation::Element::*;
     for el in doc.elements {
         match el {
             Line(l) => generator.add(line(l), 1),

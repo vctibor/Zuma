@@ -1,7 +1,7 @@
 use super::helpers::*;
 
 use crate::parsing::ast as ast;
-use crate::svg_generator as svg;
+use crate::code_generation as svg;
 
 use std::boxed::Box;
 
