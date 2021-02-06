@@ -23,7 +23,8 @@ pub struct Scope {
 #[derive(Debug, PartialEq, Clone)]
 pub struct IfStatement {
     pub condition: OperationInput,
-    pub expression_block: Box<Scope>,
+    pub positive: Box<Scope>,
+    pub negative: Box<Scope>,
 }
 
 

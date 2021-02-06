@@ -33,8 +33,8 @@ fn test_scopes_1() {
     {
         line start=[100,100] end=[100,300] color=white width=15;
         line start=[400,100] end=[400,300] color=white width=15;
-    }
-}
+    };
+};
     "#.trim();
 
     let expected = r#"
@@ -67,8 +67,8 @@ rectangle start=[10, 10] size=size color=white;
 
     {
         rectangle start=[300, 10] size=size color=red;
-    }
-}
+    };
+};
     "#.trim();
 
     let expected = r#"

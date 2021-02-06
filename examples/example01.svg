@@ -1,17 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <rect height="70" style="stroke-width:3;stroke:rgb(68,68,68);fill:rgb(255,255,255);opacity:1" width="200" x="200" y="20"/>
-    <text style="fill:rgb(68,68,68)" x="240" y="50">Objednání surovin</text>
-    <text style="fill:rgb(68,68,68)" x="260" y="70">a komponent</text>
-    <rect height="70" style="stroke-width:3;stroke:rgb(68,68,68);fill:rgb(255,255,255);opacity:1" width="200" x="200" y="120"/>
-    <text style="fill:rgb(68,68,68)" x="270" y="150">Fakturizace</text>
-    <text style="fill:rgb(68,68,68)" x="260" y="170">od dodavatele</text>
-    <rect height="70" style="stroke-width:3;stroke:rgb(68,68,68);fill:rgb(255,255,255);opacity:1" width="200" x="200" y="220"/>
-    <text style="fill:rgb(68,68,68)" x="240" y="260">Doprava do podniku</text>
-    <rect height="70" style="stroke-width:3;stroke:rgb(68,68,68);fill:rgb(255,255,255);opacity:1" width="200" x="200" y="320"/>
-    <text style="fill:rgb(68,68,68)" x="250" y="360">Přesun do výroby</text>
-    <rect height="70" style="stroke-width:3;stroke:rgb(68,68,68);fill:rgb(255,255,255);opacity:1" width="200" x="200" y="420"/>
-    <text style="fill:rgb(68,68,68)" x="260" y="460">Proces výroby</text>
-    <rect height="70" style="stroke-width:3;stroke:rgb(68,68,68);fill:rgb(255,255,255);opacity:1" width="200" x="200" y="520"/>
-    <text style="fill:rgb(68,68,68)" x="270" y="550">Přesun do</text>
-    <text style="fill:rgb(68,68,68)" x="265" y="570">meziskladu</text>
+    <rect height="600" style="stroke-width:1;stroke:rgb(0,0,0);fill:rgb(255,0,0);opacity:0.2" width="400" x="200" y="100"/>
 </svg>

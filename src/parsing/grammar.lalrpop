@@ -9,13 +9,13 @@ pub Doc: Document = {
 };
 
 pub IfStatement: IfStatement = {
-    "if" <condition:OperationInput> <scope:Scope> => IfStatement { condition, expression_block: Box::new(scope) },
+    "if" <condition:OperationInput> <positive:Scope> "else" <negative:Scope> ";" => IfStatement { condition, positive: Box::new(positive), negative: Box::new(negative) },
 }
 
 pub Expression: Expression = {
     FunctionCall => Expression::FunctionCall(<>),
     ConstantDeclaration => Expression::ConstantDeclaration(<>),
-    Scope => Expression::Scope(<>),
+    <scope:Scope> ";" => Expression::Scope(scope),
     IfStatement => Expression::IfStatement(<>),
 };
 
