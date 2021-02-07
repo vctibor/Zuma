@@ -11,6 +11,8 @@ mod tests;
 use grammar::*;
 pub use ast::*;
 
+use anyhow::{Result, anyhow};
+
 pub struct ZumaParser {
     parser: DocParser
 }
@@ -21,12 +23,13 @@ impl ZumaParser {
         ZumaParser { parser: DocParser::new() }
     }
 
-    /// TODO: Return result
-    pub fn parse(&self, source: String) -> Option<Document> {
-        let res = self.parser.parse(&source);
-
-        //println!("{:?}", res);
-
-        res.ok()
+    pub fn parse(&self, source: String) -> Result<Document> {
+        match self.parser.parse(&source) {
+            Ok(document) => Ok(document),
+            Err(e) => {
+                println!("{:?}", e);
+                Err(anyhow!("Parsing error"))
+            }
+        }
     }
 }
