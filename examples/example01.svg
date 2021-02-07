@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <line style="stroke-width:3;stroke:rgb(0,255,0)" x1="100" x2="200" y1="100" y2="100"/>
-    <line style="stroke-width:3;stroke:rgb(0,255,0)" x1="180" x2="200" y1="90" y2="100"/>
-    <line style="stroke-width:3;stroke:rgb(0,255,0)" x1="180" x2="200" y1="110" y2="100"/>
+    <line style="stroke-width:3;stroke:rgb(255,0,0)" x1="100" x2="280" y1="20" y2="200"/>
+    <line style="stroke-width:3;stroke:rgb(255,0,0)" x1="100" x2="280" y1="40" y2="220"/>
+    <line style="stroke-width:3;stroke:rgb(255,0,0)" x1="100" x2="280" y1="60" y2="240"/>
+    <line style="stroke-width:3;stroke:rgb(255,0,0)" x1="100" x2="280" y1="80" y2="260"/>
 </svg>

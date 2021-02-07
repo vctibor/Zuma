@@ -6,10 +6,6 @@ grammar;
 
 pub Doc: Document = {
     Expression* => Document { expressions: <> }
-};
-
-pub IfStatement: IfStatement = {
-    "if" <condition:OperationInput> <positive:Scope> "else" <negative:Scope> ";" => IfStatement { condition, positive: Box::new(positive), negative: Box::new(negative) },
 }
 
 pub Expression: Expression = {
@@ -17,11 +13,22 @@ pub Expression: Expression = {
     ConstantDeclaration => Expression::ConstantDeclaration(<>),
     <scope:Scope> ";" => Expression::Scope(scope),
     IfStatement => Expression::IfStatement(<>),
-};
+    ForLoop => Expression::ForLoop(<>),
+}
+
+pub ForLoop: ForLoop = {
+    "for" <index_name:Name> "=" <starting_value:Number> "," <step:Number> "," <final_value:Number> <scope:Scope>
+        => ForLoop { index_name, starting_value, step, final_value, scope },
+}
+
+pub IfStatement: IfStatement = {
+    "if" <condition:OperationInput> <positive:Scope> "else" <negative:Scope> ";"
+        => IfStatement { condition, positive: Box::new(positive), negative: Box::new(negative) },
+}
 
 pub Scope: Scope = {
     "{" <expressions:Expression*> "}" => Scope { expressions },
-};
+}
 
 pub ConstantDeclaration: ConstantDeclaration = {
     "let" <name:Name> "=" <value:OperationInput> ";"
@@ -33,16 +40,17 @@ pub ConstantDeclaration: ConstantDeclaration = {
 
 pub FunctionCall: FunctionCall = {
     <name:Name> <args: Arg*> ";" => FunctionCall { name, args }
-};
+}
 
 pub Arg: Arg = {
     <name:Name> "=" <value:OperationInput> => Arg { name, value },
     <name:Name> "=" <value:Operation> => Arg { name, value: OperationInput::Operation(value) },
-};
+}
 
 pub Operation: Operation = {
-    <lh:OperationInput> <op:Operator> <rh:OperationInput> => Operation { lh: Box::new(lh), op, rh: Box::new(rh) },
-};
+    <lh:OperationInput> <op:Operator> <rh:OperationInput>
+        => Operation { lh: Box::new(lh), op, rh: Box::new(rh) },
+}
 
 pub OperationInput: OperationInput = {
     Literal => OperationInput::Literal(<>),
@@ -60,7 +68,7 @@ pub Operator: Operator = {
     "==" => Operator::Equality,
     "&" => Operator::LogicalAnd,
     "|" => Operator::LogicalOr,
-};
+}
 
 pub Name: String = r"[a-z_-]+" => <>.to_string();
 
@@ -76,7 +84,7 @@ pub Text: String = r#"".*""# => strip_quotes(<>);
 
 pub Point: Point = {
     "[" <a:OperationInput> "," <b:OperationInput> "]" => Point { x: Box::new(b), y: Box::new(a) },
-};
+}
 
 pub Color: Color = {
     "black"  => Color { red: 0, green: 0, blue: 0 },

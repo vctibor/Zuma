@@ -41,7 +41,8 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
         //  performance impact, I am leaving it. Anyway, it would be nice to clean it up.
         let mut mut_upper = upper_scope_constants.clone();
         let mut all_constants = vec!();
-        all_constants.push(&local_consts);
+        let local_consts_clone = local_consts.clone();
+        all_constants.push(&local_consts_clone);
         all_constants.append(&mut mut_upper);
 
         match expr {
@@ -79,6 +80,37 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
 
                 doc = handle_expressions(expr, doc, &all_constants)?;
             },
+
+            ForLoop(for_loop) => {
+
+                let ast::ForLoop { index_name, starting_value, step, final_value, scope } = for_loop;
+
+                let mut current_index_value = starting_value;
+
+                while current_index_value != final_value {
+
+
+                    // TODO: deduplicate
+                    let mut mut_upper = upper_scope_constants.clone();
+                    let mut all_constants = vec!();
+                    let mut local_consts_clone = local_consts.clone();
+
+                    local_consts_clone.insert(index_name.clone(), ast::Value::Number(current_index_value));
+
+                    all_constants.push(&local_consts_clone);
+                    all_constants.append(&mut mut_upper);
+
+
+                    
+
+                    doc = handle_expressions(scope.expressions.clone(), doc, &all_constants)?;
+
+                    local_consts.remove(&index_name);
+                    
+                    current_index_value += step;
+                }
+
+            }
         }       
     }
 

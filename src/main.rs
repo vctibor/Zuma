@@ -54,6 +54,8 @@ fn main() {
         let res = compile_file(&compiler);
 
         println!("{:?}", res);
+        
+        println!("");
 
         //break;
     }

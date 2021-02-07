@@ -11,6 +11,7 @@ pub enum Expression {
     FunctionCall(FunctionCall),
     Scope(Scope),
     IfStatement(IfStatement),
+    ForLoop(ForLoop),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -19,6 +20,15 @@ pub struct Scope {
 }
 
 // STATEMENTS
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct ForLoop {
+    pub index_name: String,
+    pub starting_value: f32,
+    pub step: f32,
+    pub final_value: f32,
+    pub scope: Scope,
+}
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct IfStatement {
