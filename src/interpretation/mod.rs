@@ -85,9 +85,19 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
 
                 let ast::ForLoop { index_name, starting_value, step, final_value, scope } = for_loop;
 
+                if step == 0.0 {
+                    return Err(anyhow!("Step can't be zero!"));
+                }
+
+                let condition = if step > 0.0 {
+                    |curr, fin| curr < fin
+                } else {
+                    |curr, fin| curr > fin
+                };
+
                 let mut current_index_value = starting_value;
 
-                while current_index_value != final_value {
+                while condition(current_index_value, final_value) {
 
 
                     // TODO: deduplicate

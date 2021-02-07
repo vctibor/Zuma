@@ -1,3 +1,0 @@
-let w = (-4 * -10);
-
-line start=[10,10] end=[20,10] width=w color=red;
