@@ -1,1 +1,10 @@
-ellipse center=[100, 150] radius=[300, 300] color=yellow opacity=0.3;
+let size = [9, 9];
+
+for x = 10, 10, 500 {
+    for y = 10, 10, 500 {
+
+        let color = (x, 150, y);
+
+        rectangle start=[x, y] size=size color=color stroke-color=color stroke-width=1;
+    }
+}

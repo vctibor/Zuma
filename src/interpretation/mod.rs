@@ -46,6 +46,7 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
 
         // TODO: I know this is highly suboptimal, but until it starts to cause measurable
         //  performance impact, I am leaving it. Anyway, it would be nice to clean it up.
+        // TODO: Turn this function into struct method, 
         let mut mut_upper = upper_scope_constants.clone();
         let mut all_constants = vec!();
         let local_consts_clone = local_consts.clone();
@@ -128,7 +129,6 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
                     
                     current_index_value += step;
                 }
-
             }
         }       
     }
@@ -136,19 +136,17 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
     Ok(graphics)
 }
 
-fn handle_function_call(function_call: ast::FunctionCall, consts: &Constants) -> Result<Vec<GraphicNode>>
+fn handle_function_call(function_call: ast::FunctionCall, constants: &Constants)
+    -> Result<Vec<GraphicNode>>
 {
-    
     let ast::FunctionCall { name, args } = function_call;
-    
-    let stdlib = stdlib::stdlib();
+    let args = helpers::create_arg_map(args, &constants)?;
 
-    match stdlib.get(&name) {
-        Some(fun) => {
-            let args = helpers::create_arg_map(args, &consts)?;
-            Ok((fun.eval)(args, consts)?)
-        }
-
-        None => Err(anyhow!("Unknown function {}", &name))
+    match name.as_str() {
+        "line" => stdlib::line(args, constants),
+        "rectangle" => stdlib::rectangle(args, constants),
+        "text" => stdlib::text(args, constants),
+        "ellipse" => stdlib::ellipse(args, constants),
+        unknown => Err(anyhow!("Unknown function {}!", unknown)),
     }
 }

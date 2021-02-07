@@ -1,23 +1,9 @@
 use super::helpers::*;
 use super::graphics::GraphicNode;
 
-use std::boxed::Box;
-
-use maplit::hashmap;
 use anyhow::{Result, anyhow};
 
-/// Declaration of known functions, basically "stdlib".
-/// I'd like to move this into something like OnceCell.
-pub fn stdlib() -> FunMap {
-    hashmap!{
-        "line".to_owned() => Function { eval: Box::new(line) },
-        "rectangle".to_owned() => Function { eval: Box::new(rectangle) },
-        "text".to_owned() => Function { eval: Box::new(text) },
-        "ellipse".to_owned() => Function { eval: Box::new(ellipse) },
-    }
-}
-
-fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
+pub fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -62,7 +48,7 @@ fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
     ))
 }
 
-fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
+pub fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -123,7 +109,7 @@ fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode
     ))
 }
 
-fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
+pub fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -157,7 +143,7 @@ fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
     ))
 }
 
-fn ellipse(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
+pub fn ellipse(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
 
     let center = args.remove("center")
                     .ok_or(anyhow!("Missing argument `center`"))?

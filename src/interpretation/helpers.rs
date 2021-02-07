@@ -1,5 +1,4 @@
 use crate::parsing::ast as ast;
-//use crate::code_generation as svg;
 
 use super::GraphicNode;
 
@@ -14,11 +13,6 @@ pub type ConstantsMap = HashMap::<String, ast::Value>;
 
 pub type Constants<'a> = Vec<&'a ConstantsMap>;
 
-pub struct Function {
-    pub eval: Box<dyn Fn(ArgsMap, &Constants) -> Result<Vec<GraphicNode>>>
-}
-
-pub type FunMap = HashMap<String, Function>;
 
 pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &Constants) -> Result<ArgsMap> {
     let mut arg_map = HashMap::new();
