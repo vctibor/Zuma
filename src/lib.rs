@@ -4,6 +4,8 @@
 
 #[macro_use] extern crate lalrpop_util;
 
+mod stack;
+
 mod parsing;
 mod interpretation;
 mod code_generation;
