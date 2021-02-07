@@ -156,9 +156,9 @@ impl Value {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Color {
-    pub red: u8,
-    pub green: u8,
-    pub blue: u8
+    pub red: Box<OperationInput>,
+    pub green: Box<OperationInput>,
+    pub blue: Box<OperationInput>,
 }
 
 /*

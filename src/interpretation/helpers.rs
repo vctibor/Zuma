@@ -106,3 +106,10 @@ pub fn get_value(input: &ast::OperationInput, constants: &Constants) -> Result<a
         Operation(op) => eval_operation(op.clone(), constants),
     }
 }
+
+pub fn get_color(color: ast::Color, constants: &Constants) -> Result<(u8, u8, u8)> {
+    let red = get_value(&color.red, constants)?.get_number()? as u8;
+    let green = get_value(&color.green, constants)?.get_number()? as u8;
+    let blue = get_value(&color.blue, constants)?.get_number()? as u8;
+    Ok((red, green, blue))
+}

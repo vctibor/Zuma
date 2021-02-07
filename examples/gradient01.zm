@@ -1,0 +1,10 @@
+let start = [100, 100];
+
+for ix = 0, 1, 256 {
+
+    let my_color = ((ix - 8), (ix - 30), (ix - 9));
+
+    let my_size = (3 * (256 - ix));
+
+    rectangle start=start size=[my_size, my_size] color=my_color stroke-color=my_color;
+}

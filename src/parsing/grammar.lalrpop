@@ -83,17 +83,25 @@ pub Literal: Value = {
 pub Text: String = r#"".*""# => strip_quotes(<>);
 
 pub Point: Point = {
-    "[" <a:OperationInput> "," <b:OperationInput> "]" => Point { x: Box::new(b), y: Box::new(a) },
+    "[" <a:OperationInput> "," <b:OperationInput> "]"
+        => Point { x: Box::new(b), y: Box::new(a) },
 }
 
 pub Color: Color = {
-    "black"  => Color { red: 0, green: 0, blue: 0 },
-    "white"  => Color { red: 255, green: 255, blue: 255 },
-    "red"    => Color { red: 255, green: 0, blue: 0 },
-    "green"  => Color { red: 0, green: 255, blue: 0 },
-    "blue"   => Color { red: 0, green: 0, blue: 255 },
-    "yellow" => Color { red: 255, green: 255, blue: 0 },
-    r"#[a-f0-9]{6}" => parse_color(<>.to_string()).unwrap()
+    "black"  => color(0, 0, 0),
+    "white"  => color(255, 255, 255),
+    "red"    => color(255, 0, 0),
+    "green"  => color(0, 255, 0),
+    "blue"   => color(0, 0, 255),
+    "yellow" => color(255, 255, 0),
+    r"#[a-f0-9]{6}" => parse_color(<>.to_string()).unwrap(),
+
+    "(" <red:OperationInput> "," <green:OperationInput> "," <blue:OperationInput> ")"
+        => Color {
+            red: Box::new(red),
+            green: Box::new(green),
+            blue: Box::new(blue),
+        },
 }
 
 pub Number: f32 = r"[0-9]+\.?[0-9]*" => f32::from_str(<>).unwrap();

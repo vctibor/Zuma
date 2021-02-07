@@ -3,6 +3,7 @@
 use crate::ZumaParser;
 use crate::parsing::*;
 use crate::parsing::ast::*;
+use crate::parsing::parsing_functions::color;
 
 #[test]
 fn test_number() {
@@ -14,13 +15,13 @@ fn test_number() {
 #[test]
 fn test_color() {
     let parser = ColorParser::new();
-    assert!(parser.parse("black").unwrap() == Color { red: 0, green: 0, blue: 0 });
-    assert!(parser.parse("white").unwrap() == Color { red: 255, green: 255, blue: 255 });
-    assert!(parser.parse("red").unwrap() == Color { red: 255, green: 0, blue: 0 });
-    assert!(parser.parse("green").unwrap() == Color { red: 0, green: 255, blue: 0 });
-    assert!(parser.parse("blue").unwrap() == Color { red: 0, green: 0, blue: 255 });
-    assert!(parser.parse("yellow").unwrap() == Color { red: 255, green: 255, blue: 0 });
-    assert!(parser.parse("#ff00a1").unwrap() == Color { red: 255, green: 0, blue: 161 });
+    assert!(parser.parse("black").unwrap() == color(0, 0, 0));
+    assert!(parser.parse("white").unwrap() == color(255, 255, 255));
+    assert!(parser.parse("red").unwrap() == color(255, 0, 0));
+    assert!(parser.parse("green").unwrap() == color(0, 255, 0));
+    assert!(parser.parse("blue").unwrap() == color(0, 0, 255));
+    assert!(parser.parse("yellow").unwrap() == color(255, 255, 0));
+    assert!(parser.parse("#ff00a1").unwrap() == color(255, 0, 161));
     assert!(parser.parse("nonsense").is_err());
 }
 

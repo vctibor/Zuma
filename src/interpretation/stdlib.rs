@@ -1,6 +1,6 @@
 use super::helpers::*;
 
-use crate::parsing::ast as ast;
+//use crate::parsing::ast as ast;
 use crate::code_generation as svg;
 
 use std::boxed::Box;
@@ -31,7 +31,9 @@ fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
     let color = args.remove("color")
                     .map(|x| x.get_color().ok())
                     .flatten()
-                    .unwrap_or(ast::Color { red: 0, green: 0, blue: 0 });
+                    .map(|x| get_color(x, constants).ok())
+                    .flatten()
+                    .unwrap_or((0, 0, 0));
 
     let width = args.remove("width")
                     .map(|x| x.get_number().ok())
@@ -48,7 +50,7 @@ fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
     let end_y = get_value(end.y.as_ref(), &constants)?.get_number()?;
 
     let line: svg::Element = svg::Line::new(start_x, start_y, end_x, end_y)
-        .color(color.red, color.green, color.blue)
+        .color(color.0, color.1, color.2)
         .width(width)
         .into();
 
@@ -66,14 +68,18 @@ fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Elemen
                    .get_point()?;
 
     let color = args.remove("color")
-                    .map(|x| x.get_color().ok())
-                    .flatten()
-                    .unwrap_or(ast::Color { red: 0, green: 0, blue: 0 });
+                   .map(|x| x.get_color().ok())
+                   .flatten()
+                   .map(|x| get_color(x, constants).ok())
+                   .flatten()
+                   .unwrap_or((0, 0, 0));
 
     let stroke_color = args.remove("stroke-color")
-                           .map(|x| x.get_color().ok())
-                           .flatten()
-                           .unwrap_or(ast::Color { red: 0, green: 0, blue: 0 });
+                   .map(|x| x.get_color().ok())
+                   .flatten()
+                   .map(|x| get_color(x, constants).ok())
+                   .flatten()
+                   .unwrap_or((0, 0, 0));
 
     let stroke_width = args.remove("stroke-width")
                            .map(|x| x.get_number().ok())
@@ -96,8 +102,8 @@ fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Elemen
 
     let rectangle = svg::Rectangle::new(start_x, start_y, size_x, size_y)
         .stroke_width(stroke_width)
-        .stroke_color(stroke_color.red, stroke_color.green, stroke_color.blue)
-        .fill_color(color.red, color.green, color.blue)
+        .stroke_color(stroke_color.0, stroke_color.1, stroke_color.2)
+        .fill_color(color.0, color.1, color.2)
         .opacity(opacity)
         .into();
 
@@ -117,7 +123,9 @@ fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
     let color = args.remove("color")
                     .map(|x| x.get_color().ok())
                     .flatten()
-                    .unwrap_or(ast::Color { red: 0, green: 0, blue: 0 });
+                    .map(|x| get_color(x, constants).ok())
+                    .flatten()
+                    .unwrap_or((0, 0, 0));
 
     if args.len() > 0 {
         return Err(anyhow!("Unexpected argument provided."));
@@ -127,7 +135,7 @@ fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
     let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?;
 
     let text = svg::Text::new(start_x, start_y, content)
-        .fill_color(color.red, color.green, color.blue)
+        .fill_color(color.0, color.1, color.2)
         .into();
 
     Ok(vec!(text))
