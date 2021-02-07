@@ -37,7 +37,7 @@ fn compile_file(compiler: &zumalib::ZumaCompiler) -> Result<()>
     let mut output_file = File::create(svg_output)?;
     output_file.write_all(svg.as_bytes())?;
 
-    //render_svg(svg, &png_output);
+    render_svg(svg, &png_output);
 
     let end_time = start_time.elapsed();
     println!("{:?}", end_time);

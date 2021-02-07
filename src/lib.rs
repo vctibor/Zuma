@@ -10,7 +10,9 @@ mod code_generation;
 
 mod tests;
 
-use crate::parsing::ZumaParser;
+use parsing::ZumaParser;
+
+use code_generation::generate;
 
 use anyhow::{Result, bail};
 
@@ -37,8 +39,10 @@ impl ZumaCompiler {
     
         let zuma_doc: crate::parsing::ast::Document = parse_res.unwrap();
     
-        let svg: code_generation::Document = interpretation::interpret(zuma_doc)?;
-    
-        Ok(svg.generate())
+        let graphics = interpretation::interpret(zuma_doc)?;
+
+        let svg = generate(graphics);
+
+        Ok(svg)
     }
 }

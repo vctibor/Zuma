@@ -1,15 +1,13 @@
 use super::helpers::*;
-
-//use crate::parsing::ast as ast;
-use crate::code_generation as svg;
+use super::graphics::GraphicNode;
 
 use std::boxed::Box;
 
 use maplit::hashmap;
 use anyhow::{Result, anyhow};
 
-// Declaration of known functions, basically "stdlib".
-// I'd like to move this into something like OnceCell.
+/// Declaration of known functions, basically "stdlib".
+/// I'd like to move this into something like OnceCell.
 pub fn stdlib() -> FunMap {
     hashmap!{
         "line".to_owned() => Function { eval: Box::new(line) },
@@ -18,7 +16,7 @@ pub fn stdlib() -> FunMap {
     }
 }
 
-fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
+fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -38,26 +36,32 @@ fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
     let width = args.remove("width")
                     .map(|x| x.get_number().ok())
                     .flatten()
-                    .unwrap_or(1.0);
+                    .unwrap_or(1.0)
+                    .to_string();
     
     if args.len() > 0 {
         return Err(anyhow!("Unexpected argument provided."));
     }
 
-    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?;
-    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?;
-    let end_x = get_value(end.x.as_ref(), &constants)?.get_number()?;
-    let end_y = get_value(end.y.as_ref(), &constants)?.get_number()?;
+    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?.to_string();
+    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?.to_string();
+    let end_x = get_value(end.x.as_ref(), &constants)?.get_number()?.to_string();
+    let end_y = get_value(end.y.as_ref(), &constants)?.get_number()?.to_string();
 
-    let line: svg::Element = svg::Line::new(start_x, start_y, end_x, end_y)
-        .color(color.0, color.1, color.2)
-        .width(width)
-        .into();
+    let color = color_to_string(color);
 
-    Ok(vec!(line))
+    Ok(vec!(
+        GraphicNode::tag("line")
+            .insert("x1", start_x)
+            .insert("y1", start_y)
+            .insert("x2", end_x)
+            .insert("y2", end_y)
+            .insert("stroke", color)
+            .insert("stroke-width", width)
+    ))
 }
 
-fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
+fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -84,33 +88,41 @@ fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Elemen
     let stroke_width = args.remove("stroke-width")
                            .map(|x| x.get_number().ok())
                            .flatten()
-                           .unwrap_or(1.0);
+                           .unwrap_or(1.0)
+                           .to_string();
 
     let opacity = args.remove("opacity")
                            .map(|x| x.get_number().ok())
                            .flatten()
-                           .unwrap_or(1.0);
+                           .unwrap_or(1.0)
+                           .to_string();
     
     if args.len() > 0 {
         return Err(anyhow!("Unexpected argument provided."));
     }
 
-    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?;
-    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?;
-    let size_x = get_value(size.x.as_ref(), &constants)?.get_number()?;
-    let size_y = get_value(size.y.as_ref(), &constants)?.get_number()?;
+    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?.to_string();
+    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?.to_string();
+    let size_x = get_value(size.x.as_ref(), &constants)?.get_number()?.to_string();
+    let size_y = get_value(size.y.as_ref(), &constants)?.get_number()?.to_string();
 
-    let rectangle = svg::Rectangle::new(start_x, start_y, size_x, size_y)
-        .stroke_width(stroke_width)
-        .stroke_color(stroke_color.0, stroke_color.1, stroke_color.2)
-        .fill_color(color.0, color.1, color.2)
-        .opacity(opacity)
-        .into();
+    let color = color_to_string(color);
+    let stroke_color = color_to_string(stroke_color);
 
-    Ok(vec!(rectangle))
+    Ok(vec!(
+        GraphicNode::tag("rect")
+            .insert("x", start_x)
+            .insert("y", start_y)
+            .insert("width", size_x)
+            .insert("height", size_y)
+            .insert("fill", color)
+            .insert("stroke", stroke_color)
+            .insert("stroke-width", stroke_width)
+            .insert("opacity", opacity)
+    ))
 }
 
-fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
+fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
 
     let start = args.remove("start")
                     .ok_or(anyhow!("Missing argument `start`"))?
@@ -131,12 +143,15 @@ fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<svg::Element>> {
         return Err(anyhow!("Unexpected argument provided."));
     }
 
-    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?;
-    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?;
+    let start_x = get_value(start.x.as_ref(), &constants)?.get_number()?.to_string();
+    let start_y = get_value(start.y.as_ref(), &constants)?.get_number()?.to_string();
 
-    let text = svg::Text::new(start_x, start_y, content)
-        .fill_color(color.0, color.1, color.2)
-        .into();
+    let color = color_to_string(color);
 
-    Ok(vec!(text))
+    Ok(vec!(
+        GraphicNode::element("text", &content)
+            .insert("x", start_x)
+            .insert("y", start_y)
+            .insert("fill", color)
+    ))
 }

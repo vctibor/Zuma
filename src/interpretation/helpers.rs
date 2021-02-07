@@ -1,9 +1,12 @@
 use crate::parsing::ast as ast;
-use crate::code_generation as svg;
+//use crate::code_generation as svg;
+
+use super::GraphicNode;
 
 use std::collections::HashMap;
 
 use anyhow::{Result, anyhow};
+
 
 pub type ArgsMap = HashMap<String, ast::Value>;
 
@@ -12,7 +15,7 @@ pub type ConstantsMap = HashMap::<String, ast::Value>;
 pub type Constants<'a> = Vec<&'a ConstantsMap>;
 
 pub struct Function {
-    pub eval: Box<dyn Fn(ArgsMap, &Constants) -> Result<Vec<svg::Element>>>
+    pub eval: Box<dyn Fn(ArgsMap, &Constants) -> Result<Vec<GraphicNode>>>
 }
 
 pub type FunMap = HashMap<String, Function>;
@@ -112,4 +115,8 @@ pub fn get_color(color: ast::Color, constants: &Constants) -> Result<(u8, u8, u8
     let green = get_value(&color.green, constants)?.get_number()? as u8;
     let blue = get_value(&color.blue, constants)?.get_number()? as u8;
     Ok((red, green, blue))
+}
+
+pub fn color_to_string(color: (u8, u8, u8)) -> String {
+    format!("rgb({},{},{})", color.0, color.1, color.2)
 }

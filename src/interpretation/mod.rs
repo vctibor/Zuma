@@ -2,39 +2,46 @@
 //!
 //! This module takes Zuma AST,
 //! evaluates all language constructs like variables, functions, loops, etc.,
-//! and returns svg_generator's SVG representation.
+//! and returns Graphics type representing result of interpretation:
+//! simple dictionary containing values describing basic graphic primitives of SVG.
 
-mod stdlib;
+// Once we have type checking in separate layer we will be able to coearce any variable into string
+// and that will drastically simplify implementation of this module.
+
+mod graphics;
 mod helpers;
-use helpers::*;
+mod stdlib;
+
+pub use helpers::*;
+pub use self::graphics::{GraphicNode, Graphics};
 
 use crate::parsing::ast as ast;
-use crate::code_generation as svg;
-use crate::parsing::OperationInput::Literal;
-use crate::parsing::OperationInput::Constant;
-use crate::parsing::OperationInput::Operation;
 
 use std::collections::HashMap;
 
 use anyhow::{Result, anyhow};
 
-pub fn interpret(zuma: ast::Document) -> Result<svg::Document> {
-    let mut doc = svg::Document::new();
+pub fn interpret(zuma: ast::Document) -> Result<Graphics> {
+        
+    let mut graphics = Graphics::new();
+
     let constants = vec!();
-    doc = handle_expressions(zuma.expressions, doc, &constants)?;
-    Ok(doc)
+    graphics = handle_expressions(zuma.expressions, graphics, &constants)?;
+
+    //println!("{:?}", graphics);
+
+    Ok(graphics)
 }
 
 fn handle_expressions(expressions: Vec<ast::Expression>,
-                      doc: svg::Document,
+                      mut graphics: Graphics,
                       upper_scope_constants: &Constants)
-    -> Result<svg::Document>
+    -> Result<Graphics>
 {
     use crate::parsing::ast::Expression::*;
 
     let mut local_consts: ConstantsMap = HashMap::new();
 
-    let mut doc = doc;
     for expr in expressions {
 
         // TODO: I know this is highly suboptimal, but until it starts to cause measurable
@@ -48,11 +55,13 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
         match expr {
 
             FunctionCall(fc) => {
-                let mut res = handle_function_call(fc, &all_constants)?;
-                doc = doc.add_many(&mut res);
+                graphics = graphics.add_many(
+                    handle_function_call(fc, &all_constants)?
+                );
             },
             
             ConstantDeclaration(c) => {
+                use crate::parsing::OperationInput::*;
                 let resulting_constant = match c.value {
                     Literal(value) => value,
                     Constant(name) => get_constant(&name, &all_constants)?,
@@ -63,7 +72,7 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
             },
             
             Scope(s) => {
-                doc = handle_expressions(s.expressions, doc, &all_constants)?;
+                graphics = handle_expressions(s.expressions, graphics, &all_constants)?;
             },
 
             IfStatement(if_statement) => {
@@ -78,7 +87,7 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
                     if_statement.negative.as_mut().expressions.clone()
                 };
 
-                doc = handle_expressions(expr, doc, &all_constants)?;
+                graphics = handle_expressions(expr, graphics, &all_constants)?;
             },
 
             ForLoop(for_loop) => {
@@ -113,7 +122,7 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
 
                     
 
-                    doc = handle_expressions(scope.expressions.clone(), doc, &all_constants)?;
+                    graphics = handle_expressions(scope.expressions.clone(), graphics, &all_constants)?;
 
                     local_consts.remove(&index_name);
                     
@@ -124,11 +133,10 @@ fn handle_expressions(expressions: Vec<ast::Expression>,
         }       
     }
 
-    Ok(doc)
+    Ok(graphics)
 }
 
-fn handle_function_call(function_call: ast::FunctionCall, consts: &Constants)
-    -> Result<Vec<svg::Element>>
+fn handle_function_call(function_call: ast::FunctionCall, consts: &Constants) -> Result<Vec<GraphicNode>>
 {
     
     let ast::FunctionCall { name, args } = function_call;
