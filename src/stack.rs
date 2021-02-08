@@ -31,12 +31,18 @@ impl<K, V> Stack<K, V> where K: std::cmp::Eq + std::hash::Hash {
     /// We can't have Stack without at least one Frame in it,
     /// therefore this method consumes itself and optionally
     /// returns Stack in case there are more frames remaining.
+    /*
     pub fn pop_frame(mut self) -> Option<Stack<K, V>> {
         self.stack.pop();
         match self.stack.len() {
             0 => None,
             _ => Some(self)
         }
+    }
+    */
+
+    pub fn pop_frame(&mut self) {
+        self.stack.pop();
     }
 
     /// Iterates Frames from top to bottom and returns first

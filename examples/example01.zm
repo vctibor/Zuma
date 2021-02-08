@@ -1,10 +1,10 @@
-let size = [9, 9];
+let size = [5, 5];
 
-for x = 10, 10, 500 {
-    for y = 10, 10, 500 {
+for x = 1, 5, 255 {
+    for y = 1, 5, 255 {
 
-        let color = (x, 150, y);
+        let color = (x, y, y);
 
-        rectangle start=[x, y] size=size color=color stroke-color=color stroke-width=1;
+        rectangle start=[x, y] size=size color=color stroke-color=white stroke-width=0;
     }
 }

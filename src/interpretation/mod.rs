@@ -16,137 +16,119 @@ pub use helpers::*;
 pub use self::graphics::{GraphicNode, Graphics};
 
 use crate::parsing::ast as ast;
-
-use std::collections::HashMap;
+use crate::stack::Stack;
 
 use anyhow::{Result, anyhow};
 
-pub fn interpret(zuma: ast::Document) -> Result<Graphics> {
-        
-    let mut graphics = Graphics::new();
-
-    let constants = vec!();
-    graphics = handle_expressions(zuma.expressions, graphics, &constants)?;
-
-    //println!("{:?}", graphics);
-
-    Ok(graphics)
+pub struct Interpreter {
+    constants: Stack<String, ast::Value>
 }
 
-fn handle_expressions(expressions: Vec<ast::Expression>,
-                      mut graphics: Graphics,
-                      upper_scope_constants: &Constants)
-    -> Result<Graphics>
-{
-    use crate::parsing::ast::Expression::*;
-
-    let mut local_consts: ConstantsMap = HashMap::new();
-
-    for expr in expressions {
-
-        // TODO: I know this is highly suboptimal, but until it starts to cause measurable
-        //  performance impact, I am leaving it. Anyway, it would be nice to clean it up.
-        // TODO: Turn this function into struct method, 
-        let mut mut_upper = upper_scope_constants.clone();
-        let mut all_constants = vec!();
-        let local_consts_clone = local_consts.clone();
-        all_constants.push(&local_consts_clone);
-        all_constants.append(&mut mut_upper);
-
-        match expr {
-
-            FunctionCall(fc) => {
-                graphics = graphics.add_many(
-                    handle_function_call(fc, &all_constants)?
-                );
-            },
-            
-            ConstantDeclaration(c) => {
-                use crate::parsing::OperationInput::*;
-                let resulting_constant = match c.value {
-                    Literal(value) => value,
-                    Constant(name) => get_constant(&name, &all_constants)?,
-                    Operation(op) => eval_operation(op, &all_constants)?,
-                };
-
-                local_consts.insert(c.name, resulting_constant);
-            },
-            
-            Scope(s) => {
-                graphics = handle_expressions(s.expressions, graphics, &all_constants)?;
-            },
-
-            IfStatement(if_statement) => {
-
-                let mut if_statement = if_statement.clone();
-
-                let eval_cond = get_value(&if_statement.condition, &all_constants)?.get_bool()?;
-                
-                let expr = if eval_cond {
-                    if_statement.positive.as_mut().expressions.clone()
-                } else {
-                    if_statement.negative.as_mut().expressions.clone()
-                };
-
-                graphics = handle_expressions(expr, graphics, &all_constants)?;
-            },
-
-            ForLoop(for_loop) => {
-
-                let ast::ForLoop { index_name, starting_value, step, final_value, scope } = for_loop;
-
-                if step == 0.0 {
-                    return Err(anyhow!("Step can't be zero!"));
-                }
-
-                let condition = if step > 0.0 {
-                    |curr, fin| curr < fin
-                } else {
-                    |curr, fin| curr > fin
-                };
-
-                let mut current_index_value = starting_value;
-
-                while condition(current_index_value, final_value) {
-
-
-                    // TODO: deduplicate
-                    let mut mut_upper = upper_scope_constants.clone();
-                    let mut all_constants = vec!();
-                    let mut local_consts_clone = local_consts.clone();
-
-                    local_consts_clone.insert(index_name.clone(), ast::Value::Number(current_index_value));
-
-                    all_constants.push(&local_consts_clone);
-                    all_constants.append(&mut mut_upper);
-
-
-                    
-
-                    graphics = handle_expressions(scope.expressions.clone(), graphics, &all_constants)?;
-
-                    local_consts.remove(&index_name);
-                    
-                    current_index_value += step;
-                }
-            }
-        }       
+impl Interpreter {
+        
+    pub fn new() -> Interpreter {
+        Interpreter {
+            constants: Stack::new()
+        }
     }
 
-    Ok(graphics)
-}
+    pub fn interpret(&mut self, zuma: ast::Document) -> Result<Graphics> {
+        let mut graphics = Graphics::new();
+        graphics = self.handle_expressions(zuma.expressions, graphics)?;
+        Ok(graphics)
+    }
 
-fn handle_function_call(function_call: ast::FunctionCall, constants: &Constants)
-    -> Result<Vec<GraphicNode>>
-{
-    let ast::FunctionCall { name, args } = function_call;
-    let args = helpers::create_arg_map(args, &constants)?;
+    fn handle_expressions(&mut self,
+        expressions: Vec<ast::Expression>,
+        mut graphics: Graphics     // it should be possible to remove this, right?
+        )
+        -> Result<Graphics>
+    {
+        use crate::parsing::ast::Expression::*;
 
-    match name.as_str() {
-        "line" => stdlib::line(args, constants),
-        "rectangle" => stdlib::rectangle(args, constants),
-        "text" => stdlib::text(args, constants),
-        "ellipse" => stdlib::ellipse(args, constants),
-        unknown => Err(anyhow!("Unknown function {}!", unknown)),
+        self.constants.add_frame();
+
+        for expr in expressions {
+
+            match expr {
+
+                FunctionCall(fc) => {
+                    graphics = graphics.add_many(
+                        self.handle_function_call(fc)?
+                    );
+                },
+                
+                ConstantDeclaration(c) => {
+                    use crate::parsing::OperationInput::*;
+                    let resulting_constant = match c.value {
+                        Literal(value) => value,
+                        Constant(name) => get_constant(&name, &self.constants)?,
+                        Operation(op) => eval_operation(op, &self.constants)?,
+                    };
+
+                    self.constants.add_to_current_frame(c.name, resulting_constant);
+                },
+                
+                Scope(s) => {
+                    graphics = self.handle_expressions(s.expressions, graphics)?;
+                },
+
+                IfStatement(if_statement) => {
+
+                    let mut if_statement = if_statement.clone();
+
+                    let eval_cond = get_value(&if_statement.condition, &self.constants)?.get_bool()?;
+                    
+                    let expr = if eval_cond {
+                        if_statement.positive.as_mut().expressions.clone()
+                    } else {
+                        if_statement.negative.as_mut().expressions.clone()
+                    };
+
+                    graphics = self.handle_expressions(expr, graphics)?;
+                },
+
+                ForLoop(for_loop) => {
+
+                    let ast::ForLoop { index_name, starting_value, step, final_value, scope } = for_loop;
+
+                    if step == 0.0 {
+                        return Err(anyhow!("Step can't be zero!"));
+                    }
+
+                    let condition = if step > 0.0 {
+                        |curr, fin| curr < fin
+                    } else {
+                        |curr, fin| curr > fin
+                    };
+
+                    let mut current_index_value = starting_value;
+
+                    while condition(current_index_value, final_value) {
+                        self.constants.add_to_current_frame(index_name.clone(), ast::Value::Number(current_index_value));
+                        graphics = self.handle_expressions(scope.expressions.clone(), graphics)?;                        
+                        current_index_value += step;
+                    }
+                }
+            }       
+        }
+
+        self.constants.pop_frame();
+        Ok(graphics)
+    }
+
+    fn handle_function_call(&mut self, function_call: ast::FunctionCall)
+        -> Result<Vec<GraphicNode>>
+    {
+        let ast::FunctionCall { name, args } = function_call;
+        let args = helpers::create_arg_map(args, &self.constants)?;
+
+        match name.as_str() {
+            "line" => stdlib::line(args, &self.constants),
+            "rectangle" => stdlib::rectangle(args, &self.constants),
+            "text" => stdlib::text(args, &self.constants),
+            "ellipse" => stdlib::ellipse(args, &self.constants),
+            unknown => Err(anyhow!("Unknown function {}!", unknown)),
+        }
     }
 }

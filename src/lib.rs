@@ -13,8 +13,8 @@ mod code_generation;
 mod tests;
 
 use parsing::ZumaParser;
+use interpretation::Interpreter;
 use code_generation::generate;
-use interpretation::interpret;
 
 use anyhow::Result;
 
@@ -33,9 +33,12 @@ impl ZumaCompiler {
 
     /// Translates ZUMA source code into SVG.
     pub fn compile(&self, zuma_source: String) -> Result<String> {
+
+        let mut interpreter = Interpreter::new();
+
         Ok(
             generate(
-                interpret(
+                interpreter.interpret(
                     self.parser.parse(zuma_source)?
                 )?
             )

@@ -1,18 +1,13 @@
 use crate::parsing::ast as ast;
-
-use super::GraphicNode;
+use crate::stack::Stack;
 
 use std::collections::HashMap;
 
 use anyhow::{Result, anyhow};
 
-
 pub type ArgsMap = HashMap<String, ast::Value>;
 
-pub type ConstantsMap = HashMap::<String, ast::Value>;
-
-pub type Constants<'a> = Vec<&'a ConstantsMap>;
-
+pub type Constants = Stack<String, ast::Value>;
 
 pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &Constants) -> Result<ArgsMap> {
     let mut arg_map = HashMap::new();
@@ -25,13 +20,10 @@ pub fn create_arg_map(arg_vec: Vec<ast::Arg>, constants: &Constants) -> Result<A
 }
 
 pub fn get_constant(name: &str, constants: &Constants) -> Result<ast::Value> {
-    for const_map in constants {
-        if let Some(constant) = const_map.get(name) {
-            return Ok(constant.clone())
-        }
+    match constants.get(name.to_owned()) {
+        Some(val) => Ok(val.clone()),
+        None => Err(anyhow!("Unknown constant {}", &name))
     }
-
-    Err(anyhow!("Unknown constant {}", &name))
 }
 
 pub fn eval_operation(operation: ast::Operation, constants: &Constants) -> Result<ast::Value> {
