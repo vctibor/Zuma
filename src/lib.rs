@@ -32,16 +32,10 @@ impl ZumaCompiler {
     }
 
     /// Translates ZUMA source code into SVG.
-    pub fn compile(&self, zuma_source: String) -> Result<String> {
-
-        let mut interpreter = Interpreter::new();
-
-        Ok(
-            generate(
-                interpreter.interpret(
-                    self.parser.parse(zuma_source)?
-                )?
-            )
-        )
+    pub fn compile(&self, source: String) -> Result<String> {
+        let ast = self.parser.parse(source)?;
+        let ir = Interpreter::new().interpret(ast)?;
+        let svg = generate(ir);
+        Ok(svg)
     }
 }
