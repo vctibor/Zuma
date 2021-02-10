@@ -83,6 +83,12 @@ pub fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<Graphic
                            .flatten()
                            .unwrap_or(1.0)
                            .to_string();
+
+    let round_corners = args.remove("round-corners")
+                           .map(|x| x.get_number().ok())
+                           .flatten()
+                           .unwrap_or(0.0)
+                           .to_string();
     
     if args.len() > 0 {
         return Err(anyhow!("Unexpected argument provided."));
@@ -95,6 +101,7 @@ pub fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<Graphic
 
     let color = color_to_string(color);
     let stroke_color = color_to_string(stroke_color);
+    // let round_corners = get_value(round_corners, &constants)?.get_number()?.to_string();
 
     Ok(vec!(
         GraphicNode::tag("rect")
@@ -106,6 +113,8 @@ pub fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<Graphic
             .insert("stroke", stroke_color)
             .insert("stroke-width", stroke_width)
             .insert("opacity", opacity)
+            .insert("rx", round_corners.clone())
+            .insert("ry", round_corners)
     ))
 }
 

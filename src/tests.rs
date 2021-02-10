@@ -12,9 +12,9 @@ rectangle start=[70,40] size=[100,100] color=green opacity=0.3;
 
     let expected = r#"
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <rect fill="rgb(0,0,255)" height="100" opacity="0.3" stroke-width="1" stroke="rgb(0,0,0)" width="100" x="50" y="50"></rect>
-    <rect fill="rgb(255,0,0)" height="100" opacity="0.3" stroke-width="1" stroke="rgb(0,0,0)" width="100" x="10" y="10"></rect>
-    <rect fill="rgb(0,255,0)" height="100" opacity="0.3" stroke-width="1" stroke="rgb(0,0,0)" width="100" x="40" y="70"></rect>
+    <rect fill="rgb(0,0,255)" height="100" opacity="0.3" rx="0" ry="0" stroke-width="1" stroke="rgb(0,0,0)" width="100" x="50" y="50"></rect>
+    <rect fill="rgb(255,0,0)" height="100" opacity="0.3" rx="0" ry="0" stroke-width="1" stroke="rgb(0,0,0)" width="100" x="10" y="10"></rect>
+    <rect fill="rgb(0,255,0)" height="100" opacity="0.3" rx="0" ry="0" stroke-width="1" stroke="rgb(0,0,0)" width="100" x="40" y="70"></rect>
 </svg>
     "#.trim();
 
@@ -38,7 +38,7 @@ fn test_scopes_1() {
 
     let expected = r#"
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <rect fill="rgb(255,0,0)" height="300" opacity="1" stroke-width="1" stroke="rgb(255,0,0)" width="200" x="100" y="100"></rect>
+    <rect fill="rgb(255,0,0)" height="300" opacity="1" rx="0" ry="0" stroke-width="1" stroke="rgb(255,0,0)" width="200" x="100" y="100"></rect>
     <line stroke-width="15" stroke="rgb(255,255,255)" x1="100" x2="300" y1="100" y2="100"></line>
     <line stroke-width="15" stroke="rgb(255,255,255)" x1="100" x2="300" y1="400" y2="400"></line>
 </svg>
@@ -67,10 +67,10 @@ rectangle start=[10, 10] size=size color=white;
 
     let expected = r#"
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <rect fill="rgb(255,255,255)" height="50" opacity="1" stroke-width="1" stroke="rgb(0,0,0)" width="50" x="10" y="10"></rect>
-    <rect fill="rgb(255,255,255)" height="50" opacity="1" stroke-width="1" stroke="rgb(0,0,0)" width="50" x="10" y="100"></rect>
-    <rect fill="rgb(0,0,255)" height="20" opacity="1" stroke-width="1" stroke="rgb(0,0,0)" width="80" x="10" y="200"></rect>
-    <rect fill="rgb(255,0,0)" height="20" opacity="1" stroke-width="1" stroke="rgb(0,0,0)" width="80" x="10" y="300"></rect>
+    <rect fill="rgb(255,255,255)" height="50" opacity="1" rx="0" ry="0" stroke-width="1" stroke="rgb(0,0,0)" width="50" x="10" y="10"></rect>
+    <rect fill="rgb(255,255,255)" height="50" opacity="1" rx="0" ry="0" stroke-width="1" stroke="rgb(0,0,0)" width="50" x="10" y="100"></rect>
+    <rect fill="rgb(0,0,255)" height="20" opacity="1" rx="0" ry="0" stroke-width="1" stroke="rgb(0,0,0)" width="80" x="10" y="200"></rect>
+    <rect fill="rgb(255,0,0)" height="20" opacity="1" rx="0" ry="0" stroke-width="1" stroke="rgb(0,0,0)" width="80" x="10" y="300"></rect>
 </svg>
     "#.trim();
 
@@ -99,10 +99,10 @@ rectangle start=[300,300] size=rectangle_size color=malky_green stroke-color=pur
 
     let expected = r#"
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <rect fill="rgb(187,224,136)" height="120" opacity="1" stroke-width="15" stroke="rgb(153,79,209)" width="120" x="100" y="100"></rect>
-    <rect fill="rgb(187,224,136)" height="120" opacity="1" stroke-width="15" stroke="rgb(153,79,209)" width="120" x="300" y="100"></rect>
-    <rect fill="rgb(187,224,136)" height="120" opacity="1" stroke-width="15" stroke="rgb(153,79,209)" width="120" x="100" y="300"></rect>
-    <rect fill="rgb(187,224,136)" height="120" opacity="1" stroke-width="15" stroke="rgb(153,79,209)" width="120" x="300" y="300"></rect>
+    <rect fill="rgb(187,224,136)" height="120" opacity="1" rx="0" ry="0" stroke-width="15" stroke="rgb(153,79,209)" width="120" x="100" y="100"></rect>
+    <rect fill="rgb(187,224,136)" height="120" opacity="1" rx="0" ry="0" stroke-width="15" stroke="rgb(153,79,209)" width="120" x="300" y="100"></rect>
+    <rect fill="rgb(187,224,136)" height="120" opacity="1" rx="0" ry="0" stroke-width="15" stroke="rgb(153,79,209)" width="120" x="100" y="300"></rect>
+    <rect fill="rgb(187,224,136)" height="120" opacity="1" rx="0" ry="0" stroke-width="15" stroke="rgb(153,79,209)" width="120" x="300" y="300"></rect>
 </svg>
     "#.trim();
 
@@ -123,7 +123,7 @@ rectangle start=[50,50] size=[50,100] color=red stroke-width=w stroke-color=whit
 
     let expected = r#"
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <rect fill="rgb(255,0,0)" height="50" opacity="1" stroke-width="4" stroke="rgb(255,255,255)" width="100" x="50" y="50"></rect>
+    <rect fill="rgb(255,0,0)" height="50" opacity="1" rx="0" ry="0" stroke-width="4" stroke="rgb(255,255,255)" width="100" x="50" y="50"></rect>
 </svg>
     "#.trim();
 
