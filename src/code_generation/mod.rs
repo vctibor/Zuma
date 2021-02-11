@@ -1,4 +1,6 @@
-use crate::interpretation::{Graphics, GraphicNode};
+use crate::interpretation::*;
+
+mod tests;
 
 static INDENT_SIZE: usize = 4;
 
@@ -6,7 +8,7 @@ static INDENT_SIZE: usize = 4;
 static SVG_OPEN: &str = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1000\" height=\"1000\">";
 static SVG_CLOSE: &str = "</svg>";
 
-pub fn generate(graphics: Graphics) -> String {
+pub fn generate(graphics: &Graphics) -> String {
 
     let mut document = "".to_owned();
 
@@ -14,7 +16,7 @@ pub fn generate(graphics: Graphics) -> String {
     document.push_str("\n");
 
     for node in graphics.get_nodes() {
-        let xml_element = generate_xml_element(node);
+        let xml_element = element(node);
 
         let indent_chars = " ".repeat(INDENT_SIZE);
         document.push_str(&indent_chars);
@@ -27,11 +29,11 @@ pub fn generate(graphics: Graphics) -> String {
     document
 }
 
-fn generate_xml_element(node: &GraphicNode) -> String {
+fn element(node: &GraphicNode) -> String {
 
     let name = node.get_name();
     let attrs = attributes(node.get_attributes());
-    let content = node.get_content();
+    let content = content(node.get_content());
     format!("<{} {}>{}</{}>", name, attrs, content, name)
 }
 
@@ -45,4 +47,13 @@ fn attributes(attributes: Vec<(String, String)>) -> String {
     attrs.sort();
 
     attrs.join(" ")
+}
+
+fn content(content: ElementContent) -> String {
+    use ElementContent::*;
+    match content {
+        Empty => "".to_owned(),
+        Text(t) => t,
+        Elements(e) => generate(e.as_ref()),
+    }
 }

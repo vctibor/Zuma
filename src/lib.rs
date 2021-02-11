@@ -35,7 +35,7 @@ impl ZumaCompiler {
     pub fn compile(&self, source: String) -> Result<String> {
         let ast = self.parser.parse(source)?;
         let ir = Interpreter::new().interpret(ast)?;
-        let svg = generate(ir);
+        let svg = generate(&ir);
         Ok(svg)
     }
 }

@@ -1,5 +1,14 @@
 //! Implements Graphics type and related structures to represent result of ZUMA interpretation.
 
+/// This is content of XML element, like this:
+/// <text>this is content</text>
+#[derive(Debug, PartialEq, Clone)]
+pub enum ElementContent {
+    Empty,
+    Text(String),
+    Elements(Box<Graphics>),
+}
+
 /// Represents ( ZUMA interpretation result / SVG document) as a set of graphical primitives.
 #[derive(Debug, PartialEq, Clone)]
 pub struct Graphics {
@@ -11,21 +20,27 @@ pub struct Graphics {
 #[derive(Debug, PartialEq, Clone)]
 pub struct GraphicNode {
     name: String,
-
-    /// This is content of XML element, like this:
-    /// <text>this is content</text>
-    content: String,
-    
+    content: ElementContent,
     attributes: Vec<(String, String)>,
 }
 
-impl GraphicNode {
-    pub fn tag(name: &str) -> GraphicNode {
-        GraphicNode { name: name.to_string(), content: "".to_owned(), attributes: Vec::new() }
+impl ElementContent {
+    pub fn from_str(content: &str) -> ElementContent {
+        ElementContent::Text(content.clone().to_owned())
     }
 
-    pub fn element(name: &str, content: &str) -> GraphicNode {
-        GraphicNode { name: name.to_string(), content: content.to_owned(), attributes: Vec::new() }
+    pub fn from_graphics(content: Graphics) -> ElementContent {
+        ElementContent::Elements(Box::new(content))
+    }
+}
+
+impl GraphicNode {
+    pub fn empty_element(name: &str) -> GraphicNode {
+        GraphicNode { name: name.to_string(), content: ElementContent::Empty, attributes: Vec::new() }
+    }
+
+    pub fn element(name: &str, content: ElementContent) -> GraphicNode {
+        GraphicNode { name: name.to_string(), content, attributes: Vec::new() }
     }
 
     pub fn insert(mut self, attr_name: &str, attr_value: String) -> GraphicNode {
@@ -41,7 +56,7 @@ impl GraphicNode {
         self.name.clone()
     }
 
-    pub fn get_content(&self) -> String {
+    pub fn get_content(&self) -> ElementContent {
         self.content.clone()
     }
 }

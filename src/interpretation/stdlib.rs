@@ -1,5 +1,5 @@
 use super::helpers::*;
-use super::graphics::GraphicNode;
+use super::graphics::{GraphicNode, ElementContent};
 
 use anyhow::{Result, anyhow};
 
@@ -38,7 +38,7 @@ pub fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>
     let color = color_to_string(color);
 
     Ok(vec!(
-        GraphicNode::tag("line")
+        GraphicNode::empty_element("line")
             .insert("x1", start_x)
             .insert("y1", start_y)
             .insert("x2", end_x)
@@ -104,7 +104,7 @@ pub fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<Graphic
     // let round_corners = get_value(round_corners, &constants)?.get_number()?.to_string();
 
     Ok(vec!(
-        GraphicNode::tag("rect")
+        GraphicNode::empty_element("rect")
             .insert("x", start_x)
             .insert("y", start_y)
             .insert("width", size_x)
@@ -145,7 +145,7 @@ pub fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>
     let color = color_to_string(color);
 
     Ok(vec!(
-        GraphicNode::element("text", &content)
+        GraphicNode::element("text", ElementContent::from_str(&content))
             .insert("x", start_x)
             .insert("y", start_y)
             .insert("fill", color)
@@ -201,7 +201,7 @@ pub fn ellipse(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNo
     let stroke_color = color_to_string(stroke_color);
 
     Ok(vec!(
-        GraphicNode::tag("ellipse")
+        GraphicNode::empty_element("ellipse")
             .insert("cx", center_x)
             .insert("cy", center_y)
             .insert("rx", radius_x)

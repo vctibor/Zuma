@@ -13,7 +13,7 @@ mod helpers;
 mod stdlib;
 
 pub use helpers::*;
-pub use self::graphics::{GraphicNode, Graphics};
+pub use self::graphics::*;
 
 use crate::parsing::ast as ast;
 use crate::stack::Stack;
