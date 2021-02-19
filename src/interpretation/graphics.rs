@@ -1,5 +1,7 @@
 //! Implements Graphics type and related structures to represent result of ZUMA interpretation.
 
+#![allow(dead_code)]
+
 /// This is content of XML element, like this:
 /// <text>this is content</text>
 #[derive(Debug, PartialEq, Clone)]
@@ -43,8 +45,13 @@ impl GraphicNode {
         GraphicNode { name: name.to_string(), content, attributes: Vec::new() }
     }
 
-    pub fn insert(mut self, attr_name: &str, attr_value: String) -> GraphicNode {
-        self.attributes.push((attr_name.to_string(), attr_value));
+    pub fn add_attr(mut self, attr_name: &str, attr_value: &str) -> GraphicNode {
+        self.attributes.push((attr_name.to_string(), attr_value.to_string()));
+        self
+    }
+
+    pub fn insert_content(mut self, content: Graphics) -> GraphicNode {
+        self.content = ElementContent::from_graphics(content);
         self
     }
 
@@ -64,6 +71,11 @@ impl GraphicNode {
 impl Graphics {
     pub fn new() -> Graphics {
         Graphics { nodes: vec!() }
+    }
+
+    pub fn add(mut self, node: GraphicNode) -> Graphics {
+        self.nodes.push(node);
+        self
     }
 
     pub fn add_many(mut self, mut nodes: Vec<GraphicNode>) -> Graphics {

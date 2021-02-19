@@ -39,12 +39,12 @@ pub fn line(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>
 
     Ok(vec!(
         GraphicNode::empty_element("line")
-            .insert("x1", start_x)
-            .insert("y1", start_y)
-            .insert("x2", end_x)
-            .insert("y2", end_y)
-            .insert("stroke", color)
-            .insert("stroke-width", width)
+            .add_attr("x1", &start_x)
+            .add_attr("y1", &start_y)
+            .add_attr("x2", &end_x)
+            .add_attr("y2", &end_y)
+            .add_attr("stroke", &color)
+            .add_attr("stroke-width", &width)
     ))
 }
 
@@ -105,16 +105,16 @@ pub fn rectangle(mut args: ArgsMap, constants: &Constants) -> Result<Vec<Graphic
 
     Ok(vec!(
         GraphicNode::empty_element("rect")
-            .insert("x", start_x)
-            .insert("y", start_y)
-            .insert("width", size_x)
-            .insert("height", size_y)
-            .insert("fill", color)
-            .insert("stroke", stroke_color)
-            .insert("stroke-width", stroke_width)
-            .insert("opacity", opacity)
-            .insert("rx", round_corners.clone())
-            .insert("ry", round_corners)
+            .add_attr("x", &start_x)
+            .add_attr("y", &start_y)
+            .add_attr("width", &size_x)
+            .add_attr("height", &size_y)
+            .add_attr("fill", &color)
+            .add_attr("stroke", &stroke_color)
+            .add_attr("stroke-width", &stroke_width)
+            .add_attr("opacity", &opacity)
+            .add_attr("rx", &round_corners)
+            .add_attr("ry", &round_corners)
     ))
 }
 
@@ -146,9 +146,9 @@ pub fn text(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>
 
     Ok(vec!(
         GraphicNode::element("text", ElementContent::from_str(&content))
-            .insert("x", start_x)
-            .insert("y", start_y)
-            .insert("fill", color)
+            .add_attr("x", &start_x)
+            .add_attr("y", &start_y)
+            .add_attr("fill", &color)
     ))
 }
 
@@ -202,13 +202,13 @@ pub fn ellipse(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNo
 
     Ok(vec!(
         GraphicNode::empty_element("ellipse")
-            .insert("cx", center_x)
-            .insert("cy", center_y)
-            .insert("rx", radius_x)
-            .insert("ry", radius_y)
-            .insert("fill", color)
-            .insert("stroke", stroke_color)
-            .insert("stroke-width", stroke_width)
-            .insert("opacity", opacity)
+            .add_attr("cx", &center_x)
+            .add_attr("cy", &center_y)
+            .add_attr("rx", &radius_x)
+            .add_attr("ry", &radius_y)
+            .add_attr("fill", &color)
+            .add_attr("stroke", &stroke_color)
+            .add_attr("stroke-width", &stroke_width)
+            .add_attr("opacity", &opacity)
     ))
 }

@@ -15,29 +15,51 @@ pub fn generate(graphics: &Graphics) -> String {
     document.push_str(SVG_OPEN);
     document.push_str("\n");
 
-    for node in graphics.get_nodes() {
-        let xml_element = element(node);
-
-        let indent_chars = " ".repeat(INDENT_SIZE);
-        document.push_str(&indent_chars);
-
-        document.push_str(&xml_element);
-        document.push_str("\n");
-    }
+    let graphics_result = gen_graphics(graphics, 1);
+    document.push_str(&graphics_result);
 
     document.push_str(SVG_CLOSE);
     document
 }
 
-fn element(node: &GraphicNode) -> String {
+fn gen_graphics(graphics: &Graphics, indent_level: usize) -> String {
+    let mut document = "".to_owned();
+    for node in graphics.get_nodes() {
+        let xml_element = element(node, indent_level);
 
-    let name = node.get_name();
-    let attrs = attributes(node.get_attributes());
-    let content = content(node.get_content());
-    format!("<{} {}>{}</{}>", name, attrs, content, name)
+        let indent_chars = " ".repeat(indent_level * INDENT_SIZE);
+        document.push_str(&indent_chars);
+
+        document.push_str(&xml_element);
+        document.push_str("\n");
+    }
+    document
 }
 
-fn attributes(attributes: Vec<(String, String)>) -> String {
+fn element(node: &GraphicNode, indent_level: usize) -> String {
+
+    let name = node.get_name();
+    let attrs = gen_attributes(node.get_attributes());
+    let mut content = content(node.get_content(), indent_level + 1);
+
+    if content != "" {
+        let indent_chars = " ".repeat(indent_level * INDENT_SIZE);
+        content = format!("\n{}{}", content, indent_chars);
+    }
+
+    match attrs {
+        Some(a) => format!("<{} {}>{}</{}>", name, a, content, name),
+        None => format!("<{}>{}</{}>", name, content, name)
+    }
+    
+}
+
+fn gen_attributes(attributes: Vec<(String, String)>) -> Option<String> {
+    
+    if attributes.len() == 0 {
+        return None
+    }
+    
     let mut attrs = vec!();
 
     for attr in attributes {
@@ -45,15 +67,14 @@ fn attributes(attributes: Vec<(String, String)>) -> String {
     }
 
     attrs.sort();
-
-    attrs.join(" ")
+    Some(attrs.join(" "))
 }
 
-fn content(content: ElementContent) -> String {
+fn content(content: ElementContent, indent_level: usize) -> String {
     use ElementContent::*;
     match content {
         Empty => "".to_owned(),
         Text(t) => t,
-        Elements(e) => generate(e.as_ref()),
+        Elements(e) => gen_graphics(e.as_ref(), indent_level),
     }
 }
