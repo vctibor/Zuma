@@ -109,8 +109,12 @@ impl Interpreter {
                         graphics = self.handle_expressions(scope.expressions.clone(), graphics)?;                        
                         current_index_value += step;
                     }
+                },
+
+                UserProcedure(user_proc) => {
+                    println!("{:?}", user_proc);
                 }
-            }       
+            }
         }
 
         self.constants.pop_frame();

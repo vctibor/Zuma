@@ -12,6 +12,7 @@ pub enum Expression {
     Scope(Scope),
     IfStatement(IfStatement),
     ForLoop(ForLoop),
+    UserProcedure(UserProcedure),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -54,14 +55,6 @@ pub struct Arg {
 
 
 // CONSTANTS
-
-/*
-#[derive(Debug, PartialEq, Clone)]
-pub enum ConstantOrLiteral {
-    Const(String),  // name of constant used
-    Literal(OperationInput)
-}
-*/
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ConstantDeclaration {
@@ -111,10 +104,6 @@ pub enum Value {
     Color(Color),
     String(String),
     Bool(bool),
-
-    /// This is special type that can be only constructed using built-in functions
-    /// for generating resulting graphic primitives, such as line, rectangle, etc.
-    Graphic
 }
 
 impl Value {
@@ -161,16 +150,45 @@ pub struct Color {
     pub blue: Box<OperationInput>,
 }
 
-/*
-#[derive(Debug, PartialEq, Clone)]
-pub struct Point {
-    pub x: f32,
-    pub y: f32
-}
-*/
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Point {
     pub x: Box<OperationInput>,
     pub y: Box<OperationInput>,
+}
+
+// USER DECLARED PROCEDURES
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct UserProcedure {
+    pub name: String,
+    pub args: Vec<ProcArg>,
+    pub body: Scope,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum ProcArg {
+    Optional(OptionalArg),
+    Required(RequiredArg),
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct OptionalArg {
+    pub name: String,
+    pub default_value: OperationInput,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct RequiredArg {
+    pub name: String,
+    pub arg_type: ZumaType,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum ZumaType {
+    Bool,
+    Number,
+    Point,
+    Color,
+    Text,
 }

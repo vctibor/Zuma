@@ -1,11 +1,2 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <rect fill="rgb(136,136,136)" height="200" opacity="1" rx="5" ry="5" stroke-width="1" stroke="rgb(136,136,136)" width="300" x="23" y="23"></rect>
-    <rect fill="rgb(238,238,238)" height="200" opacity="1" rx="5" ry="5" stroke-width="1" stroke="rgb(0,0,0)" width="300" x="20" y="20"></rect>
-    <text fill="rgb(0,0,0)" x="25" y="40">Привет мир!</text>
-    <text fill="rgb(0,0,0)" x="25" y="60">我是</text>
-    <text fill="rgb(0,0,0)" x="25" y="80">ZUMA</text>
-    <text fill="rgb(0,0,0)" x="25" y="100">Vector Graphics Language</text>
-    <ellipse cx="250" cy="170" fill="rgb(255,0,0)" opacity="0.3" rx="25" ry="25" stroke-width="1" stroke="rgb(255,0,0)"></ellipse>
-    <ellipse cx="230" cy="135" fill="rgb(0,0,255)" opacity="0.3" rx="25" ry="25" stroke-width="1" stroke="rgb(0,0,255)"></ellipse>
-    <ellipse cx="270" cy="135" fill="rgb(0,255,0)" opacity="0.3" rx="25" ry="25" stroke-width="1" stroke="rgb(0,255,0)"></ellipse>
 </svg>

@@ -5,6 +5,10 @@ use crate::parsing::*;
 use crate::parsing::ast::*;
 use crate::parsing::parsing_functions::color;
 
+
+
+
+
 #[test]
 fn test_number() {
     let parser = NumberParser::new();
@@ -87,5 +91,33 @@ fn test_constant_declaration() {
         let n = 4557;
         let s = "你好！";
     "#;
+    assert!(parser.parse(input.to_string()).is_ok());
+}
+
+
+#[test]
+fn test_user_procedure_declaration() {
+    let parser = ZumaParser::new();
+    let input = r#"
+    proc name req_arg:Bool reg_arg:Color opt_arg="val" {
+
+    }
+    "#.trim();
+    let res = parser.parse(input.to_string());
+    println!("{:?}", res);
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_empty_doc() {
+    let parser = ZumaParser::new();
+    let input = "";
+    assert!(parser.parse(input.to_string()).is_ok());
+}
+
+#[test]
+fn test_empty_scope() {
+    let parser = ZumaParser::new();
+    let input = r#"{ };"#;
     assert!(parser.parse(input.to_string()).is_ok());
 }

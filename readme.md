@@ -3,40 +3,16 @@ ZUMA - Vector Graphics Language
 
 ## WARNING: Language spec is currently unstable and WILL break.
 
-[This code](examples/front_page01.zm):
+ZUMA is Vector Graphics Language, i.e. domain specific language intended for creation of vector graphics. One could think about it like a graphics editor in the vein of *Inkscape*, just using slightly different kind of User Interface - namely plain text containing source code in some machine readable form, rather than Graphical User Interface more usual for these kinds of programs. Alternatively, you can think about ZUMA as being to vestor graphics like *tex* is to text documents or *OpenSCAD* is to CAD.
 
-```
-let starting_point = 20;
+Probably closest competitor to ZUMA is *SVG*, another language / text format intended for description of vector graphics; in fact, SVG is direct compilation target of ZUMA. *SVG* has problem of being *XML*, therefore verbose and more on the machine end of human-readable / machine-readable spectrum, and no fun to write at all. Another possible competition for ZUMA is *DOT* and similar languages for describing diagrams and graphs. While there certainly is ambition to use ZUMA to draw diagrams and graphs and anything else, this is intended to be achieved through functions, procedures and modules created by users from primitive types provided by language itself.
 
-let lighter_gray = #eeeeee;
-let darker_gray = #888888;
+The main goal for ZUMA design is to be simple and easy, these two characteristics being different, often orthogonal. Either way, geometric shapes easy to express in natural language should be  simple/easy to express in ZUMA as well. For example, if I would say in natural language something like:
 
-let width = 300;
-let height = 200;
+"Red rectangle one hundred by four hundred."
 
-let shadow_size = 3;
-let start_plus_shadow = [(starting_point + shadow_size), (starting_point + shadow_size)];
-let rect_size = [height, width];
+I can express the same idea in ZUMA by writing:
 
-rectangle start=start_plus_shadow size=rect_size color=darker_gray stroke-color=darker_gray round-corners=5;
+    rectangle start=[0,0] size=[100,400] color=red;
 
-rectangle start=[starting_point, starting_point] size=rect_size color=lighter_gray round-corners=5;
-
-text text = "Привет мир!" start=[(starting_point+20), (starting_point+5)];
-text text = "我是" start=[(starting_point+40), (starting_point+5)];
-text text = "ZUMA" start=[(starting_point+60), (starting_point+5)];
-text text = "Vector Graphics Language" start=[(starting_point+80), (starting_point+5)];
-
-let circle_size = [25, 25];
-let opa = 0.3;
-ellipse center=[(starting_point+150), (starting_point+230)]
-    radius=circle_size color=red stroke-color=red opacity=opa;
-ellipse center=[(starting_point+115), (starting_point+210)]
-    radius=circle_size color=blue stroke-color=blue opacity=opa;
-ellipse center=[(starting_point+115), (starting_point+250)]
-    radius=circle_size color=green stroke-color=green opacity=opa;
-```
-
-produces this:
-
-![examples/front_page01.svg](examples/front_page01.svg)
+It should be noted that in its current state ZUMA is more of research project for me to learn about developing machine language, and less readily usable tool; but there is intention to develop it into one. Meanwhile, it is expected that syntax will change dramatically and it shouldn't, if it even can, be used for anything serious.
