@@ -39,13 +39,22 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
 #[allow(clippy::trivially_copy_pass_by_ref)]
 fn view(model: &Model) -> Node<Msg> {
     div![
+
         textarea![
-            input_ev(Ev::Input, Msg::SourceCodeChanged),
+            C!["element source_input"],
+            input_ev(Ev::Input, Msg::SourceCodeChanged)
         ],
-        br!(),
-        raw![&model.compiled.clone().unwrap_or(EMPTY_SVG.to_owned())],
-        h1!("Cheatsheet"),
-        md!(include_str!("../zuma_cheatsheet.md"))
+                
+        div![
+            C!["element render_area"],
+            raw![&model.compiled.clone().unwrap_or(EMPTY_SVG.to_owned())]
+        ],
+
+        div![
+            C!["element cheatsheet"],
+            h2!("Cheatsheet"),
+            md!(include_str!("../zuma_cheatsheet.md"))
+        ]
     ]
 }
 
