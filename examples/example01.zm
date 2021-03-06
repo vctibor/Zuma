@@ -1,7 +1,5 @@
 proc test-proc size: Number {
-    rectangle start=[10,10] size=[size, size] color=blue opacity=0.1;
+    rectangle start=[10,10] size=[size, size] color=blue;
 }
 
-line start=[50, 10] end=[500, 80] color=red width=5;
-
-test-proc size=10;
+test-proc size=100;

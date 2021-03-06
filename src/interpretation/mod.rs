@@ -24,7 +24,7 @@ pub struct Interpreter {
     constants: Stack<String, ast::Value>,
     
     /// User-defined procedures
-    procedures: Stack<String, ast::Scope>,
+    procedures: Stack<String, ast::UserProcedure>,
 }
 
 impl Interpreter {
@@ -72,14 +72,45 @@ impl Interpreter {
 
                     let user_procedure = self.procedures.get(name).cloned();
 
-                    if let Some(user_defined) = user_procedure {
-                        graphics = self.handle_expressions(user_defined.expressions.clone(), graphics)?;
-                        continue;
+                    graphics = if let Some(user_defined) = user_procedure {
+
+                        use crate::parsing::ast::ProcArg::*;
+
+                        // add new frame to the stack
+                        self.add_frame();
+
+                        // add default values from procedure definition
+                        for arg in user_defined.args {
+                            match arg {                                
+                                Optional(optional_arg) => {       
+                                    // default argument values provided as operation should be evaluated when procedure is defined not called, and then stored as values                             
+                                    let evaluated = get_value(&optional_arg.default_value, &self.constants)?;
+                                    self.constants.add_to_current_frame(optional_arg.name, evaluated);
+                                },
+                                Required(_) => continue,
+                            }
+                        }
+
+                        // add values from call
+                        for arg in fc.args {
+                            let evaluated = get_value(&arg.value, &self.constants)?;
+                            self.constants.add_to_current_frame(arg.name, evaluated);
+                        }
+
+                        // evaluate procedure
+                        let graphics = self.handle_expressions(user_defined.body.expressions.clone(), graphics)?;
+
+                        // pop frame
+                        self.pop_frame();
+
+                        graphics
                     }
-                    
-                    graphics = graphics.add_many(
-                        self.handle_function_call(fc)?
-                    );
+                    else
+                    {
+                        graphics.add_many(
+                            self.handle_function_call(fc)?
+                        )
+                    }
                 },
                 
                 ConstantDeclaration(c) => {
@@ -136,7 +167,7 @@ impl Interpreter {
                 },
 
                 UserProcedure(user_proc) => {
-                    self.procedures.add_to_current_frame(user_proc.name, user_proc.body);
+                    self.procedures.add_to_current_frame(user_proc.name.clone(), user_proc);
                 }
             }
         }
