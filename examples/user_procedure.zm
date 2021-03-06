@@ -1,40 +1,5 @@
-let arrow(
-    arrow_start: Point,
-    pointing_to_x: Number,
-    pointing_to_y: Number,
-    head_height: Number = 10,
-    head_length: Number = 20,
-    arrow_color: Color = black,
-    arrow_width: Number = 3)
-{
-    let pointing_to = [
-        pointing_to_x,
-        pointing_to_y
-    ];
+proc test-proc size: Number {
+    rectangle start=[10,10] size=[size, size] color=blue;
+}
 
-    let head_y = (pointing_to_y - head_length);
-
-    line start=arrow_start end=pointing_to color=arrow_color width=arrow_width;
-    line start=[(pointing_to_x - head_height), head_y] end=pointing_to color=arrow_color width=arrow_width;
-    line start=[(pointing_to_x + head_height), head_y] end=pointing_to color=arrow_color width=arrow_width;
-};
-
-
-let arrow_start = [100, 100];
-
-let pointing_to_x = 100;
-let pointing_to_y = 200;
-
-let head_height = 10;
-let head_length = 20;
-
-let arrow_color = green;
-let arrow_width = 3;
-
-arrow arrow_start = arrow_start
-      pointing_to_x = pointing_to_x
-      pointing_to_y = pointing_to_y
-      head_height = head_height
-      head_length = head_length
-      arrow_color = arrow_color
-      arrow_width = arrow_width;
+test-proc size=100;

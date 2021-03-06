@@ -1,5 +1,34 @@
-proc test-proc size: Number {
-    rectangle start=[10,10] size=[size, size] color=blue;
+proc box
+    start_x: Number
+    start_y: Number
+    upper: Text
+    lower = ""
+    size = [70, 200]
+    fg_color = #444444
+    bg_color = white
+{
+    rectangle start=[start_x, start_y] size=size color=bg_color stroke-color=fg_color stroke-width=4;
+
+    text text=upper start=[(start_x + 30), (start_y + 70)] color=fg_color;
+    text text=lower start=[(start_x + 50), (start_y + 60)] color=fg_color;
 }
 
-test-proc size=100;
+let vspace = 100;
+
+let start_x = 50;
+let start_y = 50;
+
+box upper="Fakturizace" lower="od dodavatele";
+let start_x = start_x + vspace;
+
+box upper="Doprava" lower="do podniku";
+let start_x = start_x + vspace;
+
+box upper="Přesun" lower="do výroby";
+let start_x = start_x + vspace;
+
+box upper="Proces výroby";
+let start_x = start_x + vspace;
+
+box upper="Přesun do" lower="meziskladu";
+let start_x = start_x + vspace;

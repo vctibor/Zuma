@@ -87,7 +87,7 @@ impl Interpreter {
                                     let evaluated = get_value(&optional_arg.default_value, &self.constants)?;
                                     self.constants.add_to_current_frame(optional_arg.name, evaluated);
                                 },
-                                Required(_) => continue,
+                                Required(_) => {},
                             }
                         }
 

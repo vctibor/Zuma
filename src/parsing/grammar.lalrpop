@@ -17,8 +17,17 @@ pub Expression: Expression = {
     UserProcedure => Expression::UserProcedure(<>),
 }
 
+pub UserProcedure: UserProcedure = {
+    "proc" <name:Name> <args:ProcArg*> <body:Scope> ";" => UserProcedure { name, args, body },
+}
+
+pub ProcArg: ProcArg = {
+    <name:Name> ":" <arg_type:Type> => ProcArg::Required(RequiredArg { name, arg_type }),
+    <name:Name> "=" <default_value:OperationInput> => ProcArg::Optional(OptionalArg { name, default_value }),
+}
+
 pub ForLoop: ForLoop = {
-    "for" <index_name:Name> "=" <starting_value:Number> "," <step:Number> "," <final_value:Number> <scope:Scope>
+    "for" <index_name:Name> "=" <starting_value:Number> "," <step:Number> "," <final_value:Number> <scope:Scope> ";"
         => ForLoop { index_name, starting_value, step, final_value, scope },
 }
 
@@ -81,7 +90,7 @@ pub Literal: Value = {
     Bool => Value::Bool(<>),
 }
 
-pub Text: String = r#"".*""# => strip_quotes(<>);
+pub Text: String = r#""[^"]*""# => strip_quotes(<>);
 
 pub Point: Point = {
     "[" <a:OperationInput> "," <b:OperationInput> "]"
@@ -110,17 +119,6 @@ pub Number: f32 = r"-?[0-9]+\.?[0-9]*" => f32::from_str(<>).unwrap();
 pub Bool: bool = {
     "true" => true,
     "false" => false,
-}
-
-
-
-pub UserProcedure: UserProcedure = {
-    "proc" <name:Name> <args:ProcArg*> <body:Scope> => UserProcedure { name, args, body },
-}
-
-pub ProcArg: ProcArg = {
-    <name:Name> ":" <arg_type:Type> => ProcArg::Required(RequiredArg { name, arg_type }),
-    <name:Name> "=" <default_value:OperationInput> => ProcArg::Optional(OptionalArg { name, default_value }),
 }
 
 pub Type: ZumaType = {

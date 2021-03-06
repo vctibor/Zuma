@@ -16,6 +16,10 @@
     \color{red} \textbf{QUESTION:} \color{black} #1
 }
 
+\newcommand{\note}[1]{
+    \color{blue} \textbf{NOTE:} \color{black} #1
+}
+
 \begin{document}
 
 \pagenumbering{gobble}
@@ -140,6 +144,8 @@ Comments can be nested:
 \texttt{/* /* */}
 
 Anything inside comments shouldn't break compilation.
+
+\note{Comments most probably require implementation of custom lexer, and as such aren't currently implemented.}
 
 
 \chapter{Predefined functions}
