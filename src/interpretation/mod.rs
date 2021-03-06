@@ -21,15 +21,29 @@ use crate::stack::Stack;
 use anyhow::{Result, anyhow};
 
 pub struct Interpreter {
-    constants: Stack<String, ast::Value>
+    constants: Stack<String, ast::Value>,
+    
+    /// User-defined procedures
+    procedures: Stack<String, ast::Scope>,
 }
 
 impl Interpreter {
         
     pub fn new() -> Interpreter {
         Interpreter {
-            constants: Stack::new()
+            constants: Stack::new(),
+            procedures: Stack::new(),
         }
+    }
+
+    pub fn add_frame(&mut self) {
+        self.constants.add_frame();
+        self.procedures.add_frame();
+    }
+
+    pub fn pop_frame(&mut self) {
+        self.constants.pop_frame();
+        self.procedures.pop_frame();
     }
 
     pub fn interpret(&mut self, zuma: ast::Document) -> Result<Graphics> {
@@ -46,13 +60,23 @@ impl Interpreter {
     {
         use crate::parsing::ast::Expression::*;
 
-        self.constants.add_frame();
+        self.add_frame();
 
         for expr in expressions {
 
             match expr {
 
                 FunctionCall(fc) => {
+
+                    let name = fc.name.clone();
+
+                    let user_procedure = self.procedures.get(name).cloned();
+
+                    if let Some(user_defined) = user_procedure {
+                        graphics = self.handle_expressions(user_defined.expressions.clone(), graphics)?;
+                        continue;
+                    }
+                    
                     graphics = graphics.add_many(
                         self.handle_function_call(fc)?
                     );
@@ -112,12 +136,12 @@ impl Interpreter {
                 },
 
                 UserProcedure(user_proc) => {
-                    println!("{:?}", user_proc);
+                    self.procedures.add_to_current_frame(user_proc.name, user_proc.body);
                 }
             }
         }
 
-        self.constants.pop_frame();
+        self.pop_frame();
         Ok(graphics)
     }
 

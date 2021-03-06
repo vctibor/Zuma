@@ -11,7 +11,7 @@ pub enum ElementContent {
     Elements(Box<Graphics>),
 }
 
-/// Represents ( ZUMA interpretation result / SVG document) as a set of graphical primitives.
+/// Represents (ZUMA interpretation result / SVG document) as a set of graphical primitives.
 #[derive(Debug, PartialEq, Clone)]
 pub struct Graphics {
     nodes: Vec<GraphicNode>
