@@ -164,7 +164,7 @@ for index = 1, 1, 5 {
     let end_x = start_x + length;
     let end_y = start_y + length;
     line start=[start_x, start_y] end=[end_x, end_y] color=red width=3;
-}
+};
     "#.trim();
 
     let expected = r#"

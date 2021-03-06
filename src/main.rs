@@ -5,6 +5,7 @@ use std::{thread, time};
 
 use anyhow::Result;
 
+/*
 fn render_svg(svg: String, path: &str) {
 
     use resvg::render;
@@ -20,6 +21,7 @@ fn render_svg(svg: String, path: &str) {
     render(&tree, FitTo::Original, pixmap_mut);
     pixmap.save_png(path).unwrap();
 }
+*/
 
 fn compile_file(compiler: &zumalib::ZumaCompiler) -> Result<()>
 {
@@ -29,7 +31,7 @@ fn compile_file(compiler: &zumalib::ZumaCompiler) -> Result<()>
 
     let zuma_input = format!("{}/{}.zm", folder, input_file);
     let svg_output = format!("{}/{}.svg", folder, input_file);
-    let png_output = format!("{}/{}.png", folder, input_file);
+    //let png_output = format!("{}/{}.png", folder, input_file);
 
     let start_time = Instant::now();
     let input = read_to_string(zuma_input)?;

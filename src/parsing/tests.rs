@@ -101,7 +101,7 @@ fn test_user_procedure_declaration() {
     let input = r#"
     proc name req_arg:Bool reg_arg:Color opt_arg="val" {
 
-    }
+    };
     "#.trim();
     let res = parser.parse(input.to_string());
     println!("{:?}", res);
