@@ -1,0 +1,92 @@
+body {
+    color: #333;
+    background-color: #eee;
+
+    font-family: 'Cantarell', sans-serif;
+    font-variant: small-caps;
+    text-align: justify;
+}
+
+h1, h2, h3 {
+    color: #cc584c;
+}
+
+h1 {
+    text-shadow: 1px 1px #333;
+    text-align: center;
+}
+
+pre code, code {
+    color: #333;
+    font-family: 'Fira Code';
+    font-variant: small-caps;
+    font-weight: 500;
+}
+
+a {
+    margin: 1em;
+}
+
+a, a:visited {
+    text-decoration: none !important;
+    color: #cc584c;
+    font-weight: bold;
+}
+
+a:hover {
+    text-shadow: 1px 1px 1px gray;
+}
+
+.links {
+    margin: auto;
+    width: 10%;
+}
+
+.element {
+    background-color: #f8f8f8;
+    box-shadow: 2px 2px 5px grey;
+    
+    border-style: solid;
+    border-color: #333;
+    border-width: 1px;
+    border-radius: 5px;
+
+    padding-left: 1em;
+    padding-right: 5em;
+    padding-top: 1em;
+    padding-bottom: 5em;
+
+    /*
+    margin-left: 10%;
+    margin-right: 10%;
+    */
+
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.source_input {
+    height: 80vh;
+
+
+
+    resize: none;
+    outline: none;
+
+    color: black;
+    font-family: 'Fira Code';
+    font-variant: small-caps;
+}
+
+.render_area {
+    height: 80vh;
+
+    
+}
+
+.cheatsheet {
+    max-width: 50vw;
+
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
