@@ -10,13 +10,9 @@ ZUMA is statically, strongly typed. There are five data types:
 Every data type can be initialized by literal and assigned to constant:
 
     let x = true; let x = false;    // Bool
-
     let n = 157.44;                 // Number
-
     let p = [55, 143];              // Point
-
     let c = red; let c = #f5407;    // Color
-
     let t = "你好，世界！";           // Text
 
 ### Operations
@@ -26,9 +22,7 @@ Operations are used to calculate values. Inputs for operations can be literals, 
 ZUMA supports basic arithmetic and logical operations.
 
     let five = (1 + 4);                     // Number
-
     let not_true = (3 > five);              // Bool
-
     let this_true = (five == (2 * 2.5));    // Bool
 
 ### Conditional

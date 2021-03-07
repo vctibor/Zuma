@@ -3,20 +3,22 @@
 use seed::{prelude::*, *};
 use zumalib::ZumaCompiler;
 
-const EMPTY_SVG: &'static str = r#"<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000"></svg>"#;
+const EMPTY_SVG: &'static str = r#"<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500"></svg>"#;
 
 fn init(_: Url, _: &mut impl Orders<Msg>) -> Model {
     Model {
         compiler: ZumaCompiler::new(),
         source_code: "".to_owned(),
         compiled: None,
+        error: None
     }
 }
 
 struct Model {
     compiler: ZumaCompiler,
     source_code: String,
-    compiled: Option<String>
+    compiled: Option<String>,
+    error: Option<String>
 }
 
 #[derive(Clone)]
@@ -29,9 +31,14 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
         Msg::SourceCodeChanged(updated_source) => {
             model.source_code = updated_source;
             let compiled = model.compiler.compile(model.source_code.clone());
-            if let Ok(res) = compiled {
-                model.compiled = Some(res)
-            };
+            
+            match compiled {
+                Ok(res) => {
+                    model.compiled = Some(res);
+                    model.error = None;
+                },
+                Err(e) => model.error = Some(e.to_string())
+            }
         } 
     }
 }
@@ -39,22 +46,35 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
 #[allow(clippy::trivially_copy_pass_by_ref)]
 fn view(model: &Model) -> Node<Msg> {
     div![
-
-        textarea![
-            C!["element source_input"],
-            input_ev(Ev::Input, Msg::SourceCodeChanged)
-        ],
-                
         div![
-            C!["element render_area"],
-            raw![&model.compiled.clone().unwrap_or(EMPTY_SVG.to_owned())]
+            C!["container-fluid row align-items-start"],
+    
+            textarea![
+                id!["source_input"],
+                C!["col-4 element source_input"],
+                input_ev(Ev::Input, Msg::SourceCodeChanged),
+                attrs![At::SpellCheck => false]                
+            ],
+                    
+            div![
+                C!["col-6 element render_area"],
+                raw![&model.compiled.clone().unwrap_or(EMPTY_SVG.to_owned())]
+            ],
+
+            div![
+                C!["col-1"],
+                model.error.clone().unwrap_or("No errors.".to_owned())
+            ],
         ],
 
         div![
-            C!["element cheatsheet"],
-            h2!("Cheatsheet"),
-            md!(include_str!("../zuma_cheatsheet.md"))
-        ]
+            C!["container-fluid"],
+            div![
+                C!["element cheatsheet"],
+                h2!("Cheatsheet"),
+                md!(include_str!("../zuma_cheatsheet.md"))
+            ]
+        ]        
     ]
 }
 

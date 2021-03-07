@@ -2,21 +2,9 @@ body {
     color: #333;
     background-color: #eee;
 
-    font-family: 'Fira Code';
+    font-family: 'Cantarell', sans-serif;
     font-variant: small-caps;
-
     text-align: justify;
-}
-
-hr {
-    border: 0;
-    height: 1px;
-
-    background-image: linear-gradient(to right,
-        rgba(0, 0, 0, 0),
-        rgba(0, 0, 0, 0.75),
-        rgba(0, 0, 0, 0)
-    );
 }
 
 h1, h2, h3 {
@@ -28,17 +16,17 @@ h1 {
     text-align: center;
 }
 
-a, a:visited {
-    text-decoration: none !important;
-    color: #cc584c;
-    font-weight: bold;
-}
-
-a:hover {
-    text-shadow: 1px 1px 1px gray;
+pre code, code {
+    color: #333;
+    font-family: 'Fira Code';
+    font-variant: small-caps;
+    font-weight: 500;
 }
 
 .element {
+    background-color: #f8f8f8;
+    box-shadow: 2px 2px 5px grey;
+    
     border-style: solid;
     border-color: #333;
     border-width: 1px;
@@ -49,30 +37,37 @@ a:hover {
     padding-top: 1em;
     padding-bottom: 5em;
 
-    background-color: #f8f8f8;
-    box-shadow: 2px 2px 5px grey;
+    /*
+    margin-left: 10%;
+    margin-right: 10%;
+    */
+
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .source_input {
-
-    display : inline-flex;
-
-    width: 30vw;
     height: 80vh;
+
+
+
     resize: none;
     outline: none;
+
+    color: black;
+    font-family: 'Fira Code';
+    font-variant: small-caps;
 }
 
-
 .render_area {
-    display : inline-flex;
-    width: 30vw;
     height: 80vh;
+
+    
 }
 
 .cheatsheet {
+    max-width: 50vw;
 
-    width: 20vw;
-
-    min-height: 100vh;
+    margin-top: 15px;
+    margin-bottom: 25px;
 }
