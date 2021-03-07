@@ -1,0 +1,62 @@
+proc box
+    start_x: Number
+    start_y: Number
+    upper: Text
+    lower = ""
+    size = [70, 200]
+    fg_color = #444444
+    bg_color = white
+{
+    rectangle start=[start_x, start_y] size=size color=bg_color stroke-color=fg_color stroke-width=4;
+
+    text text=upper start=[(start_x + 30), (start_y + 70)] color=fg_color;
+    text text=lower start=[(start_x + 50), (start_y + 60)] color=fg_color;
+};
+
+proc arrow start_x: Number start_y: Number color=black {
+  let w = 3;
+  let col = #444444;
+
+  let start_x = (start_x - 25);
+  let start_y = (start_y + 100);
+
+  line start=[start_x, start_y]
+    end=[(start_x + 20), start_y]
+    width=w color=col;
+  
+  line start=[(start_x + 10), (start_y - 10)]
+    end=[(start_x + 20), (start_y + 1)]
+    width=w color=col;
+
+  line start=[(start_x + 10), (start_y + 10)]
+    end=[(start_x + 20), (start_y - 1)]
+    width=w color=col;
+};
+
+let vspace = 100;
+
+let start_x = 50;
+let start_y = 250;
+
+box upper="Fakturace" lower="od dodavatele";
+let start_x = start_x + vspace;
+
+arrow;
+
+box upper="Doprava" lower="do podniku";
+let start_x = start_x + vspace;
+
+arrow;
+
+box upper="Přesun" lower="do výroby";
+let start_x = start_x + vspace;
+
+arrow;
+
+box upper="Proces výroby";
+let start_x = start_x + vspace;
+
+arrow;
+
+box upper="Přesun do" lower="meziskladu";
+let start_x = start_x + vspace;
