@@ -3,6 +3,8 @@ ZUMA - Vector Graphics Language
 
 ## WARNING: Language spec is currently unstable and WILL break.
 
+[Playground](https://zuma-playground.netlify.app/)
+
 ZUMA is Vector Graphics Language, i.e. domain specific language for constructing vector graphics. One could think about it like a graphics editor in the vein of *Inkscape*, just using slightly different kind of User Interface - namely plain text containing source code in some machine readable form, rather than Graphical User Interface more usual for these kinds of programs. Alternatively, you can think about ZUMA as being to vector graphics like *tex* is to text documents or *OpenSCAD* is to CAD.
 
 Probably closest competitor to ZUMA is *SVG*, another language / text format intended for description of vector graphics; in fact, SVG is direct compilation target of ZUMA. *SVG* has problem of being *XML*, therefore verbose and more on the machine end of human-readable / machine-readable spectrum, and no fun to write at all. Another possible competition for ZUMA is *DOT* and similar languages for describing diagrams and graphs. While there certainly is ambition to use ZUMA to draw diagrams and graphs and anything else, this is intended to be achieved through functions, procedures and modules created by users from primitives  provided by language itself.
