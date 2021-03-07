@@ -23,6 +23,25 @@ pre code, code {
     font-weight: 500;
 }
 
+a {
+    margin: 1em;
+}
+
+a, a:visited {
+    text-decoration: none !important;
+    color: #cc584c;
+    font-weight: bold;
+}
+
+a:hover {
+    text-shadow: 1px 1px 1px gray;
+}
+
+.links {
+    margin: auto;
+    width: 10%;
+}
+
 .element {
     background-color: #f8f8f8;
     box-shadow: 2px 2px 5px grey;
