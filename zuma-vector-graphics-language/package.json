@@ -1,0 +1,25 @@
+{
+    "name": "zuma-vector-graphics-language",
+    "displayName": "ZUMA Vector Graphics Language",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.54.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "zuma",
+            "aliases": ["ZUMA", "zuma"],
+            "extensions": ["zm"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "zuma",
+            "scopeName": "source.zuma",
+            "path": "./syntaxes/zuma.tmLanguage.json"
+        }]
+    }
+}

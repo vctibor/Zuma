@@ -1,0 +1,28 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "ZUMA",
+
+	"patterns": [
+		{ "include": "#keywords" },
+		{ "include": "#types" }
+	],
+
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.zuma",
+				"match": "(for|if|proc|let)"
+			}]
+		},
+
+		"types": {
+			"patterns": [{
+				"name": "type.zuma",
+				"match": "(Bool|Number|Point|Color|Text)"
+			}]
+		}
+	},
+
+	"scopeName": "source.zuma"
+
+}

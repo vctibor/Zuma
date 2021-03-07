@@ -13,6 +13,9 @@ proc box
     text text=lower start=[(start_x + 50), (start_y + 60)] color=fg_color;
 };
 
+for 1，2，3 { 
+};
+
 proc arrow start_x: Number start_y: Number color=black {
   let w = 3;
   let col = #444444;
