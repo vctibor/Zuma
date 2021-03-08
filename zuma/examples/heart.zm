@@ -1,0 +1,9 @@
+let pink = #ff88ff;
+
+let size=70;
+
+line start=[200, 200] end=[300,300] width=(2*size) color=pink;
+
+ellipse center=[200,200] radius=[size,size] color=pink stroke-color=pink;
+
+ellipse center=[200,300] radius=[size,size] color=pink stroke-color=pink;
