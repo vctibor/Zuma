@@ -27,7 +27,7 @@ pub ProcArg: ProcArg = {
 }
 
 pub ForLoop: ForLoop = {
-    "for" <index_name:Name> "=" <starting_value:Number> "," <step:Number> "," <final_value:Number> <scope:Scope> ";"
+    "for" <index_name:Name> "=" <starting_value:OperationInput> "," <step:OperationInput> "," <final_value:OperationInput> <scope:Scope> ";"
         => ForLoop { index_name, starting_value, step, final_value, scope },
 }
 
@@ -83,43 +83,53 @@ pub Operator: Operator = {
 pub Name: String = r"[a-z_-]+" => <>.to_string();
 
 pub Literal: Value = {
-    Number => Value::Number(<>),
-    Point => Value::Point(<>),
-    Color => Value::Color(<>),
-    Text => Value::String(<>),
-    Bool => Value::Bool(<>),
+    Number => <>,
+    Point => <>,
+    Color => <>,
+    Text => <>,
+    Bool => <>,
 }
 
-pub Text: String = r#""[^"]*""# => strip_quotes(<>);
+pub Array: Array = {
+    "[" <values:Number+> "]" => Array { array_type: ZumaType::Number, values },
+    "[" <values:Point+> "]" => Array { array_type: ZumaType::Point, values },
+    "[" <values:Color+> "]" => Array { array_type: ZumaType::Color, values },
+    "[" <values:Text+> "]" => Array { array_type: ZumaType::Text, values },
+    "[" <values:Bool+> "]" => Array { array_type: ZumaType::Bool, values },
+}
 
-pub Point: Point = {
+
+pub Text: Value = r#""[^"]*""# => Value::String(strip_quotes(<>));
+
+pub Point: Value = {
     "[" <a:OperationInput> "," <b:OperationInput> "]"
-        => Point { x: Box::new(b), y: Box::new(a) },
+        => Value::Point(Point { x: Box::new(b), y: Box::new(a) }),
 }
 
-pub Color: Color = {
-    "black"  => color(0, 0, 0),
-    "white"  => color(255, 255, 255),
-    "red"    => color(255, 0, 0),
-    "green"  => color(0, 255, 0),
-    "blue"   => color(0, 0, 255),
-    "yellow" => color(255, 255, 0),
-    r"#[a-f0-9]{6}" => parse_color(<>.to_string()).unwrap(),
+pub Color: Value = {
+    "black"  => Value::Color(color(0, 0, 0)),
+    "white"  => Value::Color(color(255, 255, 255)),
+    "red"    => Value::Color(color(255, 0, 0)),
+    "green"  => Value::Color(color(0, 255, 0)),
+    "blue"   => Value::Color(color(0, 0, 255)),
+    "yellow" => Value::Color(color(255, 255, 0)),
+    r"#[a-f0-9]{6}" =>Value::Color( parse_color(<>.to_string()).unwrap()),
 
     "(" <red:OperationInput> "," <green:OperationInput> "," <blue:OperationInput> ")"
-        => Color {
+        => Value::Color(Color {
             red: Box::new(red),
             green: Box::new(green),
             blue: Box::new(blue),
-        },
+        }),
 }
 
-pub Number: f32 = r"-?[0-9]+\.?[0-9]*" => f32::from_str(<>).unwrap();
+pub Number: Value = r"-?[0-9]+\.?[0-9]*" => Value::Number(f32::from_str(<>).unwrap());
 
-pub Bool: bool = {
-    "true" => true,
-    "false" => false,
+pub Bool: Value = {
+    "true" => Value::Bool(true),
+    "false" => Value::Bool(false),
 }
+
 
 pub Type: ZumaType = {
     "Bool" => ZumaType::Bool,

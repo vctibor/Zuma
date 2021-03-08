@@ -147,6 +147,10 @@ impl Interpreter {
 
                     let ast::ForLoop { index_name, starting_value, step, final_value, scope } = for_loop;
 
+                    let starting_value = get_value(&starting_value, &self.constants)?.get_number()?;
+                    let step = get_value(&step, &self.constants)?.get_number()?;
+                    let final_value = get_value(&final_value, &self.constants)?.get_number()?;
+
                     if step == 0.0 {
                         return Err(anyhow!("Step can't be zero!"));
                     }

@@ -25,9 +25,9 @@ pub struct Scope {
 #[derive(Debug, PartialEq, Clone)]
 pub struct ForLoop {
     pub index_name: String,
-    pub starting_value: f32,
-    pub step: f32,
-    pub final_value: f32,
+    pub starting_value: OperationInput,
+    pub step: OperationInput,
+    pub final_value: OperationInput,
     pub scope: Scope,
 }
 
@@ -93,6 +93,10 @@ pub enum Operator {
     //Negation,  // unary operator, requires different implementation
 }
 
+pub struct Array {
+    pub array_type: ZumaType,
+    pub values: Vec<Value>
+}
 
 // LITERALS
 

@@ -5,36 +5,32 @@ use crate::parsing::*;
 use crate::parsing::ast::*;
 use crate::parsing::parsing_functions::color;
 
-
-
-
-
 #[test]
 fn test_number() {
     let parser = NumberParser::new();
-    assert!(parser.parse("1234").unwrap() == 1234.0);
-    assert!(parser.parse("1234.56").unwrap() == 1234.56);
+    assert!(parser.parse("1234").unwrap() == Value::Number(1234.0));
+    assert!(parser.parse("1234.56").unwrap() == Value::Number(1234.56));
 }
 
 #[test]
 fn test_color() {
     let parser = ColorParser::new();
-    assert!(parser.parse("black").unwrap() == color(0, 0, 0));
-    assert!(parser.parse("white").unwrap() == color(255, 255, 255));
-    assert!(parser.parse("red").unwrap() == color(255, 0, 0));
-    assert!(parser.parse("green").unwrap() == color(0, 255, 0));
-    assert!(parser.parse("blue").unwrap() == color(0, 0, 255));
-    assert!(parser.parse("yellow").unwrap() == color(255, 255, 0));
-    assert!(parser.parse("#ff00a1").unwrap() == color(255, 0, 161));
+    assert!(parser.parse("black").unwrap() == Value::Color(color(0, 0, 0)));
+    assert!(parser.parse("white").unwrap() == Value::Color(color(255, 255, 255)));
+    assert!(parser.parse("red").unwrap() == Value::Color(color(255, 0, 0)));
+    assert!(parser.parse("green").unwrap() == Value::Color(color(0, 255, 0)));
+    assert!(parser.parse("blue").unwrap() == Value::Color(color(0, 0, 255)));
+    assert!(parser.parse("yellow").unwrap() == Value::Color(color(255, 255, 0)));
+    assert!(parser.parse("#ff00a1").unwrap() == Value::Color(color(255, 0, 161)));
     assert!(parser.parse("nonsense").is_err());
 }
 
 #[test]
 fn test_point() {
-    let expected = Point {
+    let expected = Value::Point(Point {
         y: Box::new(OperationInput::Literal(Value::Number(0.1))),
         x: Box::new(OperationInput::Literal(Value::Number(5.0)))
-    };
+    });
     let parser = PointParser::new();
     assert!(parser.parse("[0.1,5]").unwrap() == expected);
 }
@@ -44,7 +40,7 @@ fn test_string() {
     let parser = TextParser::new();
     let res = parser.parse(r#""Ahoj světe!""#);
     println!("{:?}", res);
-    assert!(res.unwrap() == "Ahoj světe!".to_owned());
+    assert!(res.unwrap() == Value::String("Ahoj světe!".to_owned()));
 }
 
 #[test]
