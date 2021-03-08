@@ -1,0 +1,125 @@
+let a=false; let b=false; let c=false; let d= true;
+let e= true; let f=false; let g=false; let h= true;
+let i= true; let j= true; let k=false; let l= true;
+let m= true; let n= true; let o=false; let p= true;
+let q=false; let r= true; let s=false; let t=false;
+let u=false; let v=false; let w= true; let y=false;
+
+let cisco_green = #416e5f;
+let weird_yellow = #c3d17d;
+let amber = #ffbf00;
+let silver = #dbdbdb;
+let radioactive_green = #cdf099;
+
+proc eth_port start_x: Number start_y: Number {
+  rectangle start=[start_x,start_y] size=[30,30]
+    color=silver stroke-width=0;
+  let start_x = (start_x+5);
+  let start_y = (start_y+5);
+  rectangle start=[start_x,start_y] size=[17,20];
+  let start_x = (start_x+4);
+  let start_y = (start_y+3);
+  rectangle start=[start_x,start_y] size=[17,14];
+};
+
+proc port_block start_x: Number start_y: Number {
+  rectangle start=[start_x,start_y] size=[36,270]
+    color=cisco_green stroke-color=weird_yellow
+    stroke-width=2;
+  let start_x = (start_x + 3);
+  let start_y = (start_y + 4.5);
+  for ix = 0,1,8 {
+    let start_y = (start_y + (ix * 33));
+    eth_port;
+  };
+};
+
+proc ports_row {
+  for ix = 0,1,3 {
+    let start_y = (start_y + (ix * 270));
+    port_block;
+  };
+};
+
+proc diods {
+  proc diode
+    start_x: Number
+    start_y: Number
+    active: Bool
+    label=""
+  {
+    let label="";
+    let width = 7;
+    let height = ((2/3) * width);
+    if active {
+      ellipse center=[start_x,start_y] radius=[height,width]
+        stroke-width=0
+        color=radioactive_green;
+    } else {
+      ellipse center=[start_x,start_y] radius=[height,width]
+        stroke-width=0
+        color=amber;
+    };
+
+    text text=label start=[(start_x + 5), (start_y - 10)];
+  };
+
+  let distance = 33.5;
+  diode active=a label="1x";
+  let start_y=(start_y + distance);
+  diode active=b label="2x";
+  let start_y=(start_y + distance);
+  diode active=c label="3x";
+  let start_y=(start_y + distance);
+  diode active=d label="4x";
+  let start_y=(start_y + distance);
+  diode active=e label="5x";
+  let start_y=(start_y + distance);
+  diode active=f label="6x";
+  let start_y=(start_y + distance);
+  diode active=g label="7x";
+  let start_y=(start_y + distance);
+  diode active=h label="8x";
+  let start_y=(start_y + distance);
+  diode active=i label="9x";
+  let start_y=(start_y + distance);
+  diode active=j label="10x";
+  let start_y=(start_y + distance);
+  diode active=k label="11x";
+  let start_y=(start_y + distance);
+  diode active=l label="12x";
+  let start_y=(start_y + distance);
+  diode active=m label="13x";
+  let start_y=(start_y + distance);
+  diode active=n label="14x";
+  let start_y=(start_y + distance);
+  diode active=o label="15x";
+  let start_y=(start_y + distance);
+  diode active=p label="16x";
+  let start_y=(start_y + distance);
+  diode active=q label="17x";
+  let start_y=(start_y + distance);
+  diode active=r label="18x";
+  let start_y=(start_y + distance);
+  diode active=s label="19x";
+  let start_y=(start_y + distance);
+  diode active=t label="20x";
+  let start_y=(start_y + distance);
+  diode active=u label="21x";
+  let start_y=(start_y + distance);
+  diode active=v label="22x";
+  let start_y=(start_y + distance);
+  diode active=w label="23x";
+  let start_y=(start_y + distance);
+  diode active=y label="24x";
+};
+
+rectangle start=[0,0] size=[100,900] color=cisco_green;
+
+let start_x = 40;
+let start_y = 70;
+diods;
+
+let start_x = 50;
+let start_y = 50;
+ports_row;

@@ -1,6 +1,6 @@
 [package]
 name = "zuma"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Vladimír Ctibor <vladimir.ctibor@gmail.com>"]
 edition = "2018"
 description = "Vector Graphics Language"
@@ -24,6 +24,8 @@ lalrpop = "0.19.4"
 # general deps
 anyhow = "1.0"
 maplit = "1.0"
+paw = "1.0"
+structopt = { version = "0.3", features = ["paw"] }
 
 # parsing
 lalrpop-util = "0.19.4"
