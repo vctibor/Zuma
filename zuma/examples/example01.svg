@@ -1,26 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
-    <rect fill="rgb(255,255,255)" height="70" opacity="1" rx="0" ry="0" stroke-width="4" stroke="rgb(68,68,68)" width="200" x="50" y="50"></rect>
-    <text fill="rgb(68,68,68)" x="120" y="80">
-Fakturizace    </text>
-    <text fill="rgb(68,68,68)" x="110" y="100">
-od dodavatele    </text>
-    <rect fill="rgb(255,255,255)" height="70" opacity="1" rx="0" ry="0" stroke-width="4" stroke="rgb(68,68,68)" width="200" x="50" y="150"></rect>
-    <text fill="rgb(68,68,68)" x="120" y="180">
-Doprava    </text>
-    <text fill="rgb(68,68,68)" x="110" y="200">
-do podniku    </text>
-    <rect fill="rgb(255,255,255)" height="70" opacity="1" rx="0" ry="0" stroke-width="4" stroke="rgb(68,68,68)" width="200" x="50" y="250"></rect>
-    <text fill="rgb(68,68,68)" x="120" y="280">
-Přesun    </text>
-    <text fill="rgb(68,68,68)" x="110" y="300">
-do výroby    </text>
-    <rect fill="rgb(255,255,255)" height="70" opacity="1" rx="0" ry="0" stroke-width="4" stroke="rgb(68,68,68)" width="200" x="50" y="350"></rect>
-    <text fill="rgb(68,68,68)" x="120" y="380">
-Proces výroby    </text>
-    <text fill="rgb(68,68,68)" x="110" y="400"></text>
-    <rect fill="rgb(255,255,255)" height="70" opacity="1" rx="0" ry="0" stroke-width="4" stroke="rgb(68,68,68)" width="200" x="50" y="450"></rect>
-    <text fill="rgb(68,68,68)" x="120" y="480">
-Přesun do    </text>
-    <text fill="rgb(68,68,68)" x="110" y="500">
-meziskladu    </text>
+    <polygon points="50,10 10,10 10,50 60,60 "></polygon>
 </svg>

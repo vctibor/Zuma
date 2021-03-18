@@ -212,3 +212,25 @@ pub fn ellipse(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNo
             .add_attr("opacity", &opacity)
     ))
 }
+
+pub fn polygon(mut args: ArgsMap, constants: &Constants) -> Result<Vec<GraphicNode>> {
+
+    let points = args.remove("points")
+        .ok_or(anyhow!("Missing argument `points`"))?
+        .get_point_array()?;
+
+    let mut s = String::new();
+
+    for point in points {
+        let x = get_value(point.x.as_ref(), &constants)?.get_number()?;
+        let y = get_value(point.y.as_ref(), &constants)?.get_number()?;
+
+        let ss = format!("{},{} ", x, y);
+        s.push_str(&ss)
+    }
+
+    Ok(vec!(
+        GraphicNode::empty_element("polygon")
+            .add_attr("points", &s)
+    ))
+}
