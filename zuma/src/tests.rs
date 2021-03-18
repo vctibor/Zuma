@@ -182,38 +182,30 @@ for index = 1, 1, 5 {
     assert_eq!(expected, res);
 }
 
-
-
-
-/// Because Zuma is - or at least we want it to be - expressions based language,
-/// it should be possible to evaluate *any* piece of code and assign it to constant.
-/// Then expression of type Graphics when invoked by itself (not used in any higher level construct)
-/// should generate piece of SVG code.
-/// It should be indifferent whether we invoked expression by its literal declaration,
-/// or assigned it to constant and then invoked that constant.
-#[ignore]   // not yet implemented
 #[test]
-fn test_expressions() {
-    let input_1 = r#"
-line start=[10,15] end=[25,50] color=green width=3;
+fn test_polygon() {
+    let input = r#"
+polygon points = [
+    [10, 50]
+    [10, 10]
+    [50, 10]
+    [60, 60]
+];
     "#.trim();
 
-    let input_2 = r#"
-let amazing_line = line start=[10,15] end=[25,50] color=green width=3;
-
-amazing_line;
+    let expected = r#"
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
+    <polygon points="50,10 10,10 10,50 60,60 "></polygon>
+</svg>
     "#.trim();
 
     let compiler = ZumaCompiler::new();
-    let output_1 = compiler.compile(input_1.to_owned()).unwrap();
-    let output_2 = compiler.compile(input_2.to_owned()).unwrap();
+    let res = compiler.compile(input.to_owned()).unwrap();
 
-    dbg!(&output_1);
-    dbg!(&output_2);
-
-    assert_eq!(output_1, output_2);
+    assert_eq!(expected, res);
 }
 
+// TODO: fix test
 #[ignore]   // not yet implemented
 #[test]
 fn test_user_defined_procedure() {

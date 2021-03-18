@@ -191,6 +191,7 @@ impl Interpreter {
             "rectangle" => stdlib::rectangle(args, &self.constants),
             "text" => stdlib::text(args, &self.constants),
             "ellipse" => stdlib::ellipse(args, &self.constants),
+            "polygon" => stdlib::polygon(args, &self.constants),
             unknown => Err(anyhow!("Unknown function {}!", unknown)),
         }
     }
