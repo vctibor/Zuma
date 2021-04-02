@@ -5,6 +5,7 @@
 #[macro_use] extern crate lalrpop_util;
 
 mod stack;
+mod error_handling;
 
 mod parsing;
 mod interpretation;
@@ -32,7 +33,7 @@ impl ZumaCompiler {
     }
 
     /// Translates ZUMA source code into SVG.
-    pub fn compile(&self, source: String) -> Result<String> {
+    pub fn compile(&self, source: &str) -> Result<String> {
         let ast = self.parser.parse(source)?;
         let ir = Interpreter::new().interpret(ast)?;
         let svg = generate(&ir);

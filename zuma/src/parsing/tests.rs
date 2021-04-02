@@ -47,14 +47,14 @@ fn test_string() {
 fn test_single_line_1() {
     let parser = ZumaParser::new();
     let input = "line start=[0,10] end=[25,50];";
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }
 
 #[test]
 fn test_single_line_2() {
     let parser = ZumaParser::new();
     let input = "line start=[0,10] end=[25,50] color=black;";
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }
 
 #[test]
@@ -64,7 +64,7 @@ fn test_two_lines_1() {
         line start=[0,10] end=[25,50] color=black;
         line start=[0,0] end=[50,25] color=red;
     "#;
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }
 
 #[test]
@@ -75,7 +75,7 @@ fn test_arbitrary_arg_position() {
         line end=[100,70] width=11.5 color=white start=[0,40];
         line width=11.5 start=[0,40] color=white end=[100,70];
     "#;
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }
 
 #[test]
@@ -87,7 +87,7 @@ fn test_constant_declaration() {
         let n = 4557;
         let s = "你好！";
     "#;
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }
 
 
@@ -99,7 +99,7 @@ fn test_user_procedure_declaration() {
 
     };
     "#.trim();
-    let res = parser.parse(input.to_string());
+    let res = parser.parse(input);
     println!("{:?}", res);
     assert!(res.is_ok());
 }
@@ -108,21 +108,21 @@ fn test_user_procedure_declaration() {
 fn test_empty_doc() {
     let parser = ZumaParser::new();
     let input = "";
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }
 
 #[test]
 fn test_empty_scope() {
     let parser = ZumaParser::new();
     let input = r#"{ };"#;
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }
 
 #[test]
 fn test_number_array() {
     let parser = ZumaParser::new();
     let input = r#"let x = [1 2 3];"#;
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }
 
 
@@ -130,5 +130,5 @@ fn test_number_array() {
 fn test_point_array() {
     let parser = ZumaParser::new();
     let input = r#"let p = [ [0, 0] [10, 10] [50, 0] ];"#;
-    assert!(parser.parse(input.to_string()).is_ok());
+    assert!(parser.parse(input).is_ok());
 }

@@ -1,6 +1,7 @@
 //! PARSING -> type checking -> interpretation -> code generation
 
-#![allow(dead_code)]        // because of pub function in grammar.lalrpop
+// because of pub function in grammar.lalrpop
+#![allow(dead_code)]
 
 lalrpop_mod!(grammar);
 
@@ -13,6 +14,8 @@ pub use ast::*;
 
 use anyhow::{Result, anyhow};
 
+use crate::error_handling::ZumaResult;
+
 pub struct ZumaParser {
     parser: DocParser
 }
@@ -23,12 +26,12 @@ impl ZumaParser {
         ZumaParser { parser: DocParser::new() }
     }
 
-    pub fn parse(&self, source: String) -> Result<Document> {
-        match self.parser.parse(&source) {
-            Ok(document) => Ok(document),
+    pub fn parse(&self, source: &str) -> Result<Document> {
+        match self.parser.parse(source) {
+            Ok(doc) => return Ok(doc),
             Err(e) => {
-                println!("{:?}", e);
-                Err(anyhow!("Parsing error"))
+                println!("{}", e);
+                return Err(anyhow!("error"));
             }
         }
     }

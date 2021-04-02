@@ -68,7 +68,7 @@ fn main(args: Args) -> Result<()> {
     let compiler = zumalib::ZumaCompiler::new();
 
     let input = read_to_string(args.filename)?;
-    let svg = compiler.compile(input)?;
+    let svg = compiler.compile(&input)?;
 
     if args.stdout {
         println!("{}", svg);
